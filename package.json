@@ -1,0 +1,22 @@
+{
+  "name": "persian-date",
+  "version": "1.0.0",
+  "description": "A Persian date to convert from gregorian and behavie like a date in Javascript project.",
+  "main": "src/index.ts",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "test": "jest",
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "demo": "ts-node demo/index.ts",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.4"
+  }
+}
