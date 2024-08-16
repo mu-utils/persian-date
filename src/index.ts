@@ -1,17 +1,14 @@
-import PersianDateConvertor from "./PersianDateConvertor/PersianDateConvertor";
+import PersianDateUtils from "./PersianUtils/PersianDateUtils";
 
-export class PersianDate extends PersianDateConvertor {
+export class PersianDate extends Date {
   constructor(date: Date | string | number = new Date()) {
     super(date);
-
     this.normalizeDate();
-
-    console.log(this.getFullYear());
   }
 
   private normalizeDate() {
-    if (!this.isValidPersianDate()) {
-      this.setFullYear(this.getFullYear() - 621);
+    if (!PersianDateUtils.isValidPersianDate(this)) {
+      PersianDateUtils.toGregorian(this);
     }
   }
 
@@ -24,9 +21,9 @@ export class PersianDate extends PersianDateConvertor {
 
   // Format date to Persian locale with Latin digits
   toFaIRLocaleString(options?: Intl.DateTimeFormatOptions): string {
-    if (this.isPersianCalendar()) {
-      return this.toLocaleString(undefined, options);
-    }
+    // if (this.isPersianCalendar()) {
+    //   return this.toLocaleString(undefined, options);
+    // }
 
     return this.toLocaleString("fa-IR-u-nu-latn", options);
   }

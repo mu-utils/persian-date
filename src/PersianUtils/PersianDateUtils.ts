@@ -1,10 +1,11 @@
+import { PersianDate } from "..";
 import PersianCalendarConstants from "../PersianCalendarConstants";
 
 export default class PersianDateUtils {
   static isValidPersianYear(year: number): boolean {
     return (
-      year >= PersianCalendarConstants.MIN_PERSIAN_YEAR &&
-      year <= PersianCalendarConstants.MAX_PERSIAN_YEAR
+      year >= PersianCalendarConstants.MIN_YEAR &&
+      year <= PersianCalendarConstants.MAX_YEAR
     );
   }
 
@@ -31,8 +32,7 @@ export default class PersianDateUtils {
       return false;
     }
 
-    const maxDaysInMonth =
-      PersianCalendarConstants.PERSIAN_MONTHS_DAYS[month - 1];
+    const maxDaysInMonth = PersianCalendarConstants.MONTHS_DAYS[month - 1];
 
     if (month === 12 && PersianDateUtils.isLeapYear(year)) {
       return day >= 1 && day <= 30; //? Esfand has 30 days in leap years
@@ -55,5 +55,42 @@ export default class PersianDateUtils {
     }
 
     return year % 400 === 0;
+  }
+
+  /**
+   * Calculates the number of days in the given Persian year.
+   */
+  private static getEpochBase(year: number): number {
+    return (
+      year -
+      (year >= 0
+        ? PersianCalendarConstants.BASE_YEAR
+        : PersianCalendarConstants.BASE_YEAR - 1)
+    );
+  }
+
+  private static getEpochYear(epochBase: number) {
+    return (
+      PersianCalendarConstants.BASE_YEAR +
+      (epochBase % PersianCalendarConstants.YEAR_CYCLE)
+    );
+  }
+
+  static toGregorian(data: Date) {
+    const year = data.getFullYear();
+    const month = data.getMonth();
+    const day = data.getDate();
+    const epochBase = PersianDateUtils.getEpochBase(year);
+    const epochYear = PersianDateUtils.getEpochYear(epochBase);
+  }
+
+  private static getPassedDaysInMonths() {
+    let sum = 0;
+
+    return PersianCalendarConstants.MONTHS_DAYS.map((day) => {
+      const passedDays = sum;
+      sum += day;
+      return passedDays;
+    });
   }
 }
