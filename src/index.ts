@@ -1,6 +1,6 @@
-import DateConvertor from "./DateConvertor/DateConvertor";
+import PersianDateConvertor from "./PersianDateConvertor/PersianDateConvertor";
 
-export class PersianDate extends DateConvertor {
+export class PersianDate extends PersianDateConvertor {
   constructor(date: Date | string | number = new Date()) {
     super(date);
 
@@ -10,7 +10,7 @@ export class PersianDate extends DateConvertor {
   }
 
   private normalizeDate() {
-    if (!this.isPersianCalendar()) {
+    if (!this.isValidPersianDate()) {
       this.setFullYear(this.getFullYear() - 621);
     }
   }
