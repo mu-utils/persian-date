@@ -19,6 +19,14 @@ describe("PersianDateUtils", () => {
     it("should return true for 1320", () => {
       expect(PersianDateUtils["isValidPersianYear"](1320)).toBe(true);
     });
+
+    it("should return false for 1200", () => {
+      expect(PersianDateUtils["isValidPersianYear"](1180)).toBe(false);
+    });
+
+    it("should return false for 2005", () => {
+      expect(PersianDateUtils["isValidPersianYear"](2005)).toBe(false);
+    });
   });
 
   describe("isValidPersianMonth", () => {

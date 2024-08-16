@@ -1,4 +1,4 @@
-import PersianCalendarConstants from "../PersianDateConstants";
+import PersianCalendarConstants from "../PersianCalendarConstants";
 
 export default class PersianDateUtils {
   static isValidPersianYear(year: number): boolean {
@@ -25,7 +25,7 @@ export default class PersianDateUtils {
     const day = date.getDate();
 
     if (
-      !PersianDateUtils.isValidPersianYear(year) &&
+      !PersianDateUtils.isValidPersianYear(year) ||
       !PersianDateUtils.isValidPersianMonth(month)
     ) {
       return false;

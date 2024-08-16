@@ -1,4 +1,4 @@
-import PersianCalendarConstants from "../PersianDateConstants";
+import PersianCalendarConstants from "../PersianCalendarConstants";
 import { PersianDateUtils } from "../PersianUtils/PersianDateUtils";
 
 /**
