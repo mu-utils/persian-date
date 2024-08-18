@@ -33,7 +33,12 @@ export default class PersianCalendarConstants {
    */
   static readonly MAX_YEAR = 1500;
 
-  private static readonly PASSED_DAYS_IN_MONTHS = [
+  /**
+   * The total number of days in 2820 years.
+   */
+  static readonly TOTAL_DAYS_IN_2820_YEARS = 10631060;
+
+  static readonly PASSED_DAYS_IN_MONTHS = [
     0, 31, 62, 93, 124, 155, 186, 216, 246, 276, 306, 336,
   ];
 }

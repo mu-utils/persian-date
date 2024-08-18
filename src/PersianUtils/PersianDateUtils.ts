@@ -1,4 +1,5 @@
 import { PersianDate } from "..";
+import GregorianCalendarConstants from "../GreogorianCalendarConstants";
 import PersianCalendarConstants from "../PersianCalendarConstants";
 
 export default class PersianDateUtils {
@@ -82,6 +83,29 @@ export default class PersianDateUtils {
     const day = data.getDate();
     const epochBase = PersianDateUtils.getEpochBase(year);
     const epochYear = PersianDateUtils.getEpochYear(epochBase);
+    const passedDaysInMonth =
+      PersianCalendarConstants.PASSED_DAYS_IN_MONTHS[month - 1];
+
+    const totalGregorianDays =
+      day +
+      passedDaysInMonth +
+      Math.floor((epochYear * 682 - 110) / 2816) +
+      (epochYear - 1) * 365 +
+      Math.floor(epochBase / PersianCalendarConstants.YEAR_CYCLE) *
+        PersianCalendarConstants.TOTAL_DAYS_IN_2820_YEARS +
+      (PersianCalendarConstants.EPOCH - 1);
+
+    const wjd = totalGregorianDays - 1;
+    const depoch = wjd - GregorianCalendarConstants.EPOCH;
+    const quadricent = Math.floor(depoch / 146097);
+    const dqc = depoch % 146097;
+    const cent = Math.floor(dqc / 36524);
+    const dcent = dqc % 36524;
+    const quad = Math.floor(dcent / 1461);
+    const dquad = dcent % 1461;
+    const yindex = Math.floor(dquad / 365);
+
+    console.log(totalGregorianDays, "totalGregorianDays");
   }
 
   private static getPassedDaysInMonths() {
