@@ -1,4 +1,4 @@
-import PersianDateUtils from "../PersianDateUtils";
+import PersianDateUtils from "../GregorianDateUtils";
 
 describe("PersianDateUtils", () => {
   describe("isLeapYear", () => {
