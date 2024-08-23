@@ -1,5 +1,5 @@
-import persianDate from "persian-date";
+import { persianDate } from "persian-date";
 
-persianDate("2001").format("YYYY-MM-DD");
+const a = persianDate("2024-09-02");
 
 // console.log(persianDate("2001/02/14").format("YYYY/MM/DD"));
