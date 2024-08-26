@@ -1,6 +1,6 @@
-import GregorianDateUtils from "../GregorianDateUtils";
+import GregorianDateUtils from "../utils/GregorianDateUtils";
 
-describe("PersianDateUtils", () => {
+describe("GregorianDateUtils", () => {
   describe("isLeapYear", () => {
     it("should return true for 1403", () => {
       expect(GregorianDateUtils["isLeapYear"](1403)).toBe(true);

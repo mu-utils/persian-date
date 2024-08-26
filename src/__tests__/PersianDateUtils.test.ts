@@ -1,4 +1,4 @@
-import PersianDateUtils from "../PersianDateUtils";
+import PersianDateUtils from "../utils/PersianDateUtils";
 
 describe("PersianDateUtils", () => {
   describe("isValidYear", () => {
