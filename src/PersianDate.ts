@@ -66,6 +66,8 @@ export default class PersianDate extends Date {
   }
 
   setOptions(options?: PersianDateOptions) {
+    console.log(options);
+
     if (options) {
       this.options = { ...this.options, ...options };
     }
