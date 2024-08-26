@@ -2,15 +2,25 @@ import PersianCalendarConstants from "../constants/PersianCalendarConstants";
 import GregorianDateUtils from "./GregorianDateUtils";
 
 export default class PersianDateUtils {
-  static isValidYear(year: number): boolean {
+  private static isValidYear(year: number): boolean {
     return (
       year >= PersianCalendarConstants.MIN_YEAR &&
       year <= PersianCalendarConstants.MAX_YEAR
     );
   }
 
-  static isValidMonth(month: number): boolean {
+  private static isValidMonth(month: number): boolean {
     return month >= 1 && month <= 12;
+  }
+
+  private static isValidDay(day: number, year: number, month: number): boolean {
+    const maxDaysInMonth = PersianCalendarConstants.MONTHS_DAYS[month - 1];
+
+    if (month === 12 && GregorianDateUtils.isLeapYear(year)) {
+      return day >= 1 && day <= 30; //? Esfand has 30 days in leap years
+    }
+
+    return day >= 1 && day <= maxDaysInMonth;
   }
 
   /**
@@ -27,26 +37,16 @@ export default class PersianDateUtils {
 
     const year = date.getFullYear();
 
-    if (!year || !this.isValidYear(year)) {
+    if (!this.isValidYear(year)) {
       return false;
     }
 
     const month = date.getMonth() + 1;
-    const day = date.getDate();
 
-    if (
-      !PersianDateUtils.isValidYear(year) ||
-      !PersianDateUtils.isValidMonth(month)
-    ) {
+    if (!PersianDateUtils.isValidMonth(month)) {
       return false;
     }
 
-    const maxDaysInMonth = PersianCalendarConstants.MONTHS_DAYS[month - 1];
-
-    if (month === 12 && GregorianDateUtils.isLeapYear(year)) {
-      return day >= 1 && day <= 30; //? Esfand has 30 days in leap years
-    }
-
-    return day >= 1 && day <= maxDaysInMonth;
+    return this.isValidDay(date.getDate(), year, month);
   }
 }
