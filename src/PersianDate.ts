@@ -5,6 +5,7 @@ import PersianDateUtils from "./utils/PersianDateUtils";
 import normalizeArguments from "./utils/normalizeArguments";
 import DateValidationResult from "./constants/DateValidationResult";
 import InvalidDate from "./utils/InvalidDate";
+import DateFormatTemplate from "./types/DateFormatTemplate";
 
 export default class PersianDate extends Date {
   private invalidDate!: InvalidDate;
@@ -14,9 +15,10 @@ export default class PersianDate extends Date {
    */
   static readonly DEFAULT_OPTIONS: PersianDateOptions = {
     ignoreCalendar: true,
-    invalidDateSeverity: "default",
     timeZone: "Asia/Tehran",
+    invalidDateSeverity: "default",
   };
+
   private options: PersianDateOptions = PersianDate.DEFAULT_OPTIONS;
 
   constructor(...args: PersianDateArguments) {
@@ -51,6 +53,8 @@ export default class PersianDate extends Date {
   }
 
   private normalizeDate() {
+    console.log(this.format(""));
+
     const result = PersianDateUtils.validateDate(this);
 
     if (result === DateValidationResult.DATE_IS_INVALID) {
@@ -81,7 +85,7 @@ export default class PersianDate extends Date {
     this.setTime(date.getTime());
   }
 
-  format(template: DateFormat): string {
+  format(template: DateFormatTemplate): string {
     let result = `${template}`;
     const month = this.getMonth() + 1;
     const replacements: Record<string, string> = {
