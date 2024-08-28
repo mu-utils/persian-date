@@ -89,7 +89,7 @@ export default class GregorianDateUtils {
     );
   }
 
-  static toGregorian(date: Date) {
+  static toGregorianDate(date: Date) {
     const totalGregorianDays = GregorianDateUtils.getTotalGregorianDays(date);
     const wjd = totalGregorianDays - 1;
     const depoch = wjd - GregorianCalendarConstants.EPOCH;
