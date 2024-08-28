@@ -7,11 +7,6 @@ export default class InvalidDate {
     if (this.severity === "error") {
       throw InvalidDate.createError(message);
     }
-
-    if (this.severity === "warning") {
-      console.warn(InvalidDate.createError(message));
-      return;
-    }
   }
 
   private static createError(message: string) {

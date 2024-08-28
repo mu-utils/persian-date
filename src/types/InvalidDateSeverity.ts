@@ -1,3 +1,3 @@
-type InvalidDateSeverity = "error" | "warning" | "default";
+type InvalidDateSeverity = "error" | "default";
 
 export default InvalidDateSeverity;

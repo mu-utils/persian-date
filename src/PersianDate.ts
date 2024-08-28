@@ -69,7 +69,7 @@ export default class PersianDate extends Date {
 
   private throwException() {
     this.invalidDate.exception("Invalid Date");
-    this.setDate(NaN);
+    this.setTime(NaN);
   }
 
   /**

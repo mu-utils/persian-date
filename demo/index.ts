@@ -10,11 +10,12 @@ import { PersianDate, persianDate } from "persian-date";
 //   timeZone: "Asia/Tehran",
 // });
 
-const date = new PersianDate("1399/09/12T12:00:00", {
-//   ignoreCalendar: true, 
-//   timeZone: "Asia/Tehran",
+const date = new PersianDate("2021-2-20", {
+  ignoreCalendar: true,
+  invalidDateSeverity: "default",
+  //   timeZone: "Asia/Tehran",
 });
 
-console.log(date.getDate());
+console.log(date.toLocaleDateString());
 
 // console.log(persianDate("2001/02/14").format("YYYY/MM/DD"));
