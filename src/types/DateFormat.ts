@@ -1,10 +1,10 @@
-type Segment = "MM" | "YYYY" | "DD";
+import DateSegment from "./DateSegment";
 
 type Separator = "-" | "/" | ".";
 
 type DateFormat =
-  | `${Segment}`
-  | `${Segment}${Separator}${Segment}`
-  | `${Segment}${Separator}${Segment}${Separator}${Segment}`;
+  | `${DateSegment}`
+  | `${DateSegment}${Separator}${DateSegment}`
+  | `${DateSegment}${Separator}${DateSegment}${Separator}${DateSegment}`;
 
 export default DateFormat;

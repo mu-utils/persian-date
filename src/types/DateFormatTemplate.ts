@@ -1,10 +1,11 @@
 import DateFormat from "./DateFormat";
+import DateTimeSegment from "./DateTimeSegment";
 import TimeFormat from "./TimeFormat";
 
 type Separator = "-" | " ";
 
-type Segment = DateFormat | TimeFormat;
-
-type DateFormatTemplate = `${DateFormat}${Separator}${TimeFormat}` | Segment;
+type DateFormatTemplate =
+  | `${DateFormat}${Separator}${TimeFormat}`
+  | DateTimeSegment;
 
 export default DateFormatTemplate;

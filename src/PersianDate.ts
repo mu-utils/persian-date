@@ -1,4 +1,3 @@
-import DateFormat from "./types/DateFormat";
 import PersianDateOptions from "./types/PersianDateOptions";
 import PersianDateArguments from "./types/PersianDateArguments";
 import PersianDateUtils from "./utils/PersianDateUtils";
@@ -6,6 +5,7 @@ import normalizeArguments from "./utils/normalizeArguments";
 import DateValidationResult from "./constants/DateValidationResult";
 import InvalidDate from "./utils/InvalidDate";
 import DateFormatTemplate from "./types/DateFormatTemplate";
+import DateTimeSegment from "./types/DateTimeSegment";
 import GregorianDateUtils from "./utils/GregorianDateUtils";
 
 export default class PersianDate extends Date {
@@ -87,10 +87,13 @@ export default class PersianDate extends Date {
   format(template: DateFormatTemplate): string {
     let result = `${template}`;
     const month = this.getMonth() + 1;
-    const replacements: Record<string, string> = {
+    const replacements: Record<DateTimeSegment, string> = {
       YYYY: this.getFullYear().toString(),
       MM: month.toString().padStart(2, "0"),
       DD: this.getDate().toString().padStart(2, "0"),
+      HH: this.getHours().toString().padStart(2, "0"),
+      mm: this.getMinutes().toString().padStart(2, "0"),
+      ss: this.getSeconds().toString().padStart(2, "0"),
     };
 
     for (const [key, value] of Object.entries(replacements)) {
