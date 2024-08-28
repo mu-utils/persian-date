@@ -51,7 +51,7 @@ export default class PersianDate extends Date {
   private normalizeDate() {
     if (!PersianDateUtils.isValidDate(this)) {
       if (!this.options.ignoreCalendar) {
-        throw new Error("Invalid date");
+        throw new Error("Invalid Date");
       }
 
       this.toPersianDate();
