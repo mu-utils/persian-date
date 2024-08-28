@@ -10,9 +10,17 @@ describe("PersianDate", () => {
   });
 
   describe("format", () => {
-    it("should return formatted date", () => {
-      const date = new PersianDate("1399/12/31 23:59:59.999");
-      expect(date.format("YYYY-MM-DD")).toBe("1399-12-31");
+    it("should throw Invalid Date error", () => {
+      expect(() => new PersianDate("1399/12/31 23:59:59.999")).toThrow(
+        "Invalid Date"
+      );
+    });
+  });
+
+  describe("normalizeDate", () => {
+    it("should normalize date", () => {
+      const date = new PersianDate("2021/1/2 23:59:59.999");
+      expect(date.format("YYYY-MM-DD")).toBe("1399-10-13");
     });
   });
 });
