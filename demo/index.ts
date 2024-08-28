@@ -20,3 +20,10 @@ console.clear();
 console.log(date.toLocaleDateString());
 
 // console.log(persianDate("2001/02/14").format("YYYY/MM/DD"));
+
+// set america timezone
+
+const americaDate = new Date();
+americaDate.toLocaleString("en-US", { timeZone: "2" });
+console.log(americaDate);
+
