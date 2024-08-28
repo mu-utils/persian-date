@@ -1,3 +1,4 @@
+import PersianDate from "../PersianDate";
 import PersianDateArguments from "../types/PersianDateArguments";
 import PersianDateOptions from "../types/PersianDateOptions";
 
@@ -52,5 +53,5 @@ export default function normalizeArguments(
 }
 
 function isOptions(arg: unknown): arg is PersianDateOptions {
-  return typeof arg === "object" && !(arg instanceof Date);
+  return typeof arg === "object" && !(arg instanceof PersianDate);
 }
