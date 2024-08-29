@@ -79,7 +79,7 @@ export default class PersianDate extends Date {
    * Converts the current date to a Persian date through locale string.
    */
   private toPersianDate() {
-    const localeString = this.toFaIRLocaleString();
+    const localeString = this.toPersianLocalString();
     const date = new PersianDate(localeString);
     this.setTime(date.getTime());
   }
@@ -87,13 +87,29 @@ export default class PersianDate extends Date {
   format(template: DateFormatTemplate): string {
     let result = `${template}`;
     const month = this.getMonth() + 1;
+    const hours = this.getHours();
+    const stringHours = hours.toString();
+    const stringMonth = month.toString();
+    const stringDate = this.getDate().toString();
+    const localString = this.toPersianLocalString;
+
     const replacements: Record<DateTimeSegment, string> = {
       YYYY: this.getFullYear().toString(),
-      MM: month.toString().padStart(2, "0"),
-      DD: this.getDate().toString().padStart(2, "0"),
-      HH: this.getHours().toString().padStart(2, "0"),
+      MM: stringMonth.padStart(2, "0"),
+      DD: stringDate.padStart(2, "0"),
+      HH: stringHours.toString().padStart(2, "0"),
       mm: this.getMinutes().toString().padStart(2, "0"),
       ss: this.getSeconds().toString().padStart(2, "0"),
+      dddd: localString({ weekday: "long" }),
+      MMM: localString({ month: "short" }),
+      MMMM: localString({ month: "long" }),
+      YY: this.getFullYear().toString().slice(-2),
+      D: stringDate,
+      ddd: localString({ weekday: "short" }),
+      Do: stringDate.padStart(2, "0"),
+      M: stringMonth,
+      h: stringHours,
+      a: hours < 12 ? "AM" : "PM",
     };
 
     for (const [key, value] of Object.entries(replacements)) {
@@ -108,11 +124,7 @@ export default class PersianDate extends Date {
   }
 
   // Format date to Persian locale with Latin digits
-  toFaIRLocaleString(options?: Intl.DateTimeFormatOptions): string {
-    // if (this.isPersianCalendar()) {
-    //   return this.toLocaleString(undefined, options);
-    // }
-
+  toPersianLocalString(options?: Intl.DateTimeFormatOptions): string {
     return this.toLocaleString("fa-IR-u-nu-latn", options);
   }
 
