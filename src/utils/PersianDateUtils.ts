@@ -1,3 +1,4 @@
+import DateValidationResult from "../constants/DateValidationResult";
 import PersianCalendarConstants from "../constants/PersianCalendarConstants";
 import GregorianDateUtils from "./GregorianDateUtils";
 
@@ -30,28 +31,28 @@ export default class PersianDateUtils {
    * month is within the valid range (1-12), and the day is within the valid
    * range for the given month and year.
    */
-  static isValidDate(date: Date): boolean {
+  static validateDate(date: Date): DateValidationResult {
     if (isNaN(date.getTime())) {
-      return false;
+      return DateValidationResult.DATE_IS_INVALID;
     }
 
     const year = date.getFullYear();
 
     if (!this.isValidYear(year)) {
-      return false;
+      return DateValidationResult.PERSIAN_DATE_IS_INVALID;
     }
 
     const month = date.getMonth() + 1;
 
     if (!PersianDateUtils.isValidMonth(month)) {
-      return false;
+      return DateValidationResult.DATE_IS_INVALID;
     }
 
     // whenever the date is persian the day should be valid otherwise it will be invalid
     if (!this.isValidDay(date.getDate(), year, month)) {
-      throw new Error("Invalid Date");
+      return DateValidationResult.DATE_IS_INVALID;
     }
 
-    return true;
+    return DateValidationResult.DATE_IS_VALID;
   }
 }

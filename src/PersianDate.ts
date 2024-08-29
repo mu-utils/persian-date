@@ -3,29 +3,26 @@ import PersianDateOptions from "./types/PersianDateOptions";
 import PersianDateArguments from "./types/PersianDateArguments";
 import PersianDateUtils from "./utils/PersianDateUtils";
 import normalizeArguments from "./utils/normalizeArguments";
-import GregorianDateUtils from "./utils/GregorianDateUtils";
+import DateValidationResult from "./constants/DateValidationResult";
+import InvalidDate from "./utils/InvalidDate";
+import DateFormatTemplate from "./types/DateFormatTemplate";
 
 export default class PersianDate extends Date {
+  private invalidDate!: InvalidDate;
+
   /**
    * this is a default options for PersianDate in the future some other configs will be add to this
-   * @param {PersianDateOptions} options
-   * @param {boolean} options.ignoreCalendar
-   *
-   *
-   * calendar: "persian",
-   * format: "YYYY/MM/DD",
-   * locale: "fa-IR",
-   * numberingSystem: "latn",
-   * timeZone: "Asia/Tehran",
    */
   static readonly DEFAULT_OPTIONS: PersianDateOptions = {
     ignoreCalendar: true,
+    timeZone: "Asia/Tehran",
+    invalidDateSeverity: "default",
   };
+
   private options: PersianDateOptions = PersianDate.DEFAULT_OPTIONS;
 
   constructor(...args: PersianDateArguments) {
     const { props, options } = normalizeArguments(args);
-
     super(...(props as [number | string | Date]));
     this.setOptions(options);
     this.normalizeDate();
@@ -39,6 +36,12 @@ export default class PersianDate extends Date {
     if (options) {
       this.options = { ...this.options, ...options };
     }
+
+    this.createNewInvalidDate();
+  }
+
+  private createNewInvalidDate() {
+    this.invalidDate = new InvalidDate(this.options.invalidDateSeverity!);
   }
 
   parse(s: string): number {
@@ -50,13 +53,27 @@ export default class PersianDate extends Date {
   }
 
   private normalizeDate() {
-    if (!PersianDateUtils.isValidDate(this)) {
-      if (!this.options.ignoreCalendar) {
-        throw new Error("Invalid Date");
-      }
+    console.log(this.format(""));
 
-      this.toPersianDate();
+    const result = PersianDateUtils.validateDate(this);
+
+    if (result === DateValidationResult.DATE_IS_INVALID) {
+      this.throwException();
+      return;
     }
+
+    if (result === DateValidationResult.PERSIAN_DATE_IS_INVALID) {
+      if (!this.options.ignoreCalendar) {
+        this.throwException();
+      } else {
+        this.toPersianDate();
+      }
+    }
+  }
+
+  private throwException() {
+    this.invalidDate.exception("Invalid Date");
+    this.setTime(NaN);
   }
 
   /**
@@ -68,7 +85,7 @@ export default class PersianDate extends Date {
     this.setTime(date.getTime());
   }
 
-  format(template: DateFormat): string {
+  format(template: DateFormatTemplate): string {
     let result = `${template}`;
     const month = this.getMonth() + 1;
     const replacements: Record<string, string> = {
