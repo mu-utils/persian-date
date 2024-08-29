@@ -6,6 +6,7 @@ type Separator = "-" | " ";
 
 type DateFormatTemplate =
   | `${DateFormat}${Separator}${TimeFormat}`
-  | DateTimeSegment;
+  | DateTimeSegment
+  | string;
 
 export default DateFormatTemplate;
