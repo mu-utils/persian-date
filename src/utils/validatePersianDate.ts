@@ -1,4 +1,4 @@
-import DateValidationResult from "../constants/DateValidationResult";
+import DateValidationResult from "../constants/dateValidationResult";
 import {
   PERSIAN_MIN_YEAR,
   PERSIAN_MAX_YEAR,

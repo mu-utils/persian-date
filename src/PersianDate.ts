@@ -1,6 +1,6 @@
 import PersianDateOptions from "./types/PersianDateOptions";
 import normalizeArguments from "./utils/normalizeArguments";
-import DateValidationResult from "./constants/DateValidationResult";
+import DateValidationResult from "./constants/dateValidationResult";
 import InvalidDate from "./utils/InvalidDate";
 import DateFormatTemplate from "./types/DateFormatTemplate";
 import formatDate from "./utils/formatDate";
@@ -70,8 +70,7 @@ export default class PersianDate extends Date {
     const [newArguments, options] = normalizeArguments(args);
     super(...(newArguments as []));
     this.setOptions(options);
-
-    // this.normalizeDate();
+    this.normalizeDate();
   }
 
   setOptions(options?: PersianDateOptions) {

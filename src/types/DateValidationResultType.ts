@@ -1,4 +1,4 @@
-import DateValidationResult from "../constants/DateValidationResult";
+import DateValidationResult from "../constants/dateValidationResult";
 
 type DateValidationResultType =
   (typeof DateValidationResult)[keyof typeof DateValidationResult];
