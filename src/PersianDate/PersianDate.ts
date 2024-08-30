@@ -1,5 +1,6 @@
 import PersianDateUtils from "../utils/PersianDateUtils";
 import DateFormat from "../types/DateFormat";
+import PersianDateOptions from "../types/PersianDateOptions";
 
 type DateConstructorArgs =
   | []
@@ -8,11 +9,13 @@ type DateConstructorArgs =
   | [string]
   | [number, number, number?, number?, number?, number?, number?];
 
+new PersianDate();
+
 export default class PersianDate extends Date {
-  constructor();
-  constructor(value: Date);
-  constructor(value: number);
-  constructor(value: string);
+  constructor(options?: PersianDateOptions);
+  constructor(value: Date, options?: PersianDateOptions);
+  constructor(value: number, options?: PersianDateOptions);
+  constructor(value: string, options?: PersianDateOptions);
   constructor(
     year: number,
     month: number,
@@ -20,9 +23,10 @@ export default class PersianDate extends Date {
     hours?: number,
     minutes?: number,
     seconds?: number,
-    ms?: number
+    ms?: number,
+    options?: PersianDateOptions
   );
-  constructor(...args: DateConstructorArgs) {
+  constructor(...args: ConstructorParameters<PersianDate>) {
     if (args.length === 0) {
       super();
     } else if (args.length === 1) {
@@ -64,9 +68,10 @@ export default class PersianDate extends Date {
 
   format(template: DateFormat): string {
     let result = `${template}`;
+    const month = this.getMonth() + 1;
     const replacements: Record<string, string> = {
       YYYY: this.getFullYear().toString(),
-      MM: this.getMonth().toString().padStart(2, "0"),
+      MM: month.toString().padStart(2, "0"),
       DD: this.getDate().toString().padStart(2, "0"),
     };
 

@@ -26,6 +26,11 @@ export default class PersianDateUtils {
     }
 
     const year = date.getFullYear();
+
+    if (!year || !this.isValidYear(year)) {
+      return false;
+    }
+
     const month = date.getMonth() + 1;
     const day = date.getDate();
 
