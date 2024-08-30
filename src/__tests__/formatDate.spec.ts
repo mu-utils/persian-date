@@ -9,7 +9,7 @@ describe("formatDate", () => {
 
   it("should get month", () => {
     const date = new PersianDate(1402, 5, 15);
-    expect(formatDate(date, "MM")).toBe("05");
+    expect(formatDate(date, "MM")).toBe("06");
   });
 
   it("should get day", () => {
@@ -17,14 +17,14 @@ describe("formatDate", () => {
     expect(formatDate(date, "DD")).toBe("15");
   });
 
-  it("should replace multiple placeholders", () => {
+  it("should replace multiple placeholders correctly", () => {
     const date = new PersianDate(1402, 5, 15);
-    expect(formatDate(date, "YYYY/MM/DD")).toBe("1402/05/15");
+    expect(formatDate(date, "YYYY/MM/DD")).toBe("1402/06/15");
   });
 
   it("should deal with surrounding text", () => {
     const date = new PersianDate(1402, 5, 15);
-    expect(formatDate(date, "YYYY, MM, DD")).toBe("1402, 05, 15");
+    expect(formatDate(date, "YYYY, MM, DD")).toBe("1402, 06, 15");
   });
 
   it("should not replace non-existent placeholders", () => {

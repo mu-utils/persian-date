@@ -12,6 +12,10 @@ export default function normalizeArguments(
   let newArguments: unknown[] = [];
   let options: PersianDateOptions | undefined = undefined;
 
+  if (args.length > 8) {
+    throw new Error("Invalid number of arguments");
+  }
+
   for (const arg of args) {
     if (!isOptions(arg)) {
       newArguments.push(arg);
