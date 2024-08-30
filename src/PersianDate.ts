@@ -51,20 +51,20 @@ export default class PersianDate extends Date {
   private normalizeDate() {
     if (!PersianDateUtils.isValidDate(this)) {
       if (!this.options.ignoreCalendar) {
-        throw new Error("Invalid date");
+        throw new Error("Invalid Date");
       }
 
       this.toPersianDate();
     }
   }
 
+  /**
+   * Converts the current date to a Persian date through locale string.
+   */
   private toPersianDate() {
     const localeString = this.toFaIRLocaleString();
-    // const time = new PersianDate(localeString).getTime();
-    // this.setTime(time);
-
-    console.log(localeString);
-    
+    const date = new PersianDate(localeString);
+    this.setTime(date.getTime());
   }
 
   format(template: DateFormat): string {
