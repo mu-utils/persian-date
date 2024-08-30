@@ -1,25 +1,17 @@
 import PersianDateOptions from "./types/PersianDateOptions";
 import normalizeArguments from "./utils/normalizeArguments";
-import DateValidationResult from "./constants/dateValidationResult";
 import InvalidDate from "./utils/InvalidDate";
 import DateFormatTemplate from "./types/DateFormatTemplate";
 import formatDate from "./utils/formatDate";
 import { toGregorianDate } from "./utils/gregorianDateCalculations";
 import validatePersianDate from "./utils/validatePersianDate";
+import DateValidationResult from "./constants/dateValidationResult";
+import DEFAULT_OPTIONS from "./constants/defaultOptions";
 
 export default class PersianDate extends Date {
   private invalidDate!: InvalidDate;
 
-  /**
-   * this is a default options for PersianDate in the future some other configs will be add to this
-   */
-  static readonly DEFAULT_OPTIONS: PersianDateOptions = {
-    ignoreCalendar: true,
-    timeZone: "Asia/Tehran",
-    invalidDateSeverity: "default",
-  };
-
-  private options: PersianDateOptions = PersianDate.DEFAULT_OPTIONS;
+  private options: PersianDateOptions = DEFAULT_OPTIONS;
 
   constructor(options?: PersianDateOptions);
   constructor(value: Date, options?: PersianDateOptions);
@@ -83,14 +75,6 @@ export default class PersianDate extends Date {
 
   private createNewInvalidDate() {
     this.invalidDate = new InvalidDate(this.options.invalidDateSeverity!);
-  }
-
-  parse(s: string): number {
-    throw new Error("Method not implemented.");
-  }
-
-  now(): number {
-    throw new Error("Method not implemented.");
   }
 
   private normalizeDate() {
