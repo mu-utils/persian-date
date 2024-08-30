@@ -1,8 +1,6 @@
 import PersianDate from "../PersianDate";
 import PersianDateOptions from "../types/PersianDateOptions";
 
-type DateType = Date | number | string | undefined;
-
 type NormalizeArguments = [
   newArguments: unknown[],
   options: PersianDateOptions | undefined

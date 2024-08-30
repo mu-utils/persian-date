@@ -66,7 +66,6 @@ export default class PersianDate extends Date {
     ms: number,
     options?: PersianDateOptions
   );
-
   constructor(...args: unknown[]) {
     const [newArguments, options] = normalizeArguments(args);
     super(...(newArguments as []));
