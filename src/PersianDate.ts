@@ -101,6 +101,10 @@ export default class PersianDate extends Date {
     return result;
   }
 
+  toGregorianDate(): Date {
+    return GregorianDateUtils.toGregorianDate(this);
+  }
+
   // Format date to Persian locale with Latin digits
   toFaIRLocaleString(options?: Intl.DateTimeFormatOptions): string {
     // if (this.isPersianCalendar()) {
