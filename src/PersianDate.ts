@@ -1,12 +1,11 @@
 import PersianDateOptions from "./types/PersianDateOptions";
-import PersianDateArguments from "./types/PersianDateArguments";
 import PersianDateUtils from "./utils/PersianDateUtils";
 import normalizeArguments from "./utils/normalizeArguments";
 import DateValidationResult from "./constants/DateValidationResult";
 import InvalidDate from "./utils/InvalidDate";
 import DateFormatTemplate from "./types/DateFormatTemplate";
-import DateTimeSegment from "./types/DateTimeSegment";
 import GregorianDateUtils from "./utils/GregorianDateUtils";
+import formatDate from "./utils/formatDate";
 
 export default class PersianDate extends Date {
   private invalidDate!: InvalidDate;
@@ -22,15 +21,57 @@ export default class PersianDate extends Date {
 
   private options: PersianDateOptions = PersianDate.DEFAULT_OPTIONS;
 
-  constructor(...args: PersianDateArguments) {
-    const { props, options } = normalizeArguments(args);
-    super(...(props as [number | string | Date]));
+  constructor(options?: PersianDateOptions);
+  constructor(value: Date, options?: PersianDateOptions);
+  constructor(value: number, options?: PersianDateOptions);
+  constructor(value: string, options?: PersianDateOptions);
+  constructor(year: number, month: number, options?: PersianDateOptions);
+  constructor(
+    year: number,
+    month: number,
+    date: number,
+    options?: PersianDateOptions
+  );
+  constructor(
+    year: number,
+    month: number,
+    date: number,
+    hours: number,
+    options?: PersianDateOptions
+  );
+  constructor(
+    year: number,
+    month: number,
+    date: number,
+    hours: number,
+    minutes: number,
+    options?: PersianDateOptions
+  );
+  constructor(
+    year: number,
+    month: number,
+    date: number,
+    hours: number,
+    minutes: number,
+    seconds: number,
+    options?: PersianDateOptions
+  );
+  constructor(
+    year: number,
+    month: number,
+    date: number,
+    hours: number,
+    minutes: number,
+    seconds: number,
+    ms: number,
+    options?: PersianDateOptions
+  );
+
+  constructor(...args: unknown[]) {
+    const [newArguments, options] = normalizeArguments(args);
+    super(...(newArguments as []));
     this.setOptions(options);
     this.normalizeDate();
-  }
-
-  setDate(date: number): number {
-    return super.setDate(date);
   }
 
   setOptions(options?: PersianDateOptions) {
@@ -85,38 +126,7 @@ export default class PersianDate extends Date {
   }
 
   format(template: DateFormatTemplate): string {
-    let result = `${template}`;
-    const month = this.getMonth() + 1;
-    const hours = this.getHours();
-    const stringHours = hours.toString();
-    const stringMonth = month.toString();
-    const stringDate = this.getDate().toString();
-    const localString = this.toPersianLocalString;
-
-    const replacements: Record<DateTimeSegment, string> = {
-      YYYY: this.getFullYear().toString(),
-      MM: stringMonth.padStart(2, "0"),
-      DD: stringDate.padStart(2, "0"),
-      HH: stringHours.toString().padStart(2, "0"),
-      mm: this.getMinutes().toString().padStart(2, "0"),
-      ss: this.getSeconds().toString().padStart(2, "0"),
-      dddd: localString({ weekday: "long" }),
-      MMM: localString({ month: "short" }),
-      MMMM: localString({ month: "long" }),
-      YY: this.getFullYear().toString().slice(-2),
-      D: stringDate,
-      ddd: localString({ weekday: "short" }),
-      Do: stringDate.padStart(2, "0"),
-      M: stringMonth,
-      h: stringHours,
-      a: hours < 12 ? "AM" : "PM",
-    };
-
-    for (const [key, value] of Object.entries(replacements)) {
-      result = result.replace(new RegExp(key, "g"), value);
-    }
-
-    return result;
+    return formatDate(this, template);
   }
 
   toGregorianDate(): Date {
