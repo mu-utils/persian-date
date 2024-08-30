@@ -1,4 +1,5 @@
-import PersianDateUtils from "./PersianUtils/PersianDateUtils";
+import PersianDateUtils from "./PersianUtils/GregorianDateUtils";
+import DateFormat from "./types/DateFormat";
 
 export class PersianDate extends Date {
   constructor(date: Date | string | number = new Date()) {
@@ -8,15 +9,29 @@ export class PersianDate extends Date {
 
   private normalizeDate() {
     if (!PersianDateUtils.isValidPersianDate(this)) {
-      PersianDateUtils.toGregorian(this);
+      this.toPersianDate();
     }
   }
 
-  // Convert Persian digits to Latin digits
-  private toPersianDigits(n: string): string {
-    return n.replace(/[۰-۹]/g, (d) =>
-      String(d.charCodeAt(0) - "۰".charCodeAt(0))
-    );
+  private toPersianDate() {
+    const localeString = this.toFaIRLocaleString();
+    const time = new Date(localeString).getTime();
+    this.setTime(time);
+  }
+
+  format(template: DateFormat): string {
+    let result = `${template}`;
+    const replacements: Record<string, string> = {
+      YYYY: this.getFullYear().toString(),
+      MM: this.getMonth().toString().padStart(2, "0"),
+      DD: this.getDate().toString().padStart(2, "0"),
+    };
+
+    for (const [key, value] of Object.entries(replacements)) {
+      result = result.replace(new RegExp(key, "g"), value);
+    }
+
+    return result;
   }
 
   // Format date to Persian locale with Latin digits
@@ -28,15 +43,12 @@ export class PersianDate extends Date {
     return this.toLocaleString("fa-IR-u-nu-latn", options);
   }
 
-  // Calculate the difference in time between two PersianDate instances
   diff(date: PersianDate): number {
     return Math.abs(this.getTime() - date.getTime());
   }
 }
 
-// Factory function to create and return a new PersianDate instance
 function persianDate(date?: PersianDate | string | number | Date): PersianDate {
-  // Convert the input to a valid Date or undefined
   if (date instanceof PersianDate) {
     return new PersianDate(date.getTime());
   }

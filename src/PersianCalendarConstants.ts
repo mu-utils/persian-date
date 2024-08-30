@@ -1,7 +1,7 @@
 export default class PersianCalendarConstants {
   /**
    * An array containing the number of days in each month of the Persian
-   * calendar. For example, farvadin has 31 days and esfand has 30 days except
+   * calendar. For example, Farvadin has 31 days and Esfand has 30 days except
    * in leap years.
    */
   static readonly MONTHS_DAYS = [
@@ -38,7 +38,45 @@ export default class PersianCalendarConstants {
    */
   static readonly TOTAL_DAYS_IN_2820_YEARS = 10631060;
 
+  /**
+   * An array containing the number of days that passed in each month of the
+   */
   static readonly PASSED_DAYS_IN_MONTHS = [
     0, 31, 62, 93, 124, 155, 186, 216, 246, 276, 306, 336,
   ];
+
+  /**
+   * Multiplier used in Persian leap year calculations.
+   */
+  static readonly LEAP_YEAR_MULTIPLIER = 682;
+
+  /**
+   * Adjustment factor for leap year calculation.
+   */
+  static readonly LEAP_YEAR_ADJUSTMENT = 110;
+
+  /**
+   * Divisor for determining leap years.
+   */
+  static readonly LEAP_YEAR_DIVISOR = 2816;
+
+  /**
+   * Number of days in a 400 year cycle.
+   */
+  static readonly DAYS_IN_400_YEARS = 146097;
+
+  /**
+   * Number of days in a 100 year cycle.
+   */
+  static readonly DAYS_IN_100_YEARS = 36524;
+
+  /**
+   * Number of days in a 4 year cycle.
+   */
+  static readonly DAYS_IN_4_YEARS = 1461;
+
+  /**
+   * Number of days in a year.
+   */
+  static readonly DAYS_IN_YEAR = 365;
 }
