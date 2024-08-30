@@ -18,15 +18,13 @@ export default function formatDate(
 function createReplacements(
   thisInstance: PersianDate
 ): Record<DateTimeSegment, string> {
-  const month = thisInstance.getMonth() + 1;
+  const month = thisInstance.getMonth();
   const hours = thisInstance.getHours();
   const stringHours = hours.toString();
   const stringMonth = month.toString();
   const stringYear = thisInstance.getFullYear().toString();
   const stringDate = thisInstance.getDate().toString();
   const localString = thisInstance.toPersianLocalString.bind(thisInstance);
-
-  console.log(stringYear);
 
   return {
     YYYY: stringYear.toString(),
@@ -44,6 +42,6 @@ function createReplacements(
     Do: stringDate.padStart(2, "0"),
     M: stringMonth,
     h: stringHours,
-    a: hours < 12 ? "AM" : "PM",
+    a: hours < 12 ? "am" : "pm",
   };
 }
