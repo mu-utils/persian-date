@@ -1,10 +1,8 @@
-import DateValidationResult from "../constants/dateValidationResult";
 import {
   PERSIAN_MIN_YEAR,
   PERSIAN_MAX_YEAR,
   PERSIAN_MONTHS_DAYS,
 } from "../constants/persianCalendar";
-import DateValidationResultType from "../types/DateValidationResultType";
 import { isLeapYear } from "./leapYear";
 
 const isValidYear = (year: number): boolean =>
@@ -33,25 +31,10 @@ const validatePersianDate = (
   year: number,
   month: number,
   day: number
-): DateValidationResultType => {
-  if (isNaN(year)) {
-    return DateValidationResult.DATE_IS_INVALID;
-  }
-
-  if (!isValidYear(year)) {
-    return DateValidationResult.PERSIAN_DATE_IS_INVALID;
-  }
-
-  if (!isValidMonth(month)) {
-    return DateValidationResult.DATE_IS_INVALID;
-  }
-
-  // whenever the date is persian the day should be valid otherwise it will be invalid
-  if (!isValidDay(day, year, month)) {
-    return DateValidationResult.DATE_IS_INVALID;
-  }
-
-  return DateValidationResult.DATE_IS_VALID;
-};
+): boolean =>
+  isNaN(year) ||
+  !isValidYear(year) ||
+  !isValidMonth(month) ||
+  !isValidDay(day, year, month);
 
 export default validatePersianDate;

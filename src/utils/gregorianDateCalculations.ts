@@ -21,10 +21,11 @@ import { getLeapYearFactor } from "./leapYear";
  * @param date - The date to calculate the total Gregorian days for.
  * @returns The total number of Gregorian days for the given date.
  */
-export const getTotalGregorianDays = (date: PersianDate): number => {
-  const year = date.getFullYear();
-  const month = date.getMonth();
-  const day = date.getDate();
+export const getTotalGregorianDays = (
+  year: number,
+  month: number,
+  day: number
+): number => {
   const epochBase = calculateEpochBase(year);
   const epochYear = calculateEpochYear(epochBase);
   const passedDaysInMonth = PERSIAN_PASSED_DAYS_IN_MONTHS[month - 1];
@@ -46,15 +47,19 @@ export const getTotalGregorianDays = (date: PersianDate): number => {
  * @param date - The Persian date to convert.
  * @returns The corresponding Gregorian date.
  */
-export const toGregorianDate = (date: PersianDate): Date => {
-  const totalGregorianDays = getTotalGregorianDays(date);
+export const toGregorianDate = (
+  year: number,
+  month: number,
+  day: number
+): Date => {
+  const totalGregorianDays = getTotalGregorianDays(year, month, day);
   const wjd = totalGregorianDays - 1;
   const depoch = wjd - GREGORIAN_EPOCH;
-  const year = calculateYear(depoch);
-  const month = calculateMonth(wjd, year);
-  const day = calculateDay(wjd, year, month);
+  const gYear = calculateYear(depoch);
+  const gMonth = calculateMonth(wjd, year);
+  const gDay = calculateDay(wjd, year, month);
 
-  return new Date(year, month - 1, day);
+  return new Date(gYear, gMonth - 1, gDay);
 };
 
 /**

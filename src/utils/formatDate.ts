@@ -25,7 +25,7 @@ function createReplacements(
   const stringMonth = month.toString();
   const stringYear = date.getFullYear().toString();
   const stringDate = date.getDate().toString();
-  const localString = date.toPersianLocalString.bind(date);
+  const localString = date.toPersianLocaleString.bind(date);
 
   return {
     YYYY: stringYear.toString(),

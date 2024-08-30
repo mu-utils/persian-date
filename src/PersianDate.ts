@@ -5,9 +5,10 @@ import formatDate from "./utils/formatDate";
 import { toGregorianDate } from "./utils/gregorianDateCalculations";
 import validatePersianDate from "./utils/validatePersianDate";
 import DEFAULT_OPTIONS from "./constants/defaultOptions";
+import normalizeTime from "./utils/normalizeDate";
 
 export default class PersianDate extends Date {
-  private options: PersianDateOptions = DEFAULT_OPTIONS;
+  options: PersianDateOptions = DEFAULT_OPTIONS;
 
   constructor(options?: PersianDateOptions);
   constructor(value: Date, options?: PersianDateOptions);
@@ -58,7 +59,7 @@ export default class PersianDate extends Date {
     const [newArguments, options] = normalizeArguments(args);
     super(...(newArguments as []));
     this.setOptions(options);
-    this.normalizeDate();
+    this.normalizeTime();
   }
 
   setOptions(options?: PersianDateOptions) {
@@ -67,11 +68,9 @@ export default class PersianDate extends Date {
     }
   }
 
-  private normalizeDate() {
-    const day = this.getDate();
-    const month = this.getMonth();
-    const year = this.getFullYear();
-    const result = validatePersianDate(year, month, day);
+  private normalizeTime() {
+    const time = this.getTime();
+    normalizeTime(time, this.options);
 
     // if (result === DateValidationResult.DATE_IS_INVALID) {
     //   this.setTime(NaN);
@@ -92,7 +91,7 @@ export default class PersianDate extends Date {
    * Converts the current date to a Persian date through locale string.
    */
   private toPersianDate() {
-    const localeString = this.toPersianLocalString();
+    const localeString = this.toPersianLocaleString();
     const date = new PersianDate(localeString);
     this.setTime(date.getTime());
   }
@@ -106,7 +105,7 @@ export default class PersianDate extends Date {
   }
 
   // Format date to Persian locale with Latin digits
-  toPersianLocalString(options?: Intl.DateTimeFormatOptions): string {
+  toPersianLocaleString(options?: Intl.DateTimeFormatOptions): string {
     return this.toLocaleString("fa-IR-u-nu-latn", options);
   }
 
