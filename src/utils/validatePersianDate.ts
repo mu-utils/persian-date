@@ -40,7 +40,7 @@ const validatePersianDate = (date: Date): DateValidationResultType => {
     return DateValidationResult.PERSIAN_DATE_IS_INVALID;
   }
 
-  const month = date.getMonth() + 1;
+  const month = date.getMonth();
 
   if (!isValidMonth(month)) {
     return DateValidationResult.DATE_IS_INVALID;

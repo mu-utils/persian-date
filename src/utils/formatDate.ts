@@ -3,11 +3,11 @@ import DateFormatTemplate from "../types/DateFormatTemplate";
 import DateTimeSegment from "../types/DateTimeSegment";
 
 export default function formatDate(
-  thisInstance: PersianDate,
+  date: PersianDate,
   template: DateFormatTemplate
 ) {
   let result = `${template}`;
-  const replacements = createReplacements(thisInstance);
+  const replacements = createReplacements(date);
 
   for (const [key, value] of Object.entries(replacements)) {
     result = result.replace(new RegExp(key, "g"), value);
@@ -16,23 +16,23 @@ export default function formatDate(
   return result;
 }
 function createReplacements(
-  thisInstance: PersianDate
+  data: PersianDate
 ): Record<DateTimeSegment, string> {
-  const month = thisInstance.getMonth();
-  const hours = thisInstance.getHours();
+  const hours = data.getHours();
+  const month = 12 - data.getMonth();
   const stringHours = hours.toString();
   const stringMonth = month.toString();
-  const stringYear = thisInstance.getFullYear().toString();
-  const stringDate = thisInstance.getDate().toString();
-  const localString = thisInstance.toPersianLocalString.bind(thisInstance);
+  const stringYear = data.getFullYear().toString();
+  const stringDate = data.getDate().toString();
+  const localString = data.toPersianLocalString.bind(data);
 
   return {
     YYYY: stringYear.toString(),
     MM: stringMonth.padStart(2, "0"),
     DD: stringDate.padStart(2, "0"),
     HH: stringHours.padStart(2, "0"),
-    mm: thisInstance.getMinutes().toString().padStart(2, "0"),
-    ss: thisInstance.getSeconds().toString().padStart(2, "0"),
+    mm: data.getMinutes().toString().padStart(2, "0"),
+    ss: data.getSeconds().toString().padStart(2, "0"),
     dddd: localString({ weekday: "long" }),
     MMM: localString({ month: "short" }),
     MMMM: localString({ month: "long" }),
