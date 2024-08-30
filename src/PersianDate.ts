@@ -1,11 +1,11 @@
 import PersianDateOptions from "./types/PersianDateOptions";
-import PersianDateUtils from "./utils/PersianDateUtils";
 import normalizeArguments from "./utils/normalizeArguments";
-import DateValidationResult from "./constants/DateValidationResult";
+import DateValidationResult from "./constants/dateValidationResult";
 import InvalidDate from "./utils/InvalidDate";
 import DateFormatTemplate from "./types/DateFormatTemplate";
-import GregorianDateUtils from "./utils/GregorianDateUtils";
 import formatDate from "./utils/formatDate";
+import { toGregorianDate } from "./utils/gregorianDateCalculations";
+import validatePersianDate from "./utils/validatePersianDate";
 
 export default class PersianDate extends Date {
   private invalidDate!: InvalidDate;
@@ -94,7 +94,10 @@ export default class PersianDate extends Date {
   }
 
   private normalizeDate() {
-    const result = PersianDateUtils.validateDate(this);
+    const day = this.getDate();
+    const month = this.getMonth();
+    const year = this.getFullYear();
+    const result = validatePersianDate(year, month, day);
 
     if (result === DateValidationResult.DATE_IS_INVALID) {
       this.throwException();
@@ -129,7 +132,7 @@ export default class PersianDate extends Date {
   }
 
   toGregorianDate(): Date {
-    return GregorianDateUtils.toGregorianDate(this);
+    return toGregorianDate(this);
   }
 
   // Format date to Persian locale with Latin digits
