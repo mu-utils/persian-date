@@ -15,24 +15,25 @@ export default function formatDate(
 
   return result;
 }
+
 function createReplacements(
-  data: PersianDate
+  date: PersianDate
 ): Record<DateTimeSegment, string> {
-  const hours = data.getHours();
-  const month = 12 - data.getMonth();
+  const hours = date.getHours();
+  const month = date.getMonth() + 1;
   const stringHours = hours.toString();
   const stringMonth = month.toString();
-  const stringYear = data.getFullYear().toString();
-  const stringDate = data.getDate().toString();
-  const localString = data.toPersianLocalString.bind(data);
+  const stringYear = date.getFullYear().toString();
+  const stringDate = date.getDate().toString();
+  const localString = date.toPersianLocalString.bind(date);
 
   return {
     YYYY: stringYear.toString(),
     MM: stringMonth.padStart(2, "0"),
     DD: stringDate.padStart(2, "0"),
     HH: stringHours.padStart(2, "0"),
-    mm: data.getMinutes().toString().padStart(2, "0"),
-    ss: data.getSeconds().toString().padStart(2, "0"),
+    mm: date.getMinutes().toString().padStart(2, "0"),
+    ss: date.getSeconds().toString().padStart(2, "0"),
     dddd: localString({ weekday: "long" }),
     MMM: localString({ month: "short" }),
     MMMM: localString({ month: "long" }),

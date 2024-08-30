@@ -29,25 +29,25 @@ const isValidDay = (day: number, year: number, month: number): boolean => {
  * month is within the valid range (1-12), and the day is within the valid
  * range for the given month and year.
  */
-const validatePersianDate = (date: Date): DateValidationResultType => {
-  if (isNaN(date.getTime())) {
+const validatePersianDate = (
+  year: number,
+  month: number,
+  day: number
+): DateValidationResultType => {
+  if (isNaN(year)) {
     return DateValidationResult.DATE_IS_INVALID;
   }
-
-  const year = date.getFullYear();
 
   if (!isValidYear(year)) {
     return DateValidationResult.PERSIAN_DATE_IS_INVALID;
   }
-
-  const month = date.getMonth();
 
   if (!isValidMonth(month)) {
     return DateValidationResult.DATE_IS_INVALID;
   }
 
   // whenever the date is persian the day should be valid otherwise it will be invalid
-  if (!isValidDay(date.getDate(), year, month)) {
+  if (!isValidDay(day, year, month)) {
     return DateValidationResult.DATE_IS_INVALID;
   }
 
