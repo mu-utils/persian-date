@@ -32,9 +32,6 @@ const validatePersianDate = (
   month: number,
   day: number
 ): boolean =>
-  isNaN(year) ||
-  !isValidYear(year) ||
-  !isValidMonth(month) ||
-  !isValidDay(day, year, month);
+  !isValidYear(year) && !isValidMonth(month) && !isValidDay(day, year, month);
 
 export default validatePersianDate;

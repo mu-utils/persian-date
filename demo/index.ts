@@ -1,6 +1,8 @@
 // import { PersianDate } from "persian-date";
-import moment from "moment";
+// import moment from "moment";
 // const a = persianDate("2024-09-02", { ignoreCalendar: true });
+
+import { PersianDate, persianDate } from "persian-date";
 
 // console.log(a.format("YYYY/MM/DD"), "SDddfdf");
 // us timezoneط
@@ -17,3 +19,6 @@ import moment from "moment";
 // const americaDate = new Date();
 // americaDate.toLocaleString("en-US", { timeZone: "2" });
 // console.log(americaDate);
+const date = new PersianDate("1399-12-1T12:15:25", {
+  calender: "gregorian",
+});

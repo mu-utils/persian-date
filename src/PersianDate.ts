@@ -2,10 +2,10 @@ import PersianDateOptions from "./types/PersianDateOptions";
 import normalizeArguments from "./utils/normalizeArguments";
 import DateFormatTemplate from "./types/DateFormatTemplate";
 import formatDate from "./utils/formatDate";
-import { toGregorianDate } from "./utils/gregorianDateCalculations";
+import { toGregorianDate } from "./utils/gregorianDate";
 import validatePersianDate from "./utils/validatePersianDate";
 import DEFAULT_OPTIONS from "./constants/defaultOptions";
-import normalizeTime from "./utils/normalizeDate";
+import normalizeTime from "./utils/normalizeTime";
 
 export default class PersianDate extends Date {
   options: PersianDateOptions = DEFAULT_OPTIONS;
@@ -70,7 +70,7 @@ export default class PersianDate extends Date {
 
   private normalizeTime() {
     const time = this.getTime();
-    normalizeTime(time, this.options);
+    this.setTime(normalizeTime(time, this.options));
 
     // if (result === DateValidationResult.DATE_IS_INVALID) {
     //   this.setTime(NaN);
@@ -87,21 +87,12 @@ export default class PersianDate extends Date {
     // }
   }
 
-  /**
-   * Converts the current date to a Persian date through locale string.
-   */
-  private toPersianDate() {
-    const localeString = this.toPersianLocaleString();
-    const date = new PersianDate(localeString);
-    this.setTime(date.getTime());
-  }
-
   format(template: DateFormatTemplate): string {
     return formatDate(this, template);
   }
 
-  toGregorianDate(): Date {
-    return toGregorianDate(this);
+  toGregorianDate() {
+    // return toGregorianDate(this);
   }
 
   // Format date to Persian locale with Latin digits
