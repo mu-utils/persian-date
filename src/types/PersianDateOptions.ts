@@ -1,4 +1,5 @@
 import InvalidDateSeverity from "./InvalidDateSeverity";
+import TimeZone from "./TimeZone";
 
 export default interface PersianDateOptions {
   /**
@@ -12,7 +13,7 @@ export default interface PersianDateOptions {
    * The time zone to use.
    * @default "Asia/Tehran"
    */
-  timeZone?: string;
+  timeZone?: TimeZone;
   /**
    * calendar: "persian",
    * format: "YYYY/MM/DD",
