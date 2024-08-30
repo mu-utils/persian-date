@@ -1,5 +1,3 @@
-import GregorianDateUtils from "../utils/GregorianDateUtils";
-
 describe("GregorianDateUtils", () => {
   describe("isLeapYear", () => {
     it("should return true for 1403", () => {
