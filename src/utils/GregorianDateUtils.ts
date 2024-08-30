@@ -1,46 +1,7 @@
-import GregorianCalendarConstants from "../GreogorianCalendarConstants";
-import PersianCalendarConstants from "../PersianCalendarConstants";
+import GregorianCalendarConstants from "../constants/GregorianCalendarConstants";
+import PersianCalendarConstants from "../constants/PersianCalendarConstants";
 
 export default class GregorianDateUtils {
-  static isValidPersianYear(year: number): boolean {
-    return (
-      year >= PersianCalendarConstants.MIN_YEAR &&
-      year <= PersianCalendarConstants.MAX_YEAR
-    );
-  }
-
-  static isValidPersianMonth(month: number): boolean {
-    return month >= 1 && month <= 12;
-  }
-
-  /**
-   * Determines whether the given Persian date is valid.
-   *
-   * The function checks if the year is within the valid range (1-9999), the
-   * month is within the valid range (1-12), and the day is within the valid
-   * range for the given month and year.
-   */
-  static isValidPersianDate(date: Date): boolean {
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-
-    if (
-      !GregorianDateUtils.isValidPersianYear(year) ||
-      !GregorianDateUtils.isValidPersianMonth(month)
-    ) {
-      return false;
-    }
-
-    const maxDaysInMonth = PersianCalendarConstants.MONTHS_DAYS[month - 1];
-
-    if (month === 12 && GregorianDateUtils.isLeapYear(year)) {
-      return day >= 1 && day <= 30; //? Esfand has 30 days in leap years
-    }
-
-    return day >= 1 && day <= maxDaysInMonth;
-  }
-
   /**
    * Determines whether the given year is a leap year in the Persian calendar.
    *
@@ -60,7 +21,7 @@ export default class GregorianDateUtils {
   /**
    * Calculates the number of days in the given Persian year.
    */
-  private static getEpochBase(year: number): number {
+  private static calculateEpochBase(year: number): number {
     return (
       year -
       (year >= 0
@@ -73,7 +34,7 @@ export default class GregorianDateUtils {
    * Calculates the number of days from the epoch to the given year.
    * @param epochBase - The number of years since the epoch.
    */
-  private static getEpochYear(epochBase: number) {
+  private static calculateEpochYear(epochBase: number) {
     return (
       PersianCalendarConstants.BASE_YEAR +
       (epochBase % PersianCalendarConstants.YEAR_CYCLE)
@@ -111,8 +72,8 @@ export default class GregorianDateUtils {
     const year = date.getFullYear();
     const month = date.getMonth();
     const day = date.getDate();
-    const epochBase = GregorianDateUtils.getEpochBase(year);
-    const epochYear = GregorianDateUtils.getEpochYear(epochBase);
+    const epochBase = GregorianDateUtils.calculateEpochBase(year);
+    const epochYear = GregorianDateUtils.calculateEpochYear(epochBase);
     const passedDaysInMonth =
       PersianCalendarConstants.PASSED_DAYS_IN_MONTHS[month - 1];
     const leapYearFactor = GregorianDateUtils.getLeapYearFactor(epochYear);
