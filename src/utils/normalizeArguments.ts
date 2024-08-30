@@ -1,57 +1,29 @@
 import PersianDate from "../PersianDate";
-import PersianDateArguments from "../types/PersianDateArguments";
 import PersianDateOptions from "../types/PersianDateOptions";
 
-type DateType = Date | number | string;
+type DateType = Date | number | string | undefined;
 
-interface NormalizeArguments {
-  props:
-    | []
-    | [value: DateType]
-    | [
-        year: number,
-        monthIndex: number,
-        date?: number,
-        hours?: number,
-        minutes?: number,
-        seconds?: number,
-        ms?: number
-      ];
-  options: PersianDateOptions | undefined;
-}
+type NormalizeArguments = [
+  newArguments: unknown[],
+  options: PersianDateOptions | undefined
+];
 
 export default function normalizeArguments(
-  args: PersianDateArguments
+  args: unknown[]
 ): NormalizeArguments {
-  if (args.length === 1) {
-    if (isOptions(args[0])) {
-      return { props: [], options: args[0] };
+  let newArguments: unknown[] = [];
+  let options: PersianDateOptions | undefined = undefined;
+
+  for (const arg of args) {
+    if (!isOptions(arg)) {
+      newArguments.push(arg);
+    } else {
+      options = arg;
     }
-
-    return { props: args as [DateType], options: undefined };
   }
 
-  if (args.length === 2 && isOptions(args[1])) {
-    return { props: [args[0] as DateType], options: args[1] };
-  }
-
-  if (args.length === 8) {
-    return {
-      props: args.slice(0, 6) as [
-        number,
-        number,
-        number,
-        number,
-        number,
-        number
-      ],
-      options: args[6] as PersianDateOptions | undefined,
-    };
-  }
-
-  return { props: [], options: undefined };
+  return [newArguments, options];
 }
 
-function isOptions(arg: unknown): arg is PersianDateOptions {
-  return typeof arg === "object" && !(arg instanceof PersianDate);
-}
+const isOptions = (arg: unknown): arg is PersianDateOptions =>
+  typeof arg === "object" && !(arg instanceof PersianDate);
