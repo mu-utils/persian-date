@@ -47,6 +47,11 @@ export default class PersianDateUtils {
       return false;
     }
 
-    return this.isValidDay(date.getDate(), year, month);
+    // whenever the date is persian the day should be valid otherwise it will be invalid
+    if (!this.isValidDay(date.getDate(), year, month)) {
+      throw new Error("Invalid Date");
+    }
+
+    return true;
   }
 }

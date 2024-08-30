@@ -4,8 +4,8 @@ import { PersianDate, persianDate } from "persian-date";
 
 // console.log(a.format("YYYY/MM/DD"), "SDddfdf");
 
-const date = new PersianDate("1399/12/31 23:59:59.999");
+const date = new PersianDate("2001/12/31 23:59:59.999");
 
-console.log(date);
+console.log(date.getFullYear());
 
 // console.log(persianDate("2001/02/14").format("YYYY/MM/DD"));
