@@ -2,72 +2,39 @@ import DateFormat from "./types/DateFormat";
 import PersianDateOptions from "./types/PersianDateOptions";
 import PersianDateArguments from "./types/PersianDateArguments";
 import PersianDateUtils from "./utils/PersianDateUtils";
-
-interface NormalizeArguments {
-  props:
-    | []
-    | [value: Date | number | string]
-    | [
-        year: number,
-        monthIndex: number,
-        date?: number,
-        hours?: number,
-        minutes?: number,
-        seconds?: number,
-        ms?: number
-      ];
-  options: PersianDateOptions | undefined;
-}
+import normalizeArguments from "./utils/normalizeArguments";
 
 export default class PersianDate extends Date {
+  /**
+   * this is a default options for PersianDate in the future some other configs will be add to this
+   * @param {PersianDateOptions} options
+   * @param {boolean} options.ignoreCalendar
+   *
+   *
+   * calendar: "persian",
+   * format: "YYYY/MM/DD",
+   * locale: "fa-IR",
+   * numberingSystem: "latn",
+   * timeZone: "Asia/Tehran",
+   */
   static readonly DEFAULT_OPTIONS: PersianDateOptions = {
-    // calendar: "persian",
-    // format: "YYYY/MM/DD",
-    // locale: "fa-IR",
-    // numberingSystem: "latn",
-    // timeZone: "Asia/Tehran",
     ignoreCalendar: true,
   };
   private options: PersianDateOptions = PersianDate.DEFAULT_OPTIONS;
 
   constructor(...args: PersianDateArguments) {
-    const { props, options } = PersianDate.normalizeArguments(args);
+    const { props, options } = normalizeArguments(args);
 
     super(...(props as [number | string | Date]));
     this.setOptions(options);
     this.normalizeDate();
   }
-  private static normalizeArguments(
-    args: PersianDateArguments
-  ): NormalizeArguments {
-    if (args.length === 1) {
-      if (typeof args[0] === "object" && !(args[0] instanceof Date)) {
-        return { props: [], options: args[0] };
-      }
 
-      return { props: args as [number | string | Date], options: undefined };
-    }
-
-    if (args.length === 8) {
-      return {
-        props: args.slice(0, 6) as [
-          number,
-          number,
-          number,
-          number,
-          number,
-          number
-        ],
-        options: args[6] as PersianDateOptions | undefined,
-      };
-    }
-
-    return { props: [], options: undefined };
+  setDate(date: number): number {
+    return super.setDate(date);
   }
 
   setOptions(options?: PersianDateOptions) {
-    console.log(options);
-
     if (options) {
       this.options = { ...this.options, ...options };
     }
@@ -93,8 +60,11 @@ export default class PersianDate extends Date {
 
   private toPersianDate() {
     const localeString = this.toFaIRLocaleString();
-    const time = new PersianDate(localeString).getTime();
-    this.setTime(time);
+    // const time = new PersianDate(localeString).getTime();
+    // this.setTime(time);
+
+    console.log(localeString);
+    
   }
 
   format(template: DateFormat): string {
