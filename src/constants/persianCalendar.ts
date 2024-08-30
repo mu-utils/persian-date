@@ -1,0 +1,80 @@
+/**
+ * An array containing the number of days in each month of the Persian
+ * calendar. For example, Farvadin has 31 days and Esfand has 30 days except
+ * in leap years.
+ */
+export const MONTHS_DAYS = [
+  31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29,
+] as const;
+
+/**
+ * The epoch of the Persian calendar.
+ */
+export const EPOCH = 1948321;
+
+/**
+ * The base year for Persian calendar calculations.
+ */
+export const BASE_YEAR = 474;
+
+/**
+ * The number of days in a Persian year cycle.
+ */
+export const YEAR_CYCLE = 2820;
+
+/**
+ * The minimum year that can be converted to the Persian calendar.
+ */
+export const MIN_YEAR = 1200;
+
+/**
+ * The maximum year that can be converted to the Persian calendar.
+ */
+export const MAX_YEAR = 1500;
+
+/**
+ * The total number of days in 2820 years.
+ */
+export const TOTAL_DAYS_IN_2820_YEARS = 10631060;
+
+/**
+ * An array containing the number of days that passed in each month of the
+ */
+export const PASSED_DAYS_IN_MONTHS = [
+  0, 31, 62, 93, 124, 155, 186, 216, 246, 276, 306, 336,
+] as const;
+
+/**
+ * Multiplier used in Persian leap year calculations.
+ */
+export const LEAP_YEAR_MULTIPLIER = 682;
+
+/**
+ * Adjustment factor for leap year calculation.
+ */
+export const LEAP_YEAR_ADJUSTMENT = 110;
+
+/**
+ * Divisor for determining leap years.
+ */
+export const LEAP_YEAR_DIVISOR = 2816;
+
+/**
+ * Number of days in a 400 year cycle.
+ */
+export const DAYS_IN_400_YEARS = 146097;
+
+/**
+ * Number of days in a 100 year cycle.
+ */
+export const DAYS_IN_100_YEARS = 36524;
+
+/**
+ * Number of days in a 4 year cycle.
+ */
+export const DAYS_IN_4_YEARS = 1461;
+
+/**
+ * Number of days in a year.
+ */
+export const DAYS_IN_YEAR = 365;
