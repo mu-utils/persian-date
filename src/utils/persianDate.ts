@@ -1,9 +1,10 @@
 import PersianDate from "../PersianDate/PersianDate";
+import PersianDateOptions from "../types/PersianDateOptions";
 
-function persianDate(): PersianDate;
-function persianDate(value: number): PersianDate;
-function persianDate(value: string): PersianDate;
-function persianDate(value: Date): PersianDate;
+function persianDate(options?: PersianDateOptions): PersianDate;
+function persianDate(value: number, options?: PersianDateOptions): PersianDate;
+function persianDate(value: string, options?: PersianDateOptions): PersianDate;
+function persianDate(value: Date, options?: PersianDateOptions): PersianDate;
 function persianDate(
   year: number,
   month: number,
@@ -11,7 +12,8 @@ function persianDate(
   hours?: number,
   minutes?: number,
   seconds?: number,
-  ms?: number
+  ms?: number,
+  options?: PersianDateOptions
 ): PersianDate;
 function persianDate(...args: Parameters<typeof Date>): PersianDate {
   return new PersianDate(...args);
