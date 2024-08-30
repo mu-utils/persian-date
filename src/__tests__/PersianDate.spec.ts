@@ -4,7 +4,7 @@ describe("PersianDate", () => {
   describe("constructor", () => {
     it("should throw error if date is invalid", () => {
       expect(() => new PersianDate("2003", { ignoreCalendar: false })).toThrow(
-        "Invalid date"
+        "Invalid Date"
       );
     });
   });
