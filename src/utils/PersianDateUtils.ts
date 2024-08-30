@@ -1,6 +1,6 @@
 import DateValidationResult from "../constants/DateValidationResult";
 import PersianCalendarConstants from "../constants/PersianCalendarConstants";
-import GregorianDateUtils from "./GregorianDateUtils";
+import { isLeapYear } from "./leapYearUtils";
 
 export default class PersianDateUtils {
   private static isValidYear(year: number): boolean {
@@ -17,7 +17,7 @@ export default class PersianDateUtils {
   private static isValidDay(day: number, year: number, month: number): boolean {
     const maxDaysInMonth = PersianCalendarConstants.MONTHS_DAYS[month - 1];
 
-    if (month === 12 && GregorianDateUtils.isLeapYear(year)) {
+    if (month === 12 && isLeapYear(year)) {
       return day >= 1 && day <= 30; //? Esfand has 30 days in leap years
     }
 
