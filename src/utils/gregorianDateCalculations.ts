@@ -1,4 +1,4 @@
-import { GREGORIAN_EPOCH } from "../constants/GregorianCalendarConstants";
+import { GREGORIAN_EPOCH } from "../constants/gregorianCalendar";
 import {
   PERSIAN_PASSED_DAYS_IN_MONTHS,
   PERSIAN_DAYS_IN_400_YEARS,
