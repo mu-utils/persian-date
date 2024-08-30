@@ -16,6 +16,7 @@ const date = new PersianDate("2021-2-20", {
   //   timeZone: "Asia/Tehran",
 });
 
+console.clear();
 console.log(date.toLocaleDateString());
 
 // console.log(persianDate("2001/02/14").format("YYYY/MM/DD"));
