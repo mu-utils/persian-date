@@ -4,8 +4,8 @@ import normalizeArguments from "./utils/normalizeArguments";
 import DateValidationResult from "./constants/DateValidationResult";
 import InvalidDate from "./utils/InvalidDate";
 import DateFormatTemplate from "./types/DateFormatTemplate";
-import GregorianDateUtils from "./utils/GregorianDateUtils";
 import formatDate from "./utils/formatDate";
+import { toGregorianDate } from "./utils/gregrioanDateUtls";
 
 export default class PersianDate extends Date {
   private invalidDate!: InvalidDate;
@@ -129,7 +129,7 @@ export default class PersianDate extends Date {
   }
 
   toGregorianDate(): Date {
-    return GregorianDateUtils.toGregorianDate(this);
+    return toGregorianDate(this);
   }
 
   // Format date to Persian locale with Latin digits
