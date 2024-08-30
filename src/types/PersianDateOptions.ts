@@ -1,3 +1,4 @@
+import Calendar from "./Calendar";
 import InvalidDateSeverity from "./InvalidDateSeverity";
 import TimeZone from "./TimeZone";
 
@@ -23,8 +24,13 @@ export default interface PersianDateOptions {
    */
 
   /**
-   *   
+   *
    * @default true
    */
   invalidDateSeverity?: InvalidDateSeverity;
+
+  /**
+   * @default "persian"
+   */
+  calender?: Calendar;
 }
