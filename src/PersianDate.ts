@@ -3,6 +3,7 @@ import PersianDateOptions from "./types/PersianDateOptions";
 import PersianDateArguments from "./types/PersianDateArguments";
 import PersianDateUtils from "./utils/PersianDateUtils";
 import normalizeArguments from "./utils/normalizeArguments";
+import GregorianDateUtils from "./utils/GregorianDateUtils";
 
 export default class PersianDate extends Date {
   /**
@@ -81,6 +82,10 @@ export default class PersianDate extends Date {
     }
 
     return result;
+  }
+
+  toGregorianDate(): Date {
+    return GregorianDateUtils.toGregorianDate(this);
   }
 
   // Format date to Persian locale with Latin digits
