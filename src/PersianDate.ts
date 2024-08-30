@@ -95,7 +95,10 @@ export default class PersianDate extends Date {
   }
 
   private normalizeDate() {
-    const result = validatePersianDate(this);
+    const day = this.getDate();
+    const month = this.getMonth();
+    const year = this.getFullYear();
+    const result = validatePersianDate(year, month, day);
 
     if (result === DateValidationResult.DATE_IS_INVALID) {
       this.throwException();
