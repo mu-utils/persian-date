@@ -41,4 +41,18 @@ describe("PersianDate", () => {
       expect(date.format("YYYY-MM-DD")).toBe("1399-10-13");
     });
   });
+
+  describe("toGregorianDate", () => {
+    it("should convert to gregorian date", () => {
+      const date = new PersianDate("1399/10/13");
+
+
+      console.log(date);
+      
+
+      expect(date.toGregorianDate()).toEqual(
+        new Date("2021-01-02T23:59:59.999Z")
+      );
+    });
+  });
 });
