@@ -1,5 +1,18 @@
-import DateSegment from "./DateSegment";
-import TimeSegment from "./TimeSegment";
+type DateSegment =
+  | "MM"
+  | "YYYY"
+  | "DD"
+  | "dddd"
+  | "MMM"
+  | "MMMM"
+  | "YY"
+  | "D"
+  | "ddd"
+  | "Do"
+  | "M"
+  | "YYYY";
+
+type TimeSegment = "HH" | "mm" | "ss" | "a" | "h";
 
 type DateTimeSegment = DateSegment | TimeSegment;
 
