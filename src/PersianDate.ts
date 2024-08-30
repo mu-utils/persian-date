@@ -6,6 +6,7 @@ import normalizeArguments from "./utils/normalizeArguments";
 import DateValidationResult from "./constants/DateValidationResult";
 import InvalidDate from "./utils/InvalidDate";
 import DateFormatTemplate from "./types/DateFormatTemplate";
+import GregorianDateUtils from "./utils/GregorianDateUtils";
 
 export default class PersianDate extends Date {
   private invalidDate!: InvalidDate;
@@ -53,8 +54,6 @@ export default class PersianDate extends Date {
   }
 
   private normalizeDate() {
-    console.log(this.format(""));
-
     const result = PersianDateUtils.validateDate(this);
 
     if (result === DateValidationResult.DATE_IS_INVALID) {
