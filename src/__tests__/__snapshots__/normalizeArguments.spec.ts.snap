@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`normalizeArguments should return an tuple of props and options 1`] = `
+[
+  [
+    "2023/01/01",
+  ],
+  undefined,
+]
+`;
