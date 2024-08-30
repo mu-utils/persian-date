@@ -1,13 +1,13 @@
 import GregorianCalendarConstants from "../constants/GregorianCalendarConstants";
-import PersianCalendarConstants from "../constants/PersianCalendarConstants";
+import PersianCalendarConstants from "../constants/persianCalendar";
 import PersianDate from "../PersianDate";
 import { dayFromYear, dayInYear } from "./dateCalculations";
 import {
   calculateEpochBase,
   calculateEpochYear,
   getDaysFromCycleAndEpoch,
-} from "./epochUtils";
-import { getLeapYearFactor } from "./leapYearUtils";
+} from "./epochCalculations";
+import { getLeapYearFactor } from "./leapYear";
 
 /**
  * Calculates the total number of Gregorian days for the given date.

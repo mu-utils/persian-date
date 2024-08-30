@@ -1,6 +1,6 @@
 import DateValidationResult from "../constants/DateValidationResult";
-import PersianCalendarConstants from "../constants/PersianCalendarConstants";
-import { isLeapYear } from "./leapYearUtils";
+import PersianCalendarConstants from "../constants/persianCalendar";
+import { isLeapYear } from "./leapYear";
 
 export default class PersianDateUtils {
   private static isValidYear(year: number): boolean {
