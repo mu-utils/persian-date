@@ -1,11 +1,12 @@
 import PersianDateOptions from "./types/PersianDateOptions";
-import PersianDateUtils from "./utils/PersianDateCalculations";
+import PersianDateUtils from "./utils/validatePersianDate";
 import normalizeArguments from "./utils/normalizeArguments";
 import DateValidationResult from "./constants/DateValidationResult";
 import InvalidDate from "./utils/InvalidDate";
 import DateFormatTemplate from "./types/DateFormatTemplate";
 import formatDate from "./utils/formatDate";
 import { toGregorianDate } from "./utils/gregorianDateCalculations";
+import validatePersianDate from "./utils/validatePersianDate";
 
 export default class PersianDate extends Date {
   private invalidDate!: InvalidDate;
@@ -94,7 +95,7 @@ export default class PersianDate extends Date {
   }
 
   private normalizeDate() {
-    const result = PersianDateUtils.validateDate(this);
+    const result = validatePersianDate(this);
 
     if (result === DateValidationResult.DATE_IS_INVALID) {
       this.throwException();

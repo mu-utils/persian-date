@@ -1,5 +1,11 @@
-import GregorianCalendarConstants from "../constants/GregorianCalendarConstants";
-import PersianCalendarConstants from "../constants/persianCalendar";
+import { GREGORIAN_EPOCH } from "../constants/GregorianCalendarConstants";
+import {
+  PERSIAN_PASSED_DAYS_IN_MONTHS,
+  PERSIAN_DAYS_IN_400_YEARS,
+  PERSIAN_DAYS_IN_100_YEARS,
+  PERSIAN_DAYS_IN_4_YEARS,
+  PERSIAN_DAYS_IN_YEAR,
+} from "../constants/persianCalendar";
 import PersianDate from "../PersianDate";
 import { dayFromYear, dayInYear } from "./dateCalculations";
 import {
@@ -21,8 +27,7 @@ export const getTotalGregorianDays = (date: PersianDate): number => {
   const day = date.getDate();
   const epochBase = calculateEpochBase(year);
   const epochYear = calculateEpochYear(epochBase);
-  const passedDaysInMonth =
-    PersianCalendarConstants.PASSED_DAYS_IN_MONTHS[month - 1];
+  const passedDaysInMonth = PERSIAN_PASSED_DAYS_IN_MONTHS[month - 1];
   const leapYearFactor = getLeapYearFactor(epochYear);
   const totalDaysInYears = (epochYear - 1) * 365;
   const daysFromCycleAndEpoch = getDaysFromCycleAndEpoch(epochBase);
@@ -44,7 +49,7 @@ export const getTotalGregorianDays = (date: PersianDate): number => {
 export const toGregorianDate = (date: PersianDate): Date => {
   const totalGregorianDays = getTotalGregorianDays(date);
   const wjd = totalGregorianDays - 1;
-  const depoch = wjd - GregorianCalendarConstants.EPOCH;
+  const depoch = wjd - GREGORIAN_EPOCH;
   const year = calculateYear(depoch);
   const month = calculateMonth(wjd, year);
   const day = calculateDay(wjd, year, month);
@@ -79,29 +84,22 @@ const calculateMonth = (wjd: number, year: number): number => {
  * @param depoch - The day count since the epoch.
  */
 const calculateYear = (depoch: number): number => {
-  const quadricentCycles = Math.floor(
-    depoch / PersianCalendarConstants.DAYS_IN_400_YEARS
-  );
-  const daysSinceQuadricent =
-    depoch % PersianCalendarConstants.DAYS_IN_400_YEARS;
+  const quadricentCycles = Math.floor(depoch / PERSIAN_DAYS_IN_400_YEARS);
+  const daysSinceQuadricent = depoch % PERSIAN_DAYS_IN_400_YEARS;
 
   const centCycles = Math.floor(
-    daysSinceQuadricent / PersianCalendarConstants.DAYS_IN_100_YEARS
+    daysSinceQuadricent / PERSIAN_DAYS_IN_100_YEARS
   );
-  const daysSinceCent =
-    daysSinceQuadricent % PersianCalendarConstants.DAYS_IN_100_YEARS;
+  const daysSinceCent = daysSinceQuadricent % PERSIAN_DAYS_IN_100_YEARS;
 
-  const quadCycles = Math.floor(
-    daysSinceCent / PersianCalendarConstants.DAYS_IN_4_YEARS
-  );
-  const daysSinceQuad =
-    daysSinceCent % PersianCalendarConstants.DAYS_IN_4_YEARS;
+  const quadCycles = Math.floor(daysSinceCent / PERSIAN_DAYS_IN_4_YEARS);
+  const daysSinceQuad = daysSinceCent % PERSIAN_DAYS_IN_4_YEARS;
 
   const year =
     quadricentCycles * 400 +
     centCycles * 100 +
     quadCycles * 4 +
-    Math.floor(daysSinceQuad / PersianCalendarConstants.DAYS_IN_YEAR);
+    Math.floor(daysSinceQuad / PERSIAN_DAYS_IN_YEAR);
 
   return year;
 };
