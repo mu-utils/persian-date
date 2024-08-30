@@ -4,7 +4,7 @@ import TimeZone from "./TimeZone";
 export default interface PersianDateOptions {
   /**
    * While parse and conversion is based on the Gregorian calendar, there isn't any error throwing.
-   *
+   * @default true
    * strict mode?
    */
   ignoreCalendar?: boolean;
@@ -23,7 +23,8 @@ export default interface PersianDateOptions {
    */
 
   /**
-   *
+   *   
+   * @default true
    */
   invalidDateSeverity?: InvalidDateSeverity;
 }
