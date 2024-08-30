@@ -1,11 +1,11 @@
 import PersianDateOptions from "./types/PersianDateOptions";
-import PersianDateUtils from "./utils/PersianDateUtils";
+import PersianDateUtils from "./utils/PersianDateCalculations";
 import normalizeArguments from "./utils/normalizeArguments";
 import DateValidationResult from "./constants/DateValidationResult";
 import InvalidDate from "./utils/InvalidDate";
 import DateFormatTemplate from "./types/DateFormatTemplate";
 import formatDate from "./utils/formatDate";
-import { toGregorianDate } from "./utils/gregrioanDateUtls";
+import { toGregorianDate } from "./utils/gregorianDateCalculations";
 
 export default class PersianDate extends Date {
   private invalidDate!: InvalidDate;

@@ -1,4 +1,4 @@
-import PersianCalendarConstants from "../constants/PersianCalendarConstants";
+import PersianCalendarConstants from "../constants/persianCalendar";
 
 /**
  * Calculates the number of days in the given Persian year.

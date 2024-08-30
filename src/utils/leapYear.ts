@@ -1,4 +1,4 @@
-import PersianCalendarConstants from "../constants/PersianCalendarConstants";
+import PersianCalendarConstants from "../constants/persianCalendar";
 
 /**
  * Calculates the leap year factor for a given epoch year.
