@@ -1,8 +1,8 @@
-type Segment = "HH" | "mm" | "ss";
+import TimeSegment from "./TimeSegment";
 
 type TimeFormat =
-  | `${Segment}`
-  | `${Segment}:${Segment}`
-  | `${Segment}:${Segment}:${Segment}`;
+  | `${TimeSegment}`
+  | `${TimeSegment}:${TimeSegment}`
+  | `${TimeSegment}:${TimeSegment}:${TimeSegment}`;
 
 export default TimeFormat;
