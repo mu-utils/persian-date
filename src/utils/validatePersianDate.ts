@@ -1,0 +1,57 @@
+import DateValidationResult from "../constants/DateValidationResult";
+import {
+  PERSIAN_MIN_YEAR,
+  PERSIAN_MAX_YEAR,
+  PERSIAN_MONTHS_DAYS,
+} from "../constants/persianCalendar";
+import DateValidationResultType from "../types/DateValidationResultType";
+import { isLeapYear } from "./leapYear";
+
+const isValidYear = (year: number): boolean =>
+  year >= PERSIAN_MIN_YEAR && year <= PERSIAN_MAX_YEAR;
+
+const isValidMonth = (month: number): boolean => month >= 1 && month <= 12;
+
+const isValidDay = (day: number, year: number, month: number): boolean => {
+  const maxDaysInMonth = PERSIAN_MONTHS_DAYS[month - 1];
+
+  if (month === 12 && isLeapYear(year)) {
+    return day >= 1 && day <= 30; //? Esfand has 30 days in leap years
+  }
+
+  return day >= 1 && day <= maxDaysInMonth;
+};
+
+/**
+ * Determines whether the given Persian date is valid.
+ *
+ * The function checks if the year is within the valid range (1-9999), the
+ * month is within the valid range (1-12), and the day is within the valid
+ * range for the given month and year.
+ */
+const validatePersianDate = (date: Date): DateValidationResultType => {
+  if (isNaN(date.getTime())) {
+    return DateValidationResult.DATE_IS_INVALID;
+  }
+
+  const year = date.getFullYear();
+
+  if (!isValidYear(year)) {
+    return DateValidationResult.PERSIAN_DATE_IS_INVALID;
+  }
+
+  const month = date.getMonth() + 1;
+
+  if (!isValidMonth(month)) {
+    return DateValidationResult.DATE_IS_INVALID;
+  }
+
+  // whenever the date is persian the day should be valid otherwise it will be invalid
+  if (!isValidDay(date.getDate(), year, month)) {
+    return DateValidationResult.DATE_IS_INVALID;
+  }
+
+  return DateValidationResult.DATE_IS_VALID;
+};
+
+export default validatePersianDate;
