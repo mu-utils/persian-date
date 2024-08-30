@@ -1,6 +1,6 @@
-export default class GregorianCalendarConstants {
-  /**
-   * The epoch of the Gregorian calendar.
-   */
-  static readonly EPOCH = 1721425.5;
-}
+/**
+ * The epoch of the Gregorian calendar.
+ */
+export const GREGORIAN_EPOCH = 1721425.5;
+
+export default GREGORIAN_EPOCH;
