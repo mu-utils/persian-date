@@ -1,16 +1,12 @@
 import PersianDateOptions from "./types/PersianDateOptions";
 import normalizeArguments from "./utils/normalizeArguments";
-import InvalidDate from "./utils/InvalidDate";
 import DateFormatTemplate from "./types/DateFormatTemplate";
 import formatDate from "./utils/formatDate";
 import { toGregorianDate } from "./utils/gregorianDateCalculations";
 import validatePersianDate from "./utils/validatePersianDate";
-import DateValidationResult from "./constants/dateValidationResult";
 import DEFAULT_OPTIONS from "./constants/defaultOptions";
 
 export default class PersianDate extends Date {
-  private invalidDate!: InvalidDate;
-
   private options: PersianDateOptions = DEFAULT_OPTIONS;
 
   constructor(options?: PersianDateOptions);
@@ -69,12 +65,6 @@ export default class PersianDate extends Date {
     if (options) {
       this.options = { ...this.options, ...options };
     }
-
-    this.createNewInvalidDate();
-  }
-
-  private createNewInvalidDate() {
-    this.invalidDate = new InvalidDate(this.options.invalidDateSeverity!);
   }
 
   private normalizeDate() {
@@ -83,23 +73,19 @@ export default class PersianDate extends Date {
     const year = this.getFullYear();
     const result = validatePersianDate(year, month, day);
 
-    if (result === DateValidationResult.DATE_IS_INVALID) {
-      this.throwException();
-      return;
-    }
+    // if (result === DateValidationResult.DATE_IS_INVALID) {
+    //   this.setTime(NaN);
+    //   throwInvalidDateError(this.options.invalidDateSeverity);
+    // }
 
-    if (result === DateValidationResult.PERSIAN_DATE_IS_INVALID) {
-      if (!this.options.ignoreCalendar) {
-        this.throwException();
-      } else {
-        this.toPersianDate();
-      }
-    }
-  }
-
-  private throwException() {
-    this.invalidDate.exception("Invalid Date");
-    this.setTime(NaN);
+    // if (result === DateValidationResult.PERSIAN_DATE_IS_INVALID) {
+    //   if (!this.options.ignoreCalendar) {
+    //     this.setTime(NaN);
+    //     throwInvalidDateError(this.options.invalidDateSeverity);
+    //   } else {
+    //     this.toPersianDate();
+    //   }
+    // }
   }
 
   /**
