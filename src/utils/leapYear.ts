@@ -1,4 +1,8 @@
-import PersianCalendarConstants from "../constants/persianCalendar";
+import {
+  PERSIAN_LEAP_YEAR_ADJUSTMENT,
+  PERSIAN_LEAP_YEAR_DIVISOR,
+  PERSIAN_LEAP_YEAR_MULTIPLIER,
+} from "../constants/persianCalendar";
 
 /**
  * Calculates the leap year factor for a given epoch year.
@@ -6,9 +10,8 @@ import PersianCalendarConstants from "../constants/persianCalendar";
  */
 export const getLeapYearFactor = (epochYear: number): number => {
   return Math.floor(
-    (epochYear * PersianCalendarConstants.LEAP_YEAR_MULTIPLIER -
-      PersianCalendarConstants.LEAP_YEAR_ADJUSTMENT) /
-      PersianCalendarConstants.LEAP_YEAR_DIVISOR
+    (epochYear * PERSIAN_LEAP_YEAR_MULTIPLIER - PERSIAN_LEAP_YEAR_ADJUSTMENT) /
+      PERSIAN_LEAP_YEAR_DIVISOR
   );
 };
 

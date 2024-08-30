@@ -17,7 +17,7 @@ describe("formatDate", () => {
     expect(formatDate(date, "DD")).toBe("15");
   });
 
-  it("should replace multiple placeholders", () => {
+  it("should replace multiple placeholders correctly", () => {
     const date = new PersianDate(1402, 5, 15);
     expect(formatDate(date, "YYYY/MM/DD")).toBe("1402/05/15");
   });
