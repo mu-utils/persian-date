@@ -1,15 +1,18 @@
-import PersianDate from "../PersianDate";
-import { toGregorianDate } from "../utils/gregorianDate";
-import GregorianDateUtils from "../utils/GregorianDateUtils";
+import toGregorian from "../utils/toGregorian";
 
 describe("toGregorianDate", () => {
-  it("should convert Persian date to Gregorian date correctly", () => {
-    const result = GregorianDateUtils.toGregorianDate(
-      new PersianDate("1399-12-6")
-    );
-
-    expect(result).toEqual(""); // August 6, 2023
+  it("toGregorian", () => {
+    const a = toGregorian(1402, 12, 1);
+    expect(a).toBe(1);
   });
+
+  // it("should convert Persian date to Gregorian date correctly", () => {
+  //   const result = GregorianDateUtils.toGregorianDate(
+  //     new PersianDate("1399-12-6")
+  //   );
+
+  //   expect(result).toEqual(""); // August 6, 2023
+  // });
   // it("should convert Persian date to Gregorian date correctly", () => {
   //   const result = toGregorianDate(1402, 5, 15);
   //   expect(result).toEqual(new Date(2023, 7, 6)); // August 6, 2023

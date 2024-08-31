@@ -41,7 +41,7 @@ export const PERSIAN_TOTAL_DAYS_IN_2820_YEARS = 10631060;
  * An array containing the number of days that passed in each month of the
  */
 export const PERSIAN_PASSED_DAYS_IN_MONTHS = [
-  0, 31, 62, 93, 124, 155, 186, 216, 246, 276, 306, 336,
+  0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334,
 ] as const;
 
 /**
@@ -78,3 +78,8 @@ export const PERSIAN_DAYS_IN_4_YEARS = 1461;
  * Number of days in a year.
  */
 export const PERSIAN_DAYS_IN_YEAR = 365;
+
+/**
+ * The offset of the epoch year.
+ */
+export const PERSIAN_EPOCH_OFFSET = 979;
