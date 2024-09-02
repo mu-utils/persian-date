@@ -1,5 +1,5 @@
 import PersianDateOptions from "../types/PersianDateOptions";
-import { toPersianTime } from "./persianTime";
+import { toPersianTime } from "./toPersianTime";
 import toGregorianTime from "./toGregorianTime";
 import validatePersianDate from "./validatePersianDate";
 
