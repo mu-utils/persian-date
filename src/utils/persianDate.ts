@@ -12,7 +12,7 @@ export const toPersianTime = (value: Date | string | number): number =>
  * @param {number} persianYear - Persian year.
  * @returns {object} Persian calendar details.
  */
-export function calculatePersianCalendar(persianYear: number) {
+export function calculatePersianCalendar(persianYear: number): object {
   if (
     persianYear < PERSIAN_EPOCH_YEARS[0] ||
     persianYear >= PERSIAN_EPOCH_YEARS[PERSIAN_EPOCH_YEARS.length - 1]
