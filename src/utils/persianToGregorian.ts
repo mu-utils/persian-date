@@ -6,7 +6,11 @@
  * @param {number} persianDay - Persian day.
  * @returns {object} Gregorian date.
  */
-export function persianToGregorian(persianYear, persianMonth, persianDay) {
+export function persianToGregorian(
+  persianYear,
+  persianMonth,
+  persianDay
+): number {
   const julianDayNumber = persianToJulianDayNumber(
     persianYear,
     persianMonth,
