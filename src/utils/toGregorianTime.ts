@@ -19,7 +19,7 @@ export default function toGregorianTime(persianTime: number): number {
 
   return new Date(
     gregorianYer,
-    gregorianMonth - 1,
+    gregorianMonth,
     gregorianDay,
     date.getHours(),
     date.getMinutes(),
