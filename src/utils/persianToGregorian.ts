@@ -13,11 +13,12 @@ export function persianToGregorian(
   persianYear: number,
   persianMonth: number,
   persianDay: number
-) {
+): DateTuple {
   const julianDayNumber = persianToJulianDayNumber(
     persianYear,
     persianMonth,
     persianDay
   );
-  return julianDayNumberToGregorian(julianDayNumber);
+  const [year, month, day] = julianDayNumberToGregorian(julianDayNumber);
+  return [year, month, day];
 }

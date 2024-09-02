@@ -2,6 +2,7 @@ import {
   MILLISECONDS_PER_DAY,
   UNIX_EPOCH_JDN,
 } from "../constants/timeConstants";
+import DateTuple from "../types/DateTuple";
 
 /**
  * Converts a Gregorian date to Julian Day Number.
@@ -27,7 +28,7 @@ export function gregorianToJulianDayNumber(
  * @param {number} jdn - The Julian Day Number.
  * @returns {object} The Gregorian date with properties year, month, and day.
  */
-export function julianDayNumberToGregorian(jdn: number): persianToGregorian {
+export function julianDayNumberToGregorian(jdn: number): DateTuple {
   const date = new Date((jdn - UNIX_EPOCH_JDN) * MILLISECONDS_PER_DAY);
   return {
     year: date.getUTCFullYear(),
