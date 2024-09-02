@@ -1,4 +1,4 @@
-import persianDateFormatter from "./persianFormatter";
+import createPersianFormatter from "./createPersianFormatter";
 
 /**
  *  Converts a Gregorian date to Persian date. It returns converted date in
@@ -8,4 +8,4 @@ import persianDateFormatter from "./persianFormatter";
  * @returns Persian date in milliseconds.
  */
 export const toPersianTime = (value: number | Date): number =>
-  new Date(persianDateFormatter.format(value)).getTime();
+  new Date(createPersianFormatter().format(value)).getTime();

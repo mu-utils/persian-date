@@ -3,6 +3,8 @@ import Calendar from "../types/Calendar";
 import DateFormatTemplate from "../types/DateFormatTemplate";
 import DateTimeSegment from "../types/DateTimeSegment";
 import RequiredPersianDateOptions from "../types/RequiredPersianDateOptions";
+import gregorianFormatter from "./createGregorianFormatter";
+import createPersianFormatter from "./createPersianFormatter";
 
 /**
  * Formats a date. It takes a date and a template and returns a formatted date.
@@ -20,11 +22,11 @@ import RequiredPersianDateOptions from "../types/RequiredPersianDateOptions";
  */
 export default function formatDate(
   time: number,
-  { calender }: RequiredPersianDateOptions,
-  template: DateFormatTemplate
+  template: DateFormatTemplate,
+  formatter: Intl.DateTimeFormat
 ) {
   let result = `${template}`;
-  const replacements = createReplacements(time, calender);
+  const replacements = createReplacements(time, formatter);
 
   for (const [key, value] of Object.entries(replacements)) {
     result = result.replace(new RegExp(key, "g"), value);
@@ -35,7 +37,7 @@ export default function formatDate(
 
 function createReplacements(
   time: number,
-  calender: Calendar
+  formatter: Intl.DateTimeFormat
 ): Record<DateTimeSegment, string> {
   const date = new Date(time);
   const hours = date.getHours();
@@ -65,3 +67,6 @@ function createReplacements(
     a: hours < 12 ? "am" : "pm",
   };
 }
+
+const getFormatterByCalendar = (calendar: Calendar) =>
+  calendar === "gregorian" ? gregorianFormatter : createPersianFormatter;

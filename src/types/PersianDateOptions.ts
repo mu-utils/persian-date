@@ -32,5 +32,5 @@ export default interface PersianDateOptions {
   /**
    * @default "persian"
    */
-  calender?: Calendar;
+  calendar?: Calendar;
 }
