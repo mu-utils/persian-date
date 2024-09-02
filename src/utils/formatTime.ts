@@ -1,22 +1,30 @@
 import PersianDate from "../PersianDate";
+import Calendar from "../types/Calendar";
 import DateFormatTemplate from "../types/DateFormatTemplate";
 import DateTimeSegment from "../types/DateTimeSegment";
-import PersianDateOptions from "../types/PersianDateOptions";
+import RequiredPersianDateOptions from "../types/RequiredPersianDateOptions";
 
 /**
- * Formats a date. 
- * @param time 
- * @param options 
- * @param template 
- * @returns 
+ * Formats a date. It takes a date and a template and returns a formatted date.
+ * It uses the template to replace the date with the corresponding value.
+ *
+ * @example
+ * ```
+ * formatDate(122343942384, "YYYY-MM-DD"); // "2023-04-01"
+ * ```
+ *
+ * @param time - The date to format.
+ * @param options - The options to use.
+ * @param template - The template to use.
+ * @returns The formatted date.
  */
 export default function formatDate(
   time: number,
-  options: PersianDateOptions,
+  { calender }: RequiredPersianDateOptions,
   template: DateFormatTemplate
 ) {
   let result = `${template}`;
-  const replacements = createReplacements(time);
+  const replacements = createReplacements(time, calender);
 
   for (const [key, value] of Object.entries(replacements)) {
     result = result.replace(new RegExp(key, "g"), value);
@@ -25,7 +33,10 @@ export default function formatDate(
   return result;
 }
 
-function createReplacements(time: number): Record<DateTimeSegment, string> {
+function createReplacements(
+  time: number,
+  calender: Calendar
+): Record<DateTimeSegment, string> {
   const date = new Date(time);
   const hours = date.getHours();
   const month = date.getMonth() + 1;

@@ -4,9 +4,10 @@ import DateFormatTemplate from "./types/DateFormatTemplate";
 import formatDate from "./utils/formatTime";
 import DEFAULT_OPTIONS from "./constants/defaultOptions";
 import normalizeTime from "./utils/normalizeTime";
+import RequiredPersianDateOptions from "./types/RequiredPersianDateOptions";
 
 export default class PersianDate extends Date {
-  options: PersianDateOptions = DEFAULT_OPTIONS;
+  options: RequiredPersianDateOptions = DEFAULT_OPTIONS;
 
   constructor(options?: PersianDateOptions);
   constructor(value: Date, options?: PersianDateOptions);
