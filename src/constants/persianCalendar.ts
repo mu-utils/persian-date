@@ -9,8 +9,33 @@ export const PERSIAN_MONTHS_DAYS = [
 
 /**
  * The epoch of the Persian calendar.
+ * The epoch is the point in time from which the calendar is counted.
  */
 export const PERSIAN_EPOCH = 1948321;
+
+/**
+ * The number of days in a Persian year.
+ */
+export const PERSIAN_YEAR_LENGTH = 365;
+
+/**
+ * The number of days in a Persian cycle.
+ * A cycle is a period of 2820 years.
+ */
+export const PERSIAN_CYCLE_DAYS = 33;
+
+/**
+ * The number of days in a Persian cycle that are leap years.
+ * A leap year is a year that is divisible by 4 but not by 100,
+ */
+export const PERSIAN_LEAP_YEAR_CYCLE = 4;
+
+export const PERSIAN_EXTRA_DAYS_IN_CYCLE = 8;
+
+/**
+ * The number of days in a Persian cycle that are leap years.
+ */
+export const PERSIAN_LEAP_DAYS = 78;
 
 /**
  * The base year for Persian calendar calculations.
