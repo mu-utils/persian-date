@@ -2,7 +2,7 @@ import DateTuple from "../types/DateTuple";
 import {
   gregorianToJulianDayNumber,
   julianDayNumberToGregorian,
-} from "./gregorianConvertions";
+} from "./gregorianConventions";
 import calculatePersianCalendar from "./calculatePersianCalendar";
 
 /**
