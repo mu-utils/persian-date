@@ -1,7 +1,7 @@
 import PersianDateOptions from "./types/PersianDateOptions";
 import normalizeArguments from "./utils/normalizeArguments";
 import DateFormatTemplate from "./types/DateFormatTemplate";
-import formatDate from "./utils/formatDate";
+import formatDate from "./utils/formatTime";
 import DEFAULT_OPTIONS from "./constants/defaultOptions";
 import normalizeTime from "./utils/normalizeTime";
 
@@ -67,7 +67,7 @@ export default class PersianDate extends Date {
   }
 
   format(template: DateFormatTemplate): string {
-    return formatDate(this, template);
+    return formatDate(this.getTime(), this.options, template);
   }
 
   diff(date: PersianDate): number {

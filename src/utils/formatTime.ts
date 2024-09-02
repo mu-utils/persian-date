@@ -1,13 +1,22 @@
 import PersianDate from "../PersianDate";
 import DateFormatTemplate from "../types/DateFormatTemplate";
 import DateTimeSegment from "../types/DateTimeSegment";
+import PersianDateOptions from "../types/PersianDateOptions";
 
+/**
+ * Formats a date. 
+ * @param time 
+ * @param options 
+ * @param template 
+ * @returns 
+ */
 export default function formatDate(
-  date: PersianDate,
+  time: number,
+  options: PersianDateOptions,
   template: DateFormatTemplate
 ) {
   let result = `${template}`;
-  const replacements = createReplacements(date);
+  const replacements = createReplacements(time);
 
   for (const [key, value] of Object.entries(replacements)) {
     result = result.replace(new RegExp(key, "g"), value);
@@ -16,16 +25,15 @@ export default function formatDate(
   return result;
 }
 
-function createReplacements(
-  date: PersianDate
-): Record<DateTimeSegment, string> {
+function createReplacements(time: number): Record<DateTimeSegment, string> {
+  const date = new Date(time);
   const hours = date.getHours();
   const month = date.getMonth() + 1;
   const stringHours = hours.toString();
   const stringMonth = month.toString();
   const stringYear = date.getFullYear().toString();
   const stringDate = date.getDate().toString();
-  const localString = (_e: unknown) => ''; // todo: date.toPersianLocaleString.bind(date);
+  const localString = (_e: unknown) => ""; // todo: date.toPersianLocaleString.bind(date);
 
   return {
     YYYY: stringYear.toString(),
