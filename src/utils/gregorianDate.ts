@@ -46,20 +46,30 @@ export const getTotalGregorianDays = (date: PersianDate): number => {
  * @param date - The Persian date to convert.
  * @returns The corresponding Gregorian date.
  */
-export const toGregorianDate = (date: PersianDate): Date => {
-  const totalGregorianDays = getTotalGregorianDays(date);
-  const wjd = Math.floor(totalGregorianDays + 0.5);
-  const depoch = wjd - GREGORIAN_EPOCH;
-  const year = calculateYear(depoch);
-  const month = calculateMonth(wjd, year);
-  const day = calculateDay(wjd, year, month);
+export const toGregorianDate = (persianYear: number): number => {
+  const persianEpoch = 1348; // Persian calendar epoch in Gregorian years
+  const gregorianYear = persianYear + 621;
 
-  console.log(year, month, day);
-  
+  // Adjust for the difference in leap years between Persian and Gregorian calendars
+  const persianLeaps =
+    Math.floor((persianYear - 1) / 33) * 8 +
+    Math.floor((((persianYear - 1) % 33) + 3) / 4);
+  const gregorianLeaps =
+    Math.floor((gregorianYear - 1) / 4) -
+    Math.floor((gregorianYear - 1) / 100) +
+    Math.floor((gregorianYear - 1) / 400);
 
-  return new Date(year, month - 1, day);
+  const adjustment = persianLeaps - gregorianLeaps;
+
+  // If the adjustment puts us before March 21, we need to subtract a year
+  if (adjustment > 79) {
+    return gregorianYear - 1;
+  }
+
+  return gregorianYear;
+
+  return 1;
 };
-
 /**
  * Calculates the day of the month for a given wjd, year, and month.
  * @param wjd - The day count.
