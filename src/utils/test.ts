@@ -1,4 +1,4 @@
-import { MILLISECONDS_PER_DAY, UNIX_EPOCH_JDN } from "../constants/date";
+import { MILLISECONDS_PER_DAY, UNIX_EPOCH_JDN } from "../constants/timeConstants";
 import { PERSIAN_EPOCH_YEARS } from "../constants/persianCalendar";
 
 function gregorianToJulianDayNumber(
