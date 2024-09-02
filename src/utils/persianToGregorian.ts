@@ -5,10 +5,19 @@ import { persianToJulianDayNumber } from "./persianDate";
 /**
  * Converts a Persian date to Gregorian date.
  *
+ * Firstly converts Persian date to Julian day number, then converts Julian day
+ * number to Gregorian date. Lastly, returns Gregorian date in tuple of year,
+ * month, and day.
+ *
+ * @example
+ * ```
+ * persianToGregorian(1403, 6, 12); // [2024, 9, 2]
+ * ```
+ *
  * @param {number} persianYear - Persian year.
  * @param {number} persianMonth - Persian month.
  * @param {number} persianDay - Persian day.
- * @returns {object} Gregorian date.
+ * @returns {DateTuple} Gregorian date in tuple of year, month, and day.
  */
 export default function persianToGregorian(
   persianYear: number,
@@ -20,6 +29,5 @@ export default function persianToGregorian(
     persianMonth,
     persianDay
   );
-  const [year, month, day] = julianDayNumberToGregorian(julianDayNumber);
-  return [year, month, day];
+  return julianDayNumberToGregorian(julianDayNumber);
 }
