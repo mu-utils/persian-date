@@ -3,7 +3,7 @@ import {
   gregorianToJulianDayNumber,
   julianDayNumberToGregorian,
 } from "./gregorianConvertions";
-import { calculatePersianCalendar } from "./persianDate";
+import calculatePersianCalendar from "./calculatePersianCalendar";
 
 /**
  * Converts a Julian Day Number to a Persian date.
@@ -17,7 +17,7 @@ export default function julianDayNumberToPersian(jdn: number): DateTuple {
   let k = jdn - gregorianToJulianDayNumber(gregorianYear, 3, dayInMarch);
 
   let persianMonth, persianDay;
-  
+
   if (k >= 0) {
     if (k <= 185) {
       persianMonth = 1 + Math.floor(k / 31);

@@ -1,6 +1,6 @@
 import DateTuple from "../types/DateTuple";
 import gregorianToJulianDayNumber from "./gregorianToJulianDayNumber";
-import julianDayNumberToPersian from "./julianDaynumberToPersian";
+import julianDayNumberToPersian from "./julianDayNumberToPersian";
 
 /**
  * Converts a Gregorian date to Persian date.
@@ -11,11 +11,11 @@ import julianDayNumberToPersian from "./julianDaynumberToPersian";
  * @param {number} gregorianDay - Gregorian day.
  * @returns {DateTuple} Persian date in tuple format (year, month, day).
  */
-export function gregorianToPersian(
+export default function gregorianToPersian(
   gregorianYear: number,
   gregorianMonth: number,
   gregorianDay: number
-): object {
+): DateTuple {
   return julianDayNumberToPersian(
     gregorianToJulianDayNumber(gregorianYear, gregorianMonth, gregorianDay)
   );
