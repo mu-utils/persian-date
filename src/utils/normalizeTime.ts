@@ -1,11 +1,30 @@
 import PersianDateOptions from "../types/PersianDateOptions";
-import { toGregorianDate } from "./gregorianDate";
 import { toPersianTime } from "./persianDate";
+import toGregorianTime from "./toGregorianTime";
 import validatePersianDate from "./validatePersianDate";
 
+/**
+ * Normalizes time to gregorian or persian date.
+ *
+ *  If the input time is a valid persian date and the calender is set to
+ *  persian, it returns persian date. Otherwise, it returns gregorian date.
+ *  Otherwise, it returns gregorian date.
+ *
+ * @example
+ * ```
+ * normalizeTime(1727814600000, {
+ *   calender: "gregorian",
+ *   ignoreCalendar: true,
+ *   invalidDateSeverity: "error"
+ * }); // -17876258744000
+ * ```
+ * @param time - Time in milliseconds.
+ * @param options - Options for normalizing time.
+ * @returns Normalized time in milliseconds.
+ */
 export default function normalizeTime(
   time: number,
-  { calender, ignoreCalendar, invalidDateSeverity }: PersianDateOptions
+  { calender, invalidDateSeverity }: PersianDateOptions
 ): number {
   const date = new Date(time);
   const year = date.getFullYear();
@@ -16,18 +35,14 @@ export default function normalizeTime(
     throw new Error("Invalid Date");
   }
 
-  const isPersianDate = validatePersianDate(year, month, day);
+  const isValidPersianDate = validatePersianDate(year, month, day);
 
-  if (calender === "persian" && !isPersianDate) {
-    return toPersianTime(date);
+  if (calender === "persian" && !isValidPersianDate) {
+    return toPersianTime(time);
   }
 
-  if (calender === "gregorian" && isPersianDate) {
-    return toGregorianDate(date)
-    // const gDate = toGregorianDate(year, month, day);
-    // gDate.setMilliseconds(date.getMilliseconds());
-
-    // console.log(gDate, "gdtes");
+  if (calender === "gregorian" && isValidPersianDate) {
+    return toGregorianTime(time);
   }
 
   return time;
