@@ -30,9 +30,5 @@ export function gregorianToJulianDayNumber(
  */
 export function julianDayNumberToGregorian(jdn: number): DateTuple {
   const date = new Date((jdn - UNIX_EPOCH_JDN) * MILLISECONDS_PER_DAY);
-  return {
-    year: date.getUTCFullYear(),
-    month: date.getUTCMonth() + 1,
-    day: date.getUTCDate(),
-  };
+  return [date.getUTCFullYear(), date.getUTCMonth() + 1, date.getUTCDate()];
 }
