@@ -27,11 +27,7 @@ export function gregorianToJulianDayNumber(
  * @param {number} jdn - The Julian Day Number.
  * @returns {object} The Gregorian date with properties year, month, and day.
  */
-export function julianDayNumberToGregorian(jdn: number): {
-  year: number;
-  month: number;
-  day: number;
-} {
+export function julianDayNumberToGregorian(jdn: number): persianToGregorian {
   const date = new Date((jdn - UNIX_EPOCH_JDN) * MILLISECONDS_PER_DAY);
   return {
     year: date.getUTCFullYear(),

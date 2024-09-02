@@ -1,3 +1,6 @@
+import { julianDayNumberToGregorian } from "./gregorianConvertions";
+import { persianToJulianDayNumber } from "./persianDate";
+
 /**
  * Converts a Persian date to Gregorian date.
  *
@@ -7,10 +10,10 @@
  * @returns {object} Gregorian date.
  */
 export function persianToGregorian(
-  persianYear,
-  persianMonth,
-  persianDay
-): number {
+  persianYear: number,
+  persianMonth: number,
+  persianDay: number
+) {
   const julianDayNumber = persianToJulianDayNumber(
     persianYear,
     persianMonth,
