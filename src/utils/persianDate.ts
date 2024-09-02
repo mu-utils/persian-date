@@ -1,4 +1,4 @@
-import { calculatePersianCalendar } from "./calculatePersianCalendar";
+import calculatePersianCalendar from "./calculatePersianCalendar";
 import gregorianToJulianDayNumber from "./gregorianToJulianDayNumber";
 
 export const toPersianLocaleString = (date: Date): string =>
@@ -24,4 +24,3 @@ export function persianToJulianDayNumber(
     gregorianToJulianDayNumber(year, 3, dayInMarch) + (persianMonth - 1) * 31;
   return t - Math.floor(persianMonth / 7) * (persianMonth - 7) + persianDay - 1;
 }
-

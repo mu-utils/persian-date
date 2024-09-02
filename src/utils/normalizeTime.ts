@@ -23,6 +23,7 @@ export default function normalizeTime(
   }
 
   if (calender === "gregorian" && isPersianDate) {
+    return toGregorianDate(date)
     // const gDate = toGregorianDate(year, month, day);
     // gDate.setMilliseconds(date.getMilliseconds());
 
