@@ -8,10 +8,12 @@ Persian date is a simple, easy-to-use, and fully customizable date picker compon
 ### Via npm
 ```bash
 npm install persian-datepicker
+```
 
 ### Via yarn
 ```bash
 yarn add persian-datepicker
+```
 
 ### Options
 | Option      | Type     | Default       | Description                                          |
@@ -41,6 +43,7 @@ const DatePickerComponent = () => {
 };
 
 export default DatePickerComponent;
+```
 
 
 ### Explanation:
