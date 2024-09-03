@@ -1,24 +1,14 @@
-// import { PersianDate } from "persian-date";
-// import moment from "moment";
-// const a = persianDate("2024-09-02", { ignoreCalendar: true });
-
 import { PersianDate, persianDate } from "persian-date";
 
-// console.log(a.format("YYYY/MM/DD"), "SDddfdf");
-// us timezoneط
-// crate a date by us timezone
-// const date = new PersianDate("2024-09-02", {
-//   ignoreCalendar: true,
-//   timeZone: "Asia/Tehran",
-// });
-
-// console.log(persianDate("2001/02/14").format("YYYY/MM/DD"));
-
-// set america timezone
-
-// const americaDate = new Date();
-// americaDate.toLocaleString("en-US", { timeZone: "2" });
-// console.log(americaDate);
-const date = new PersianDate("1399-12-1T12:15:25", {
-  calender: "gregorian",
+const persianDate1 = persianDate("2023-06-12T04:05:03", {
+  calendar: "gregorian",
+  timeZone: "America/New_York"
 });
+
+// console.log(new Date("2020-01-01T13:12:00"));
+
+// console.log(date, new Date());
+
+console.log(new Date());
+console.log(persianDate1);
+console.log(persianDate1.format("HH:mm:ss"));

@@ -7,5 +7,14 @@ import createPersianFormatter from "./createPersianFormatter";
  * @param value - Gregorian date in milliseconds.
  * @returns Persian date in milliseconds.
  */
-export const toPersianTime = (value: number | Date): number =>
-  new Date(createPersianFormatter().format(value)).getTime();
+export const toPersianTime = (
+  value: number | Date,
+  options: Intl.DateTimeFormatOptions
+): number => {
+  options.numberingSystem = undefined;
+  const formattedDate = new Intl.DateTimeFormat(
+    "fa-IR-u-nu-latn",
+    options
+  ).format(value);
+  return new Date(formattedDate).getTime();
+};
