@@ -9,6 +9,7 @@ import createFormatter from "./utils/createFormatter";
 import TimeZone from "./types/TimeZone";
 import Calendar from "./types/Calendar";
 import Formatters from "./types/Formatters";
+import createFormatters from "./utils/createFormatters";
 
 export default class PersianDate extends Date {
   private options: RequiredPersianDateOptions;
@@ -69,7 +70,7 @@ export default class PersianDate extends Date {
 
   // Update the formatter with current settings
   private updateFormatter() {
-    this.formatter = createFormatter(this.options);
+    this.formatters = createFormatters(this.options);
   }
 
   setTimeZone(timeZone: TimeZone) {
@@ -83,7 +84,7 @@ export default class PersianDate extends Date {
   }
 
   format(template: DateFormatTemplate): string {
-    return formatDate(this.getTime(), template, this.formatter);
+    return formatDate(this.getTime(), template, this.formatters);
   }
 
   diff(date: PersianDate): number {

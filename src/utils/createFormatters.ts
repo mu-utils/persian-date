@@ -7,10 +7,10 @@ function createFormatter(options: RequiredPersianDateOptions): Formatters {
   const locale = formatOptions.calendar === "persian" ? "fa-IR" : "en-US";
 
   return [
-    new Intl.DateTimeFormat(locale, { weekday: "long", timeZone }),
-    new Intl.DateTimeFormat(locale, { weekday: "short", timeZone }),
-    new Intl.DateTimeFormat(locale, { month: "long", timeZone }),
-    new Intl.DateTimeFormat(locale, { month: "short", timeZone }),
+    new Intl.DateTimeFormat(locale, { weekday: "long", ...formatOptions }),
+    new Intl.DateTimeFormat(locale, { weekday: "short", ...formatOptions }),
+    new Intl.DateTimeFormat(locale, { month: "long", ...formatOptions }),
+    new Intl.DateTimeFormat(locale, { month: "short", ...formatOptions }),
   ];
 }
 

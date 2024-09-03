@@ -1,10 +1,6 @@
-import PersianDate from "../PersianDate";
-import Calendar from "../types/Calendar";
 import DateFormatTemplate from "../types/DateFormatTemplate";
 import DateTimeSegment from "../types/DateTimeSegment";
-import RequiredPersianDateOptions from "../types/RequiredPersianDateOptions";
-import gregorianFormatter from "./createGregorianFormatter";
-import createPersianFormatter from "./createPersianFormatter";
+import Formatters from "../types/Formatters";
 
 /**
  * Formats a date. It takes a date and a template and returns a formatted date.
@@ -23,10 +19,10 @@ import createPersianFormatter from "./createPersianFormatter";
 export default function formatDate(
   time: number,
   template: DateFormatTemplate,
-  formatter: Intl.DateTimeFormat
+  formatters: Formatters
 ) {
   let result = `${template}`;
-  const replacements = createReplacements(time, formatter);
+  const replacements = createReplacements(time, formatters);
 
   for (const [key, value] of Object.entries(replacements)) {
     result = result.replace(new RegExp(key, "g"), value);
@@ -38,17 +34,25 @@ export default function formatDate(
 const formatter = (formatter: Intl.DateTimeFormat, date: Date) =>
   formatter.format(date);
 
+/**
+ *
+ * Creates a map of replacements for the given date.
+ *
+ *
+ * This function creates replacements for the date. It takes a date and a
+ * template and returns a formatted date. It uses the template to replace the
+ * date with the corresponding value.
+ *
+ * @param time - The date to format.
+ * @param formatters - The formatters to use.
+ * @returns The replacements.
+ */
 function createReplacements(
   time: number,
-  formatters: {
-    longWeekday: Intl.DateTimeFormat;
-    shortWeekday: Intl.DateTimeFormat;
-    longMonth: Intl.DateTimeFormat;
-    shortMonth: Intl.DateTimeFormat;
-  }
+  [longWeekday, shortWeekday, longMonth, shortMonth]: Formatters
 ): Record<DateTimeSegment, string> {
   const date = new Date(time);
-  const padTwoDigits = (num: number) => num.toString().padStart(2, "0"); // Inline utility function
+  const padTwoDigits = (num: number) => num.toString().padStart(2, "0");
   const [hours, minutes, seconds, day, month, year] = [
     date.getHours(),
     date.getMinutes(),
@@ -66,12 +70,12 @@ function createReplacements(
     HH: padTwoDigits(hours),
     mm: padTwoDigits(minutes),
     ss: padTwoDigits(seconds),
-    dddd: formatters.longWeekday.format(date),
-    MMM: formatters.shortMonth.format(date),
-    MMMM: formatters.longMonth.format(date),
+    dddd: formatter(longWeekday, date),
+    MMM: formatter(shortMonth, date),
+    MMMM: formatter(longMonth, date),
     YY: year.toString().slice(-2),
     D: day.toString(),
-    ddd: formatters.shortWeekday.format(date),
+    ddd: formatter(shortWeekday, date),
     Do: padTwoDigits(day),
     M: month.toString(),
     h: h12.toString(),
