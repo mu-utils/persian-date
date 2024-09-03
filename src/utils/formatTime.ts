@@ -37,36 +37,43 @@ export default function formatDate(
 
 function createReplacements(
   time: number,
-  formatter: Intl.DateTimeFormat
+  formatters: {
+    longWeekday: Intl.DateTimeFormat;
+    shortWeekday: Intl.DateTimeFormat;
+    longMonth: Intl.DateTimeFormat;
+    shortMonth: Intl.DateTimeFormat;
+  }
 ): Record<DateTimeSegment, string> {
   const date = new Date(time);
-  const hours = date.getHours();
-  const month = date.getMonth() + 1;
-  const stringHours = hours.toString();
-  const stringMonth = month.toString();
-  const stringYear = date.getFullYear().toString();
-  const stringDate = date.getDate().toString();
-  const localString = (_e: unknown) => ""; // todo: date.toPersianLocaleString.bind(date);
+  const padTwoDigits = (num: number) => num.toString().padStart(2, "0"); // Inline utility function
+  const [hours, minutes, seconds, day, month, year] = [
+    date.getHours(),
+    date.getMinutes(),
+    date.getSeconds(),
+    date.getDate(),
+    date.getMonth() + 1,
+    date.getFullYear(),
+  ];
+  const [h12, amPm] = [hours % 12 || 12, hours < 12 ? "am" : "pm"];
 
   return {
-    YYYY: stringYear.toString(),
-    MM: stringMonth.padStart(2, "0"),
-    DD: stringDate.padStart(2, "0"),
-    HH: stringHours.padStart(2, "0"),
-    mm: date.getMinutes().toString().padStart(2, "0"),
-    ss: date.getSeconds().toString().padStart(2, "0"),
-    dddd: localString({ weekday: "long" }),
-    MMM: localString({ month: "short" }),
-    MMMM: localString({ month: "long" }),
-    YY: stringYear.toString().slice(-2),
-    D: stringDate,
-    ddd: localString({ weekday: "short" }),
-    Do: stringDate.padStart(2, "0"),
-    M: stringMonth,
-    h: stringHours,
-    a: hours < 12 ? "am" : "pm",
+    YYYY: year.toString(),
+    MM: padTwoDigits(month),
+    DD: padTwoDigits(day),
+    HH: padTwoDigits(hours),
+    mm: padTwoDigits(minutes),
+    ss: padTwoDigits(seconds),
+    dddd: formatters.longWeekday.format(date),
+    MMM: formatters.shortMonth.format(date),
+    MMMM: formatters.longMonth.format(date),
+    YY: year.toString().slice(-2),
+    D: day.toString(),
+    ddd: formatters.shortWeekday.format(date),
+    Do: padTwoDigits(day),
+    M: month.toString(),
+    h: h12.toString(),
+    a: amPm,
   };
 }
 
-const getFormatterByCalendar = (calendar: Calendar) =>
-  calendar === "gregorian" ? gregorianFormatter : createPersianFormatter;
+const padTwoDigits = (num: number): string => num.toString().padStart(2, "0");
