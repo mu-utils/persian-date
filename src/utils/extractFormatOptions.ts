@@ -5,5 +5,9 @@ export default function extractFormatOptions(
 ): Intl.DateTimeFormatOptions {
   const { timeZone, calendar } = options;
 
-  return { timeZone, calendar, numberingSystem: "latin" };
+  return {
+    timeZone,
+    calendar: calendar === "persian" ? calendar : undefined,
+    numberingSystem: "latin",
+  };
 }

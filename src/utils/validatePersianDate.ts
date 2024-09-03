@@ -23,15 +23,15 @@ const isValidDay = (day: number, year: number, month: number): boolean => {
 /**
  * Determines whether the given Persian date is valid.
  *
- * The function checks if the year is within the valid range (1-9999), the
- * month is within the valid range (1-12), and the day is within the valid
- * range for the given month and year.
+ * The function checks if the year is within the valid range (1200-1500), the
+ * month is within the valid range (1-12), and the day is within the valid range
+ * for the given month and year.
  */
 const validatePersianDate = (
   year: number,
   month: number,
   day: number
 ): boolean =>
-  !isValidYear(year) && !isValidMonth(month) && !isValidDay(day, year, month);
+  isValidYear(year) && isValidMonth(month) && isValidDay(day, year, month);
 
 export default validatePersianDate;
