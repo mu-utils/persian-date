@@ -1,7 +1,7 @@
 import PersianDate from "../PersianDate";
 import PersianDateOptions from "../types/PersianDateOptions";
 
-function createPersianDate(): void;
+function createPersianDate(): PersianDate;
 function createPersianDate(options: PersianDateOptions): PersianDate;
 function createPersianDate(
   value: Date,
