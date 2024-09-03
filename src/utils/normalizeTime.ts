@@ -47,13 +47,5 @@ export default function normalizeTime(
     return toGregorianTime(time);
   }
 
-  const d = new Date(time);
-  d.setHours(
-    date.getHours(),
-    date.getMinutes(),
-    date.getSeconds(),
-    date.getMilliseconds()
-  );
-
-  return d.getTime();
+  return time;
 }
