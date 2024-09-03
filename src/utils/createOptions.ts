@@ -14,10 +14,10 @@ const createOptions = (
   options?: PersianDateOptions
 ): RequiredPersianDateOptions => ({
   ignoreCalendar: options?.ignoreCalendar ?? true,
-  timeZone: options?.timeZone || DEFAULT_TIME_ZONE,
+  timeZone: options?.timeZone ?? DEFAULT_TIME_ZONE,
   invalidDateSeverity:
-    options?.invalidDateSeverity || DEFAULT_INVALID_DATE_SEVERITY,
-  calendar: DEFAULT_CALENDAR,
+    options?.invalidDateSeverity ?? DEFAULT_INVALID_DATE_SEVERITY,
+  calendar: options?.calendar ?? DEFAULT_CALENDAR,
 });
 
 export default createOptions;
