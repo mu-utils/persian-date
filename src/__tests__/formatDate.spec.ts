@@ -1,39 +1,38 @@
 import PersianDate from "../PersianDate";
-import formatDate from "../utils/formatDate";
+import createFormatters from "../utils/createFormatters";
+import formatDate from "../utils/formatTime";
 
 describe("formatDate", () => {
-  it("should get year", () => {
-    const date = new PersianDate(1402, 5, 15);
-    expect(date.getFullYear()).toBe(1402);
+  const formatters = createFormatters({
+    timeZone: "America/New_York",
+    calendar: "gregorian",
+    ignoreCalendar: false,
+    invalidDateSeverity: "error",
   });
+  const date = new PersianDate("1403/06/12");
+  const time = date.getTime();
 
   it("should get month", () => {
-    const date = new PersianDate(1402, 5, 15);
-    expect(formatDate(date, "MM")).toBe("06");
+    expect(formatDate(time, "MM", formatters)).toBe("06");
   });
 
   it("should get day", () => {
-    const date = new PersianDate(1402, 5, 15);
-    expect(formatDate(date, "DD")).toBe("15");
+    expect(formatDate(time, "DD", formatters)).toBe("12");
   });
 
   it("should replace multiple placeholders correctly", () => {
-    const date = new PersianDate(1402, 5, 15);
-    expect(formatDate(date, "YYYY/MM/DD")).toBe("1402/06/15");
+    expect(formatDate(time, "YYYY/MM/DD", formatters)).toBe("1403/06/12");
   });
 
   it("should deal with surrounding text", () => {
-    const date = new PersianDate(1402, 5, 15);
-    expect(formatDate(date, "YYYY, MM, DD")).toBe("1402, 06, 15");
+    expect(formatDate(time, "YYYY, MM, DD", formatters)).toBe("1403, 06, 12");
   });
 
   it("should not replace non-existent placeholders", () => {
-    const date = new PersianDate(1402, 5, 15);
-    expect(formatDate(date, "GG EF")).toBe("GG EF");
+    expect(formatDate(time, "GG EF", formatters)).toBe("GG EF");
   });
 
   it("should handle empty template string", () => {
-    const date = new PersianDate(1402, 5, 15);
-    expect(formatDate(date, "")).toBe("");
+    expect(formatDate(time, "", formatters)).toBe("");
   });
 });
