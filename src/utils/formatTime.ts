@@ -35,6 +35,9 @@ export default function formatDate(
   return result;
 }
 
+const formatter = (formatter: Intl.DateTimeFormat, date: Date) =>
+  formatter.format(date);
+
 function createReplacements(
   time: number,
   formatters: {
@@ -75,5 +78,3 @@ function createReplacements(
     a: amPm,
   };
 }
-
-const padTwoDigits = (num: number): string => num.toString().padStart(2, "0");

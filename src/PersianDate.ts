@@ -8,10 +8,11 @@ import createOptions from "./utils/createOptions";
 import createFormatter from "./utils/createFormatter";
 import TimeZone from "./types/TimeZone";
 import Calendar from "./types/Calendar";
+import Formatters from "./types/Formatters";
 
 export default class PersianDate extends Date {
   private options: RequiredPersianDateOptions;
-  private formatter!: Intl.DateTimeFormat;
+  private formatters!: Formatters;
 
   constructor(options?: PersianDateOptions);
   constructor(value: Date, options?: PersianDateOptions);
