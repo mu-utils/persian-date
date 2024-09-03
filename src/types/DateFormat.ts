@@ -1,4 +1,4 @@
-type DateSegment = "MM" | "YYYY" | "DD";
+import DateSegment from "./DateSegment";
 
 type Separator = "-" | "/" | ".";
 

@@ -5,6 +5,8 @@
   "main": "src/index.ts",
   "types": "dist/index.d.ts",
   "scripts": {
+    "start": "npm run watch",
+    "start:demo": "cd ./demo && npm run watch",
     "test": "jest",
     "test:1": "jest -- ./src/utils/__tests__/PersianDateUtils.test.ts",
     "build": "tsc",
