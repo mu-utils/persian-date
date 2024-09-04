@@ -1,4 +1,4 @@
-import PersianDate from "../PersianDate/PersianDate";
+import PersianDate from "../PersianDate";
 import PersianDateOptions from "../types/PersianDateOptions";
 
 function persianDate(options?: PersianDateOptions): PersianDate;

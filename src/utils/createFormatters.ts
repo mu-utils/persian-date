@@ -1,16 +1,14 @@
+import FormatOptions from "../types/FormatOptions";
 import Formatters from "../types/Formatters";
-import RequiredPersianDateOptions from "../types/RequiredPersianDateOptions";
-import extractFormatOptions from "./extractFormatOptions";
 
-function createFormatter(options: RequiredPersianDateOptions): Formatters {
-  const formatOptions = extractFormatOptions(options);
-  const locale = formatOptions.calendar === "persian" ? "fa-IR" : "en-US";
+function createFormatter(options: FormatOptions): Formatters {
+  const locale = options.calendar === "persian" ? "fa-IR" : "en-US";
 
   return [
-    new Intl.DateTimeFormat(locale, { weekday: "long", ...formatOptions }),
-    new Intl.DateTimeFormat(locale, { weekday: "short", ...formatOptions }),
-    new Intl.DateTimeFormat(locale, { month: "long", ...formatOptions }),
-    new Intl.DateTimeFormat(locale, { month: "short", ...formatOptions }),
+    new Intl.DateTimeFormat(locale, { weekday: "long", ...options }),
+    new Intl.DateTimeFormat(locale, { weekday: "short", ...options }),
+    new Intl.DateTimeFormat(locale, { month: "long", ...options }),
+    new Intl.DateTimeFormat(locale, { month: "short", ...options }),
   ];
 }
 

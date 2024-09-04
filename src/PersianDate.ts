@@ -3,17 +3,19 @@ import normalizeArguments from "./utils/normalizeArguments";
 import DateFormatTemplate from "./types/DateFormatTemplate";
 import formatDate from "./utils/formatTime";
 import normalizeTime from "./utils/normalizeTime";
-import RequiredPersianDateOptions from "./types/RequiredPersianDateOptions";
-import createOptions from "./utils/createOptions";
-import createFormatter from "./utils/createFormatter";
+import createOptions from "./utils/options/createOptions";
 import TimeZone from "./types/TimeZone";
 import Calendar from "./types/Calendar";
 import Formatters from "./types/Formatters";
 import createFormatters from "./utils/createFormatters";
+import createFormatOptions from "./utils/options/createFormatOptions";
+import Options from "./types/Options";
+import FormatOptions from "./types/FormatOptions";
 
 export default class PersianDate extends Date {
-  private options: RequiredPersianDateOptions;
+  private options: Options;
   private formatters!: Formatters;
+  private formatOptions: FormatOptions;
 
   constructor(options?: PersianDateOptions);
   constructor(value: Date, options?: PersianDateOptions);
@@ -64,23 +66,29 @@ export default class PersianDate extends Date {
     const [newArguments, options] = normalizeArguments(args);
     super(...(newArguments as []));
     this.options = createOptions(options);
-    this.setTime(normalizeTime(this.getTime(), this.options));
-    this.updateFormatter();
+    this.formatOptions = createFormatOptions(options);
+    this.update();
   }
 
-  // Update the formatter with current settings
-  private updateFormatter() {
-    this.formatters = createFormatters(this.options);
+  private update() {
+    const time = normalizeTime(
+      this.getTime(),
+      this.options,
+      this.formatOptions
+    );
+    this.setTime(time);
+    this.formatters = createFormatters(this.formatOptions);
   }
 
   setTimeZone(timeZone: TimeZone) {
-    this.options.timeZone = timeZone;
-    this.updateFormatter();
+    this.formatOptions.timeZone = timeZone;
+    this.update();
   }
 
   setCalendar(calendar: Calendar) {
     this.options.calendar = calendar;
-    this.updateFormatter();
+    this.formatOptions = createFormatOptions(this.options);
+    this.update();
   }
 
   format(template: DateFormatTemplate): string {
