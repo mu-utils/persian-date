@@ -11,7 +11,6 @@ export const toPersianTime = (
   value: number | Date,
   options: Intl.DateTimeFormatOptions
 ): number => {
-  options.numberingSystem = undefined;
   const formattedDate = new Intl.DateTimeFormat(
     "fa-IR-u-nu-latn",
     options

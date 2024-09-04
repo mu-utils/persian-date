@@ -3,17 +3,18 @@ import normalizeArguments from "./utils/normalizeArguments";
 import DateFormatTemplate from "./types/DateFormatTemplate";
 import formatDate from "./utils/formatTime";
 import normalizeTime from "./utils/normalizeTime";
-import RequiredPersianDateOptions from "./types/RequiredPersianDateOptions";
-import createOptions from "./utils/createOptions";
-import createFormatter from "./utils/createFormatter";
+import createOptions from "./utils/options/createOptions";
 import TimeZone from "./types/TimeZone";
 import Calendar from "./types/Calendar";
 import Formatters from "./types/Formatters";
 import createFormatters from "./utils/createFormatters";
+import createFormatOptions from "./utils/options/createFormatOptions";
+import Options from "./types/Options";
 
 export default class PersianDate extends Date {
-  private options: RequiredPersianDateOptions;
+  private options: Options;
   private formatters!: Formatters;
+  private formatOptions: Intl.DateTimeFormatOptions;
 
   constructor(options?: PersianDateOptions);
   constructor(value: Date, options?: PersianDateOptions);
@@ -64,7 +65,10 @@ export default class PersianDate extends Date {
     const [newArguments, options] = normalizeArguments(args);
     super(...(newArguments as []));
     this.options = createOptions(options);
-    this.setTime(normalizeTime(this.getTime(), this.options));
+    this.formatOptions = createFormatOptions(options);
+    this.setTime(
+      normalizeTime(this.getTime(), this.options, this.formatOptions)
+    );
     this.updateFormatter();
   }
 
@@ -74,7 +78,7 @@ export default class PersianDate extends Date {
   }
 
   setTimeZone(timeZone: TimeZone) {
-    this.options.timeZone = timeZone;
+    this.formatOptions.timeZone = timeZone;
     this.updateFormatter();
   }
 

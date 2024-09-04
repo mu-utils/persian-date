@@ -1,8 +1,8 @@
 import { toPersianTime } from "./toPersianTime";
 import toGregorianTime from "./toGregorianTime";
 import validatePersianDate from "./validatePersianDate";
-import RequiredPersianDateOptions from "../types/RequiredPersianDateOptions";
-import extractFormatOptions from "./extractFormatOptions";
+import Options from "../types/Options";
+import FormatOptions from "../types/FormatOptions";
 
 /**
  * Normalizes time to gregorian or persian date.
@@ -25,13 +25,13 @@ import extractFormatOptions from "./extractFormatOptions";
  */
 export default function normalizeTime(
   time: number,
-  options: RequiredPersianDateOptions
+  options: Options,
+  formatOptions: FormatOptions
 ): number {
   const date = new Date(time);
   const year = date.getFullYear();
   const month = date.getMonth();
   const day = date.getDate();
-  const formatOptions = extractFormatOptions(options);
 
   if (isNaN(year) && options.invalidDateSeverity === "error") {
     throw new Error("Invalid Date");

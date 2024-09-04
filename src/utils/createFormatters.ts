@@ -1,8 +1,8 @@
 import Formatters from "../types/Formatters";
-import RequiredPersianDateOptions from "../types/RequiredPersianDateOptions";
-import extractFormatOptions from "./extractFormatOptions";
+import Options from "../types/Options";
+import extractFormatOptions from "./options/createFormatOptions";
 
-function createFormatter(options: RequiredPersianDateOptions): Formatters {
+function createFormatter(options: Options): Formatters {
   const formatOptions = extractFormatOptions(options);
   const locale = formatOptions.calendar === "persian" ? "fa-IR" : "en-US";
 
