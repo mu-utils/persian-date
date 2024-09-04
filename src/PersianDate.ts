@@ -2,7 +2,6 @@ import PersianDateOptions from "./types/PersianDateOptions";
 import normalizeArguments from "./utils/normalizeArguments";
 import DateFormatTemplate from "./types/DateFormatTemplate";
 import formatDate from "./utils/common/formatTime";
-import normalizeTime from "./utils/normalizeTime";
 import createOptions from "./utils/options/createOptions";
 import TimeZone from "./types/TimeZone";
 import Calendar from "./types/Calendar";
@@ -12,6 +11,7 @@ import createFormatOptions from "./utils/options/createFormatOptions";
 import Options from "./types/Options";
 import FormatOptions from "./types/FormatOptions";
 import isLeapYear from "./utils/common/isLeapYear";
+import normalizeTime from "./utils/common/normalizeTime";
 
 /**
  * Represents a Persian date and time.
@@ -122,7 +122,7 @@ export default class PersianDate extends Date {
   }
 
   /**
-   * 
+   *
    * @returns {boolean}
    */
   isLeapYear(): boolean {

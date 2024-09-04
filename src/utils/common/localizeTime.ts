@@ -1,4 +1,4 @@
-import TimeZone from "../types/TimeZone";
+import TimeZone from "../../types/TimeZone";
 
 /**
  *  Localizes time to the given time zone.

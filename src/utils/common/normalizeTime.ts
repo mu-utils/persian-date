@@ -1,9 +1,10 @@
-import { toPersianTime } from "./persian/toPersianTime";
-import toGregorianTime from "./gregorian/toGregorianTime";
-import Options from "../types/Options";
-import FormatOptions from "../types/FormatOptions";
+import FormatOptions from "../../types/FormatOptions";
+import Options from "../../types/Options";
+import toGregorianTime from "../gregorian/toGregorianTime";
+import { isPersianYear } from "../persian";
+import isPersianTime from "../persian/isPersianTime";
+import { toPersianTime } from "../persian/toPersianTime";
 import localizeTime from "./localizeTime";
-import isPersianTime, { isPersianYear } from "./persian/isPersianTime";
 
 /**
  * Normalizes time to Gregorian or Persian date.
