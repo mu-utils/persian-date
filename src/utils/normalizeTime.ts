@@ -1,5 +1,5 @@
 import { toPersianTime } from "./persian/toPersianTime";
-import toGregorianTime from "./toGregorianTime";
+import toGregorianTime from "./gregorian/toGregorianTime";
 import Options from "../types/Options";
 import FormatOptions from "../types/FormatOptions";
 import localizeTime from "./localizeTime";
