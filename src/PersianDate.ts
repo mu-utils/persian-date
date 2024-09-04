@@ -66,9 +66,12 @@ export default class PersianDate extends Date {
     super(...(newArguments as []));
     this.options = createOptions(options);
     this.formatOptions = createFormatOptions(options);
-    this.setTime(
-      normalizeTime(this.getTime(), this.options, this.formatOptions)
+    const normalizedTime = normalizeTime(
+      this.getTime(),
+      this.options,
+      this.formatOptions
     );
+    this.setTime(normalizedTime);
     this.updateFormatter();
   }
 

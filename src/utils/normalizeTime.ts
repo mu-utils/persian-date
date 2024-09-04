@@ -47,5 +47,12 @@ export default function normalizeTime(
     return toGregorianTime(time);
   }
 
-  return time;
+  const newDate = date.toLocaleString("en-US", {
+    timeZone: "America/New_York",
+  });
+  const newd = new Date(newDate);
+
+  // console.log(newd, date);
+
+  return new Date(newDate).getTime();
 }
