@@ -3,7 +3,7 @@ import {
   PERSIAN_DAYS_IN_YEAR,
   PERSIAN_MONTHS_DAYS,
 } from "../constants/persianCalendar";
-import { isLeapYear } from "./leapYear";
+import isPersianLeapYear from "./persian/isPersianLeapYear";
 
 /**
  * Calculates the day of the year for a given month in a given year.
@@ -13,7 +13,7 @@ import { isLeapYear } from "./leapYear";
 export const dayInYear = (year: number, month: number): number => {
   const days = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
-  if (month > 2 && isLeapYear(year)) {
+  if (month > 2 && isPersianLeapYear(year)) {
     return days[month - 1] + 1;
   }
 

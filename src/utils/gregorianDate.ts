@@ -67,8 +67,6 @@ export const toGregorianDate = (persianYear: number): number => {
   }
 
   return gregorianYear;
-
-  return 1;
 };
 /**
  * Calculates the day of the month for a given wjd, year, and month.

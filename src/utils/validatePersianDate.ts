@@ -3,7 +3,7 @@ import {
   PERSIAN_MAX_YEAR,
   PERSIAN_MONTHS_DAYS,
 } from "../constants/persianCalendar";
-import { isLeapYear } from "./leapYear";
+import isPersianLeapYear from "./persian/isPersianLeapYear";
 
 const isValidYear = (year: number): boolean =>
   year >= PERSIAN_MIN_YEAR && year <= PERSIAN_MAX_YEAR;
@@ -13,7 +13,7 @@ const isValidMonth = (month: number): boolean => month >= 1 && month <= 12;
 const isValidDay = (day: number, year: number, month: number): boolean => {
   const maxDaysInMonth = PERSIAN_MONTHS_DAYS[month - 1];
 
-  if (month === 12 && isLeapYear(year)) {
+  if (month === 12 && isPersianLeapYear(year)) {
     return day >= 1 && day <= 30; //? Esfand has 30 days in leap years
   }
 

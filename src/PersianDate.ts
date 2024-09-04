@@ -12,6 +12,18 @@ import createFormatOptions from "./utils/options/createFormatOptions";
 import Options from "./types/Options";
 import FormatOptions from "./types/FormatOptions";
 
+/**
+ * Represents a Persian date and time.
+ * @extends Date
+ * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
+ *
+ * @example
+ * ```
+ * const persianDate = new PersianDate();
+ * console.log(persianDate.format('YYYY/MM/DD'));
+ * console.log(persianDate.format('YYYY/MM/DD HH:mm:ss'));
+ * ```
+ */
 export default class PersianDate extends Date {
   private options: Options;
   private formatters!: Formatters;
@@ -80,7 +92,16 @@ export default class PersianDate extends Date {
     this.formatters = createFormatters(this.formatOptions);
   }
 
-  setTimeZone(timeZone: TimeZone) {
+  /**
+   * Sets the time zone for the PersianDate instance.
+   *
+   * This method updates the time zone in the format options and triggers
+   * an update to reflect the new time zone settings.
+   *
+   * @param {TimeZone} timeZone - The time zone to set (e.g., "UTC", "Asia/Tehran").
+   * @returns {void}
+   */
+  setTimeZone(timeZone: TimeZone): void {
     this.formatOptions.timeZone = timeZone;
     this.update();
   }
