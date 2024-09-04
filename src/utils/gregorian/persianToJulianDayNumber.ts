@@ -1,5 +1,5 @@
 import calculatePersianCalendar from "./calculatePersianCalendar";
-import gregorianToJulianDayNumber from "../gregorianToJulianDayNumber";
+import gregorianToJulianDayNumber from "./gregorianToJulianDayNumber";
 
 /**
  * Converts a Persian date to Julian Day Number.

@@ -12,6 +12,7 @@ import Options from "./types/Options";
 import FormatOptions from "./types/FormatOptions";
 import isLeapYear from "./utils/common/isLeapYear";
 import normalizeTime from "./utils/common/normalizeTime";
+import isPersianLeapYear from "./utils/persian/isPersianLeapYear";
 
 /**
  * Represents a Persian date and time.
@@ -126,6 +127,6 @@ export default class PersianDate extends Date {
    * @returns {boolean}
    */
   isLeapYear(): boolean {
-    return isLeapYear(this.getFullYear());
+    return isPersianLeapYear(this.getFullYear());
   }
 }

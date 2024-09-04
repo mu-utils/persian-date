@@ -1,4 +1,5 @@
 import PersianDate from "../PersianDate";
+import isPersianLeapYear from "../utils/persian/isPersianLeapYear";
 
 describe("PersianDate", () => {
   describe("normalizeDate", () => {
@@ -42,10 +43,11 @@ describe("PersianDate", () => {
 
   describe("isLeapYear", () => {
     it("should return true for leap year 1404", () => {
-      const date = new PersianDate("1404/10/13");
+      const date = new PersianDate("1403/10/13");
       expect(date.isLeapYear()).toBe(true);
     });
   });
 });
 
-console.log(new PersianDate("1399").isLeapYear()); // false;
+
+console.log(isPersianLeapYear(1407)); // true
