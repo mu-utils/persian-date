@@ -7,8 +7,6 @@ describe("createFormatReplacements", () => {
     const formatters = createFormatters({
       timeZone: "America/New_York",
       calendar: "persian",
-      ignoreCalendar: false,
-      invalidDateSeverity: "error",
     });
     const replacements = createFormatReplacements(date.getTime(), formatters);
     expect(replacements).toEqual({
