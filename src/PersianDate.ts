@@ -7,7 +7,7 @@ import createOptions from "./utils/options/createOptions";
 import TimeZone from "./types/TimeZone";
 import Calendar from "./types/Calendar";
 import Formatters from "./types/Formatters";
-import createFormatters from "./utils/createFormatters";
+import createFormatters from "./utils/formatters/createFormatters";
 import createFormatOptions from "./utils/options/createFormatOptions";
 import Options from "./types/Options";
 import FormatOptions from "./types/FormatOptions";

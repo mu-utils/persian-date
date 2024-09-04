@@ -1,4 +1,4 @@
-import calculatePersianCalendar from "../calculatePersianCalendar";
+import calculatePersianCalendar from "./calculatePersianCalendar";
 import gregorianToJulianDayNumber from "../gregorianToJulianDayNumber";
 
 /**

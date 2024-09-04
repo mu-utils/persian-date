@@ -1,8 +1,8 @@
-import DateTuple from "../types/DateTuple";
+import DateTuple from "../../types/DateTuple";
 import {
   gregorianToJulianDayNumber,
   julianDayNumberToGregorian,
-} from "./gregorianConventions";
+} from "../gregorianConventions";
 import calculatePersianCalendar from "./calculatePersianCalendar";
 
 /**

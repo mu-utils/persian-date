@@ -1,5 +1,5 @@
-import FormatOptions from "../types/FormatOptions";
-import Formatters from "../types/Formatters";
+import FormatOptions from "../../types/FormatOptions";
+import Formatters from "../../types/Formatters";
 
 function createFormatter(options: FormatOptions): Formatters {
   const locale = options.calendar === "persian" ? "fa-IR" : "en-US";
