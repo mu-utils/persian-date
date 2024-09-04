@@ -10,11 +10,12 @@ import Formatters from "./types/Formatters";
 import createFormatters from "./utils/createFormatters";
 import createFormatOptions from "./utils/options/createFormatOptions";
 import Options from "./types/Options";
+import FormatOptions from "./types/FormatOptions";
 
 export default class PersianDate extends Date {
   private options: Options;
   private formatters!: Formatters;
-  private formatOptions: Intl.DateTimeFormatOptions;
+  private formatOptions: FormatOptions;
 
   constructor(options?: PersianDateOptions);
   constructor(value: Date, options?: PersianDateOptions);

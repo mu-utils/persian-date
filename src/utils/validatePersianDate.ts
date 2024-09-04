@@ -27,11 +27,13 @@ const isValidDay = (day: number, year: number, month: number): boolean => {
  * month is within the valid range (1-12), and the day is within the valid range
  * for the given month and year.
  */
-const validatePersianDate = (
-  year: number,
-  month: number,
-  day: number
-): boolean =>
-  isValidYear(year) && isValidMonth(month) && isValidDay(day, year, month);
+export default function validatePersianDate(time: number): boolean {
+  const date = new Date(time);
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
 
-export default validatePersianDate;
+  return (
+    isValidYear(year) && isValidMonth(month) && isValidDay(day, year, month)
+  );
+}

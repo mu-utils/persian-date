@@ -5,6 +5,13 @@ const persianDate1 = persianDate("2023-06-12T03:05:03", {
   timeZone: "America/New_York",
 });
 
+persianDate1.setTimeZone("Asia/Tehran");
+console.log(persianDate1);
+
+
+console.log(persianDate1.toLocaleString());
+
+
 // const d = new Date("2023-06-12T03:05:03");
 // const b = new Date(d.toLocaleString("en-US", { timeZone: "America/New_York" }));
 // console.log(d.toLocaleString(), b.toLocaleString());

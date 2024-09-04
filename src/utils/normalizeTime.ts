@@ -3,6 +3,19 @@ import toGregorianTime from "./toGregorianTime";
 import validatePersianDate from "./validatePersianDate";
 import Options from "../types/Options";
 import FormatOptions from "../types/FormatOptions";
+import TimeZone from "../types/TimeZone";
+
+/**
+ *
+ * @param time
+ * @param timeZone
+ * @returns
+ */
+function localizeTime(time: number, timeZone: TimeZone | undefined) {
+  const date = new Date(time);
+  const localeTime = date.toLocaleString("en-US", { timeZone });
+  return new Date(localeTime).getTime();
+}
 
 /**
  * Normalizes time to gregorian or persian date.
@@ -28,31 +41,21 @@ export default function normalizeTime(
   options: Options,
   formatOptions: FormatOptions
 ): number {
-  const date = new Date(time);
-  const year = date.getFullYear();
-  const month = date.getMonth();
-  const day = date.getDate();
+  const localizedTime = localizeTime(time, formatOptions.timeZone);
 
-  if (isNaN(year) && options.invalidDateSeverity === "error") {
+  if (isNaN(time) && options.invalidDateSeverity === "error") {
     throw new Error("Invalid Date");
   }
 
-  const isValidPersianDate = validatePersianDate(year, month, day);
+  const isValidPersianDate = validatePersianDate(localizedTime);
 
   if (options.calendar === "persian" && !isValidPersianDate) {
-    return toPersianTime(time, formatOptions);
+    return toPersianTime(localizedTime, formatOptions);
   }
 
   if (options.calendar === "gregorian" && isValidPersianDate) {
-    return toGregorianTime(time);
+    return toGregorianTime(localizedTime);
   }
 
-  const newDate = date.toLocaleString("en-US", {
-    timeZone: "America/New_York",
-  });
-  const newd = new Date(newDate);
-
-  // console.log(newd, date);
-
-  return new Date(newDate).getTime();
+  return localizedTime;
 }
