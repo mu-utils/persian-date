@@ -9,10 +9,10 @@ import FormatOptions from "../types/FormatOptions";
  */
 export const toPersianTime = (
   value: number | Date,
-  options?: FormatOptions
+  { timeZone }: FormatOptions
 ): number => {
   const localeTime = new Date(value).toLocaleString("fa-IR-u-nu-latn", {
-    timeZone: options?.timeZone,
+    timeZone,
   });
   return new Date(localeTime).getTime();
 };

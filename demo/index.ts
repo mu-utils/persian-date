@@ -7,10 +7,10 @@ const persianDate1 = persianDate("2023-06-12T03:05:03", {
 
 // persianDate1.setTimeZone("Asia/Tehran");
 // console.log(persianDate1);
-persianDate1.setCalendar("gregorian");
+persianDate1.setCalendar("persian");
 // persianDate1.setCalendar("gregorian");
 
-console.log(persianDate1.format("YYYY-MM-DD h:mm:ss a"));
+console.log(persianDate1.getHours());
 
 // const d = new Date("2023-06-12T03:05:03");
 // const b = new Date(d.toLocaleString("en-US", { timeZone: "America/New_York" }));

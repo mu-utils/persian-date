@@ -38,7 +38,7 @@ export default function normalizeTime(
   const isValidPersianDate = validatePersianDate(localeTime);
 
   if (options.calendar === "persian" && !isValidPersianDate) {
-    return toPersianTime(localeTime);
+    return toPersianTime(localeTime, formatOptions);
   }
 
   if (options.calendar === "gregorian" && isValidPersianDate) {
