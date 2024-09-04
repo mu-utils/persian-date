@@ -74,7 +74,7 @@ export default class PersianDate extends Date {
 
   // Update the formatter with current settings
   private updateFormatter() {
-    this.formatters = createFormatters(this.options);
+    this.formatters = createFormatters(this.formatOptions);
   }
 
   setTimeZone(timeZone: TimeZone) {

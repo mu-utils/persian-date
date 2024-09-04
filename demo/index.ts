@@ -11,4 +11,4 @@ const persianDate1 = persianDate("2023-06-12T16:05:03", {
 
 // console.log(new Date());
 
-console.log(persianDate1);
+console.log(persianDate1.toLocaleDateString());
