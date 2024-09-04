@@ -1,5 +1,5 @@
-import DateTuple from "../types/DateTuple";
-import gregorianToJulianDayNumber from "./gregorianToJulianDayNumber";
+import DateTuple from "../../types/DateTuple";
+import gregorianToJulianDayNumber from "../gregorianToJulianDayNumber";
 import julianDayNumberToPersian from "./julianDayNumberToPersian";
 
 /**

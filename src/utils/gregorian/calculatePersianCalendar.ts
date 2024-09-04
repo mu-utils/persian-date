@@ -1,5 +1,5 @@
-import { PERSIAN_EPOCH_YEARS } from "../constants/calendarConstants";
-import CalculatePersianCalendar from "../types/CalculatePersianCalendar";
+import { PERSIAN_EPOCH_YEARS } from "../../constants/calendarConstants";
+import CalculatePersianCalendar from "../../types/CalculatePersianCalendar";
 
 /**
  * Calculates Persian calendar details based on a given Persian year.
