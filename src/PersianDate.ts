@@ -11,6 +11,7 @@ import createFormatters from "./utils/createFormatters";
 import createFormatOptions from "./utils/options/createFormatOptions";
 import Options from "./types/Options";
 import FormatOptions from "./types/FormatOptions";
+import isLeapYear from "./utils/common/isLeapYear";
 
 /**
  * Represents a Persian date and time.
@@ -118,5 +119,13 @@ export default class PersianDate extends Date {
 
   diff(date: PersianDate): number {
     return Math.abs(this.getTime() - date.getTime());
+  }
+
+  /**
+   * 
+   * @returns {boolean}
+   */
+  isLeapYear(): boolean {
+    return isLeapYear(this.getFullYear());
   }
 }

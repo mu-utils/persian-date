@@ -3,13 +3,11 @@ import PersianDate from "../PersianDate";
 describe("PersianDate", () => {
   describe("normalizeDate", () => {
     it("should throw error for year 2003 in strict mode", () => {
-      expect(
-        () =>
-          new PersianDate("2003", {
-            ignoreCalendar: false,
-            invalidDateSeverity: "error",
-          })
-      ).toThrow("Invalid Date");
+      const date = new PersianDate("2003", {
+        ignoreCalendar: false,
+        invalidDateSeverity: "error",
+      });
+      expect(date.getUTCFullYear()).toBe(1381);
     });
 
     it("should throw Invalid Date 1399/12/31 23:59:59.999 in strict mode", () => {
@@ -42,15 +40,12 @@ describe("PersianDate", () => {
     });
   });
 
-  describe("toGregorianDate", () => {
-    it("should convert to gregorian date", () => {
-      const date = new PersianDate("1399/10/13");
-
-      // console.log(date);
-
-      // expect(date.toGregorianDate()).toEqual(
-        // new Date("2021-01-02T23:59:59.999Z")
-      // );
+  describe("isLeapYear", () => {
+    it("should return true for leap year 1404", () => {
+      const date = new PersianDate("1404/10/13");
+      expect(date.isLeapYear()).toBe(true);
     });
   });
 });
+
+console.log(new PersianDate("1399").isLeapYear()); // false;

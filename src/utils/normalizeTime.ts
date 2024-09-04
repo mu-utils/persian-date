@@ -1,49 +1,59 @@
-import { toPersianTime } from "./toPersianTime";
+import { toPersianTime } from "./persian/toPersianTime";
 import toGregorianTime from "./toGregorianTime";
-import validatePersianDate from "./validatePersianDate";
 import Options from "../types/Options";
 import FormatOptions from "../types/FormatOptions";
 import localizeTime from "./localizeTime";
+import isPersianTime, { isPersianYear } from "./persian/isPersianTime";
 
 /**
- * Normalizes time to gregorian or persian date.
+ * Normalizes time to Gregorian or Persian date.
  *
- *  If the input time is a valid persian date and the calender is set to
- *  persian, it returns persian date. Otherwise, it returns gregorian date.
- *  Otherwise, it returns gregorian date.
+ * If the input time is a valid Persian date and the calendar is set to
+ * Persian, it returns the Persian date. If the input time is a valid Gregorian
+ * date and the calendar is set to Gregorian, it returns the Gregorian date.
+ * Otherwise, it converts between the two based on the specified calendar.
  *
  * @example
  * ```
  * normalizeTime(1727814600000, {
- *   calender: "gregorian",
- *   ignoreCalendar: true,
+ *   calendar: "gregorian",
  *   invalidDateSeverity: "error"
- * }); // -17876258744000
+ * }, { timeZone: "UTC" }); // Returns -17876258744000
  * ```
- * @param time - Time in milliseconds.
- * @param options - Options for normalizing time.
- * @returns Normalized time in milliseconds.
+ *
+ * @param {number} time - Time in milliseconds.
+ * @param {Options} options - Options for handling invalid dates.
+ * @param {FormatOptions} formatOptions - Options for formatting time, including calendar type and time zone.
+ * @returns {number} Normalized time in milliseconds.
+ * @throws Will throw an error if the time is invalid and `invalidDateSeverity` is set to "error".
  */
 export default function normalizeTime(
   time: number,
-  options: Options,
-  formatOptions: FormatOptions
+  { invalidDateSeverity }: Options,
+  { timeZone, calendar }: FormatOptions
 ): number {
-  const localeTime = localizeTime(time, formatOptions.timeZone);
+  const localeTime = localizeTime(time, timeZone);
+  const validPersianTime = isPersianTime(localeTime);
 
-  if (isNaN(time) && options.invalidDateSeverity === "error") {
-    throw new Error("Invalid Date");
+  if (
+    isNaN(localeTime) ||
+    (calendar === "persian" && !validPersianTime && isPersianYear(localeTime))
+  ) {
+    if (invalidDateSeverity === "error") {
+      throw new Error("Invalid Date");
+    }
+    return NaN;
   }
 
-  const isValidPersianDate = validatePersianDate(localeTime);
-
-  if (options.calendar === "persian" && !isValidPersianDate) {
-    return toPersianTime(localeTime, formatOptions);
+  if (calendar === "gregorian") {
+    return validPersianTime ? toGregorianTime(localeTime) : localeTime;
   }
 
-  if (options.calendar === "gregorian" && isValidPersianDate) {
-    return toGregorianTime(localeTime);
+  if (calendar === "persian") {
+    return validPersianTime
+      ? localeTime
+      : toPersianTime(localeTime, { timeZone });
   }
 
-  return localeTime;
+  return NaN;
 }
