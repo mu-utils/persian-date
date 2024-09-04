@@ -1,5 +1,5 @@
 import PersianDateOptions from "./types/PersianDateOptions";
-import normalizeArguments from "./utils/normalizeArguments";
+import normalizeArguments from "./utils/common/normalizeArguments";
 import DateFormatTemplate from "./types/DateFormatTemplate";
 import formatDate from "./utils/common/formatTime";
 import createOptions from "./utils/options/createOptions";

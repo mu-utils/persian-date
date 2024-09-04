@@ -2,8 +2,8 @@ import DateTuple from "../../types/DateTuple";
 import {
   gregorianToJulianDayNumber,
   julianDayNumberToGregorian,
-} from "../gregorianConventions";
-import calculatePersianCalendar from "./calculatePersianCalendar";
+} from "../gregorian/julianDay";
+import calculatePersianCalendar from "../gregorian/calculatePersianCalendar";
 
 /**
  * Converts a Julian Day Number to a Persian date.

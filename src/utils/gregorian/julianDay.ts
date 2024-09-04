@@ -1,8 +1,8 @@
 import {
   MILLISECONDS_PER_DAY,
   UNIX_EPOCH_JDN,
-} from "../constants/timeConstants";
-import DateTuple from "../types/DateTuple";
+} from "../../constants/timeConstants";
+import DateTuple from "../../types/DateTuple";
 
 /**
  * Converts a Gregorian date to Julian Day Number.

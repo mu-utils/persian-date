@@ -1,6 +1,6 @@
 import DateTuple from "../../types/DateTuple";
 import gregorianToJulianDayNumber from "../gregorianToJulianDayNumber";
-import julianDayNumberToPersian from "./julianDayNumberToPersian";
+import julianDayNumberToPersian from "../persian/julianDayNumberToPersian";
 
 /**
  * Converts a Gregorian date to Persian date.
