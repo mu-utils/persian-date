@@ -67,28 +67,28 @@ export default class PersianDate extends Date {
     super(...(newArguments as []));
     this.options = createOptions(options);
     this.formatOptions = createFormatOptions(options);
-    const normalizedTime = normalizeTime(
+    this.update();
+  }
+
+  private update() {
+    const time = normalizeTime(
       this.getTime(),
       this.options,
       this.formatOptions
     );
-    this.setTime(normalizedTime);
-    this.updateFormatter();
-  }
-
-  // Update the formatter with current settings
-  private updateFormatter() {
+    this.setTime(time);
     this.formatters = createFormatters(this.formatOptions);
   }
 
   setTimeZone(timeZone: TimeZone) {
     this.formatOptions.timeZone = timeZone;
-    this.updateFormatter();
+    this.update();
   }
 
   setCalendar(calendar: Calendar) {
     this.options.calendar = calendar;
-    this.updateFormatter();
+    this.formatOptions = createFormatOptions(this.options);
+    this.update();
   }
 
   format(template: DateFormatTemplate): string {

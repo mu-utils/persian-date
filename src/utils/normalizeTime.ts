@@ -3,19 +3,7 @@ import toGregorianTime from "./toGregorianTime";
 import validatePersianDate from "./validatePersianDate";
 import Options from "../types/Options";
 import FormatOptions from "../types/FormatOptions";
-import TimeZone from "../types/TimeZone";
-
-/**
- *
- * @param time
- * @param timeZone
- * @returns
- */
-function localizeTime(time: number, timeZone: TimeZone | undefined) {
-  const date = new Date(time);
-  const localeTime = date.toLocaleString("en-US", { timeZone });
-  return new Date(localeTime).getTime();
-}
+import localizeTime from "./localizeTime";
 
 /**
  * Normalizes time to gregorian or persian date.
@@ -41,21 +29,21 @@ export default function normalizeTime(
   options: Options,
   formatOptions: FormatOptions
 ): number {
-  const localizedTime = localizeTime(time, formatOptions.timeZone);
+  const localeTime = localizeTime(time, formatOptions.timeZone);
 
   if (isNaN(time) && options.invalidDateSeverity === "error") {
     throw new Error("Invalid Date");
   }
 
-  const isValidPersianDate = validatePersianDate(localizedTime);
+  const isValidPersianDate = validatePersianDate(localeTime);
 
   if (options.calendar === "persian" && !isValidPersianDate) {
-    return toPersianTime(localizedTime, formatOptions);
+    return toPersianTime(localeTime);
   }
 
   if (options.calendar === "gregorian" && isValidPersianDate) {
-    return toGregorianTime(localizedTime);
+    return toGregorianTime(localeTime);
   }
 
-  return localizedTime;
+  return localeTime;
 }

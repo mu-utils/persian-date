@@ -1,4 +1,4 @@
-import createPersianFormatter from "./createPersianFormatter";
+import FormatOptions from "../types/FormatOptions";
 
 /**
  *  Converts a Gregorian date to Persian date. It returns converted date in
@@ -9,11 +9,10 @@ import createPersianFormatter from "./createPersianFormatter";
  */
 export const toPersianTime = (
   value: number | Date,
-  options: Intl.DateTimeFormatOptions
+  options?: FormatOptions
 ): number => {
-  const formattedDate = new Intl.DateTimeFormat(
-    "fa-IR-u-nu-latn",
-    options
-  ).format(value);
-  return new Date(formattedDate).getTime();
+  const localeTime = new Date(value).toLocaleString("fa-IR-u-nu-latn", {
+    timeZone: options?.timeZone,
+  });
+  return new Date(localeTime).getTime();
 };
