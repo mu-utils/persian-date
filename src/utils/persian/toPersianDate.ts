@@ -1,3 +1,4 @@
+import DateType from "../../types/DateType";
 import FormatOptions from "../../types/FormatOptions";
 
 /**
@@ -7,12 +8,17 @@ import FormatOptions from "../../types/FormatOptions";
  * @param value - Gregorian date in milliseconds.
  * @returns Persian date in milliseconds.
  */
-export const toPersianTime = (
+export const toPersianDate = (
   value: number | Date,
   { timeZone }: FormatOptions
-): number => {
+): DateType => {
   const localeTime = new Date(value).toLocaleString("fa-IR-u-nu-latn", {
     timeZone,
   });
-  return new Date(localeTime).getTime();
+
+  console.log(localeTime, 'localetime');
+  
+
+  const [year, month, day] = localeTime.split("/").map(Number);
+  return { year, month, day };
 };

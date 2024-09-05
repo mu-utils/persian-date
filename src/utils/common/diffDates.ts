@@ -4,7 +4,6 @@ import {
   MILLISECONDS_PER_MINUTE,
   MILLISECONDS_PER_SECOND,
 } from "../../constants/timeConstants";
-import DateType from "../../types/DateType";
 import DateUint from "../../types/DateUnit";
 
 /**

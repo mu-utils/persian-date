@@ -13,10 +13,12 @@ import FormatOptions from "./types/FormatOptions";
 import isLeapYear from "./utils/common/isLeapYear";
 import normalizeTime from "./utils/common/normalizeTime";
 import DateUint from "./types/DateUnit";
-import DateType from "./types/DateType";
 import getTime from "./utils/common/getTime";
 import dffDates from "./utils/common/diffDates";
-import modifyTime from "./utils/common/modifyTime";
+import modifyTime from "./utils/common/modifytime";
+import { toPersianDate } from "./utils/persian/toPersianDate";
+import DateValue from "./types/DateValue";
+import DateType from "./types/DateType";
 
 /**
  * Represents a Persian date and time.
@@ -34,6 +36,7 @@ export default class PersianDate extends Date {
   private options: Options;
   private formatters!: Formatters;
   private formatOptions: FormatOptions;
+  private persianDate!: DateType;
 
   constructor(options?: PersianDateOptions);
   constructor(value: Date, options?: PersianDateOptions);
@@ -82,6 +85,11 @@ export default class PersianDate extends Date {
   );
   constructor(...args: unknown[]) {
     const [newArguments, options] = normalizeArguments(args);
+
+    console.log(newArguments);
+    
+
+
     super(...(newArguments as []));
     this.options = createOptions(options);
     this.formatOptions = createFormatOptions(options);
@@ -95,6 +103,7 @@ export default class PersianDate extends Date {
       this.formatOptions
     );
     this.setTime(time);
+    this.persianDate = toPersianDate(time, this.formatOptions);
     this.formatters = createFormatters(this.formatOptions);
   }
 
@@ -122,7 +131,7 @@ export default class PersianDate extends Date {
     return formatDate(this.getTime(), template, this.formatters);
   }
 
-  diff(value: DateType, unit?: DateUint): number {
+  diff(value: DateValue, unit?: DateUint): number {
     return dffDates(this.getTime(), getTime(value), unit);
   }
 
@@ -134,6 +143,19 @@ export default class PersianDate extends Date {
   subtract(unit: DateUint, value: number): PersianDate {
     this.setTime(modifyTime(this.getTime(), unit, -value));
     return this;
+  }
+
+  getMonth(): number {
+    return super.getMonth() + 1;
+  }
+
+  getFullYear(): number {
+    // return super.getFullYear();
+    return this.persianDate.year;
+  }
+
+  getDate(): number {
+    return super.getDate();
   }
 
   /**

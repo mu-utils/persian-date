@@ -1,3 +1,5 @@
+import persianToJulianDay from "../persian/persianToJulianDay";
+import julianDayToGregorian from "./julianDayToGregorian";
 import persianToGregorian from "./persianToGregorian";
 
 /**
@@ -12,23 +14,13 @@ import persianToGregorian from "./persianToGregorian";
  * @param persianTime - Persian date in milliseconds.
  * @returns Gregorian date in milliseconds.
  */
-export default function toGregorianTime(persianTime: number): number {
-  const date = new Date(persianTime);
-  const persianYear = date.getFullYear();
-  const persianMonth = date.getMonth();
-  const persianDay = date.getDate();
-  const [gregorianYer, gregorianMonth, gregorianDay] = persianToGregorian(
-    persianYear,
-    persianMonth,
-    persianDay
-  );
+export default function toGregorianTime(
+  persianYear: number,
+  persianMonth: number,
+  persianDay: number
+): Date {
+  const julianDay = persianToJulianDay(persianYear, persianMonth, persianDay);
+  const gDate = julianDayToGregorian(julianDay);
 
-  return new Date(
-    gregorianYer,
-    gregorianMonth,
-    gregorianDay,
-    date.getHours(),
-    date.getMinutes(),
-    date.getSeconds()
-  ).getTime();
+  return gDate;
 }

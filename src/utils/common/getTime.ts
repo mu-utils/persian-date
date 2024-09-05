@@ -1,12 +1,12 @@
 import PersianDate from "../../PersianDate";
-import DateType from "../../types/DateType";
+import DateValue from "../../types/DateValue";
 
 /**
  *  
  * @param value 
  * @returns 
  */
-export default function getTime(value: DateType): number {
+export default function getTime(value: DateValue): number {
   if (value instanceof PersianDate || value instanceof Date) {
     return value.getTime();
   }
