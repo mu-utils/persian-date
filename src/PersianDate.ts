@@ -122,10 +122,18 @@ export default class PersianDate extends Date {
   }
 
   /**
+   * Determines if the current year is a leap year based on the specified calendar.
    *
-   * @returns {boolean}
+   * @function
+   * @returns {boolean} `true` if the current year is a leap year; otherwise, `false`.
+   *
+   * @example
+   * // Assuming an instance `date` with a specified calendar:
+   * date.isLeapYear(); // Returns `true` if the year is a leap year.
    */
   isLeapYear(): boolean {
+    console.log(this.getFullYear());
+    
     return isLeapYear(this.getFullYear(), this.options.calendar);
   }
 }

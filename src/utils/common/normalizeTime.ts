@@ -30,8 +30,8 @@ import localizeTime from "./localizeTime";
  */
 export default function normalizeTime(
   time: number,
-  { invalidDateSeverity }: Options,
-  { timeZone, calendar }: FormatOptions
+  { invalidDateSeverity, calendar }: Options,
+  { timeZone }: FormatOptions
 ): number {
   const localeTime = localizeTime(time, timeZone);
   const validPersianTime = isPersianTime(localeTime);
@@ -43,6 +43,7 @@ export default function normalizeTime(
     if (invalidDateSeverity === "error") {
       throw new Error("Invalid Date");
     }
+
     return NaN;
   }
 

@@ -49,8 +49,11 @@ describe("PersianDate", () => {
     });
 
     it("should return true for gregorian leap year", () => {
-      const date = new PersianDate("2020/1/2 23:59:59.999");
+      const date = new PersianDate("2024/1/2 23:59:59.999", {
+        calendar: "gregorian",
+      });
       expect(date.isLeapYear()).toBe(true);
     });
   });
 });
+
