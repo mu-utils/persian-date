@@ -132,8 +132,6 @@ export default class PersianDate extends Date {
    * date.isLeapYear(); // Returns `true` if the year is a leap year.
    */
   isLeapYear(): boolean {
-    console.log(this.getFullYear());
-    
     return isLeapYear(this.getFullYear(), this.options.calendar);
   }
 }

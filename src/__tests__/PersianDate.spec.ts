@@ -57,3 +57,32 @@ describe("PersianDate", () => {
   });
 });
 
+describe("PersianDate", () => {
+  describe("diff", () => {
+    it("should return 0 for the same date", () => {
+      const date1 = new PersianDate(1400, 1, 1);
+      const date2 = new PersianDate(1400, 1, 1);
+      expect(date1.diff(date2)).toBe(0);
+    });
+
+    it("should return the correct difference for different dates", () => {
+      const date1 = new PersianDate(1400, 1, 1);
+      const date2 = new PersianDate(1400, 1, 2);
+      const oneDayInMs = 24 * 60 * 60 * 1000;
+      expect(date1.diff(date2)).toBe(oneDayInMs);
+    });
+
+    it("should return the correct difference for dates in different years", () => {
+      const date1 = new PersianDate(1400, 12, 29);
+      const date2 = new PersianDate(1401, 1, 1);
+      const twoDaysInMs = 2 * 24 * 60 * 60 * 1000;
+      expect(date1.diff(date2)).toBe(twoDaysInMs);
+    });
+
+    it("should return the same result regardless of the order of dates", () => {
+      const date1 = new PersianDate(1400, 1, 1);
+      const date2 = new PersianDate(1400, 1, 5);
+      expect(date1.diff(date2)).toBe(date2.diff(date1));
+    });
+  });
+});
