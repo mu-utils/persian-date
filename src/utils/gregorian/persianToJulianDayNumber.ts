@@ -1,5 +1,4 @@
 import calculateMarchDay from "./calculateMarchDay";
-import calculatePersianCalendar from "./calculateMarchDay";
 import gregorianToJulianDayNumber from "./gregorianToJulianDayNumber";
 import calculateGregorianYear from "./calculateGregorianYear";
 
