@@ -1,5 +1,7 @@
-import calculatePersianCalendar from "./calculatePersianCalendar";
+import calculateMarchDay from "./calculateMarchDay";
+import calculatePersianCalendar from "./calculateMarchDay";
 import gregorianToJulianDayNumber from "./gregorianToJulianDayNumber";
+import calculateGregorianYear from "./calculateGregorianYear";
 
 /**
  * Converts a Persian date to Julian Day Number.
@@ -13,7 +15,8 @@ export default function persianToJulianDayNumber(
   persianMonth: number,
   persianDay: number
 ): number {
-  const { year, dayInMarch } = calculatePersianCalendar(persianYear);
+  const year = calculateGregorianYear(persianYear);
+  const dayInMarch = calculateMarchDay(persianYear);
   const t =
     gregorianToJulianDayNumber(year, 3, dayInMarch) + (persianMonth - 1) * 31;
   return t - Math.floor(persianMonth / 7) * (persianMonth - 7) + persianDay - 1;

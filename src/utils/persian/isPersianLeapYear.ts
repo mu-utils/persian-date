@@ -1,16 +1,21 @@
+import {
+  PERSIAN_CYCLE_LENGTH,
+  PERSIAN_LEAP_CYCLE,
+} from "../../constants/calendarConstants";
+
 /**
- * Determines whether the given year is a leap year in the Persian calendar.
+ * Checks if a given Persian year is a leap year.
  *
- * The Persian calendar has a leap year every 4 years, except for years
- * divisible by 100 that are not divisible by 400.
+ * In the Persian calendar, leap years occur approximately every 4 years in a 33-year cycle,
+ * but some additional adjustments are needed to account for the exact length of the solar year.
  *
- * @param {number} year  - The year to check for leap year.
- * @returns {boolean} True if the year is a leap year, false otherwise.s
+ * @param {number} year - The Persian year to check.
+ * @returns {boolean} True if the year is a leap year, false otherwise.
  */
 export default function isPersianLeapYear(year: number): boolean {
-  if (year % 4 === 3 && year % 100 !== 0) {
-    return true;
-  }
+  // Calculate the number of complete cycles and the remainder
+  const cyclePosition = year % PERSIAN_CYCLE_LENGTH;
 
-  return year % 400 === 0;
+  // In a 33-year cycle, leap years are distributed every 4 years
+  return cyclePosition % PERSIAN_LEAP_CYCLE === 0;
 }
