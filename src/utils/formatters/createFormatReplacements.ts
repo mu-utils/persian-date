@@ -1,5 +1,5 @@
-import DateTimeSegment from "../types/DateTimeSegment";
-import Formatters from "../types/Formatters";
+import DateTimeSegment from "../../types/DateTimeSegment";
+import Formatters from "../../types/Formatters";
 
 const formatter = (formatter: Intl.DateTimeFormat, date: Date) =>
   formatter.format(date);

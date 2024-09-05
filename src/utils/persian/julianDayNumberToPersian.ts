@@ -1,9 +1,10 @@
-import DateTuple from "../types/DateTuple";
+import DateTuple from "../../types/DateTuple";
 import {
   gregorianToJulianDayNumber,
   julianDayNumberToGregorian,
-} from "./gregorianConventions";
-import calculatePersianCalendar from "./calculatePersianCalendar";
+} from "../gregorian/julianDay";
+import calculateMarchDay from "../gregorian/calculateMarchDay";
+import calculatePersianLeapOffset from "./calculatePersianLeapOffset";
 
 /**
  * Converts a Julian Day Number to a Persian date.
@@ -13,7 +14,8 @@ import calculatePersianCalendar from "./calculatePersianCalendar";
 export default function julianDayNumberToPersian(jdn: number): DateTuple {
   const [gregorianYear, ..._rest] = julianDayNumberToGregorian(jdn);
   let persianYear = gregorianYear - 621;
-  const { dayInMarch, leapOffset } = calculatePersianCalendar(persianYear);
+  const dayInMarch = calculateMarchDay(persianYear);
+  const leapOffset = calculatePersianLeapOffset(persianYear);
   let k = jdn - gregorianToJulianDayNumber(gregorianYear, 3, dayInMarch);
 
   let persianMonth, persianDay;

@@ -1,7 +1,7 @@
-import DateFormatTemplate from "../types/DateFormatTemplate";
-import DateTimeSegment from "../types/DateTimeSegment";
-import Formatters from "../types/Formatters";
-import createFormatReplacements from "./createFormatReplacements";
+import DateFormatTemplate from "../../types/DateFormatTemplate";
+import DateTimeSegment from "../../types/DateTimeSegment";
+import Formatters from "../../types/Formatters";
+import createFormatReplacements from "../formatters/createFormatReplacements";
 
 /**
  * Formats a date. It takes a date and a template and returns a formatted date.

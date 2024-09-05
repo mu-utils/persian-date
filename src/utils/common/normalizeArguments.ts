@@ -1,5 +1,5 @@
-import PersianDate from "../PersianDate";
-import PersianDateOptions from "../types/PersianDateOptions";
+import PersianDate from "../../PersianDate";
+import PersianDateOptions from "../../types/PersianDateOptions";
 
 type NormalizeArguments = [
   newArguments: unknown[],

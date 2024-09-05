@@ -1,7 +1,7 @@
 import {
   MILLISECONDS_PER_DAY,
   UNIX_EPOCH_JDN,
-} from "../constants/timeConstants";
+} from "../../constants/timeConstants";
 
 /**
  * Converts a Gregorian date to Julian Day Number.

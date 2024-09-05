@@ -1,4 +1,4 @@
-import FormatOptions from "../types/FormatOptions";
+import FormatOptions from "../../types/FormatOptions";
 
 /**
  *  Converts a Gregorian date to Persian date. It returns converted date in
