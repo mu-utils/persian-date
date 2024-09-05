@@ -1,7 +1,6 @@
 import PersianDate from "../PersianDate";
 import isLeapYear from "../utils/common/isLeapYear";
-import calculatePersianCalendar from "../utils/gregorian/calculateMarchDay";
-import isPersianLeapYear from "../utils/persian/isPersianLeapYear";
+import calculatePersianLeapOffset from "../utils/persian/calculatePersianLeapOffset";
 
 describe("PersianDate", () => {
   describe("normalizeDate", () => {
@@ -44,12 +43,14 @@ describe("PersianDate", () => {
   });
 
   describe("isLeapYear", () => {
-    it("should return true for leap year 1404", () => {
+    it("should return true for persian leap year", () => {
       const date = new PersianDate("1403/10/13");
+      expect(date.isLeapYear()).toBe(true);
+    });
+
+    it("should return true for gregorian leap year", () => {
+      const date = new PersianDate("2020/1/2 23:59:59.999");
       expect(date.isLeapYear()).toBe(true);
     });
   });
 });
-
-
-console.log(calculatePersianCalendar(1408), "fsdfds"); // true

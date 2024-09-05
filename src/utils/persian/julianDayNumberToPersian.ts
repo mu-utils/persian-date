@@ -3,7 +3,6 @@ import {
   gregorianToJulianDayNumber,
   julianDayNumberToGregorian,
 } from "../gregorian/julianDay";
-import calculatePersianCalendar from "../gregorian/calculateMarchDay";
 import calculateMarchDay from "../gregorian/calculateMarchDay";
 import calculatePersianLeapOffset from "./calculatePersianLeapOffset";
 
