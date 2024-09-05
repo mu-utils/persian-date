@@ -16,6 +16,7 @@ import DateUint from "./types/DateUnit";
 import DateType from "./types/DateType";
 import getTime from "./utils/common/getTime";
 import dffDates from "./utils/common/diffDates";
+import modifyTime from "./utils/common/modifyTime";
 
 /**
  * Represents a Persian date and time.
@@ -123,6 +124,16 @@ export default class PersianDate extends Date {
 
   diff(value: DateType, unit?: DateUint): number {
     return dffDates(this.getTime(), getTime(value), unit);
+  }
+
+  add(unit: DateUint, value: number): PersianDate {
+    this.setTime(modifyTime(this.getTime(), unit, value));
+    return this;
+  }
+
+  subtract(unit: DateUint, value: number): PersianDate {
+    this.setTime(modifyTime(this.getTime(), unit, -value));
+    return this;
   }
 
   /**

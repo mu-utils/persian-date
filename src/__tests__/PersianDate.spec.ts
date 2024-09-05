@@ -1,6 +1,4 @@
 import PersianDate from "../PersianDate";
-import isLeapYear from "../utils/common/isLeapYear";
-import calculatePersianLeapOffset from "../utils/persian/calculatePersianLeapOffset";
 
 describe("PersianDate", () => {
   describe("normalizeDate", () => {
@@ -55,9 +53,7 @@ describe("PersianDate", () => {
       expect(date.isLeapYear()).toBe(true);
     });
   });
-});
 
-describe("PersianDate", () => {
   describe("diff", () => {
     it("should return 0 for the same date", () => {
       const date1 = new PersianDate(1400, 1, 1);
@@ -81,6 +77,72 @@ describe("PersianDate", () => {
       const date1 = new PersianDate(1400, 1, 5);
       const date2 = new PersianDate(1400, 2, 5);
       expect(date1.diff(date2, "months")).toBe(0.919917864476386);
+    });
+  });
+
+  describe("add", () => {
+    it("should add days correctly", () => {
+      const date = new PersianDate(1402, 1, 1);
+      const result = date.add("days", 5);
+      expect(result.getDate()).toBe(6);
+    });
+
+    it("should add months correctly", () => {
+      const date = new PersianDate(1402, 1, 1);
+      const result = date.add("months", 2);
+      expect(result.getMonth()).toBe(3);
+    });
+
+    it("should add years correctly", () => {
+      const date = new PersianDate(1402, 1, 1);
+      const result = date.add("years", 1);
+      expect(result.getFullYear()).toBe(1403);
+    });
+
+    it("should add last days of the Tir month correctly", () => {
+      const date = new PersianDate(1402, 6, 30);
+      console.log(date);
+      
+      const result = date.add("days", 1);
+      console.log(result.toLocaleDateString());
+      
+      expect(result.getMonth()).toBe(4);
+    });
+
+    it("should handle adding across year boundary", () => {
+      const date = new PersianDate(1402, 12, 29);
+      const result = date.add("days", 3);
+      expect(result.getFullYear()).toBe(1403);
+      expect(result.getMonth()).toBe(1);
+      expect(result.getDate()).toBe(2);
+    });
+  });
+
+  describe("subtract", () => {
+    it("should subtract days correctly", () => {
+      const date = new PersianDate(1402, 1, 10);
+      const result = date.subtract("days", 5);
+      expect(result.getDate()).toBe(5);
+    });
+
+    it("should subtract months correctly", () => {
+      const date = new PersianDate(1402, 3, 1);
+      const result = date.subtract("months", 2);
+      expect(result.getMonth()).toBe(1);
+    });
+
+    it("should subtract years correctly", () => {
+      const date = new PersianDate(1402, 1, 1);
+      const result = date.subtract("years", 1);
+      expect(result.getFullYear()).toBe(1401);
+    });
+
+    it("should handle subtracting across year boundary", () => {
+      const date = new PersianDate(1403, 1, 2);
+      const result = date.subtract("days", 3);
+      expect(result.getFullYear()).toBe(1402);
+      expect(result.getMonth()).toBe(12);
+      expect(result.getDate()).toBe(29);
     });
   });
 });
