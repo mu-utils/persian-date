@@ -57,3 +57,30 @@ describe("PersianDate", () => {
   });
 });
 
+describe("PersianDate", () => {
+  describe("diff", () => {
+    it("should return 0 for the same date", () => {
+      const date1 = new PersianDate(1400, 1, 1);
+      const date2 = new PersianDate(1400, 1, 1);
+      expect(date1.diff(date2)).toBe(0);
+    });
+
+    it("should return the same result regardless of the order of dates", () => {
+      const date1 = new PersianDate(1400, 1, 1);
+      const date2 = new PersianDate(1400, 1, 5);
+      expect(date1.diff(date2)).toBe(date2.diff(date1));
+    });
+
+    it("should return the correct difference in hours", () => {
+      const date1 = new PersianDate(1400, 1, 5, 4);
+      const date2 = new PersianDate(1400, 1, 5, 5);
+      expect(date1.diff(date2, "hours")).toBe(1);
+    });
+
+    it("should return the correct difference in months", () => {
+      const date1 = new PersianDate(1400, 1, 5);
+      const date2 = new PersianDate(1400, 2, 5);
+      expect(date1.diff(date2, "months")).toBe(0.919917864476386);
+    });
+  });
+});

@@ -12,6 +12,10 @@ import Options from "./types/Options";
 import FormatOptions from "./types/FormatOptions";
 import isLeapYear from "./utils/common/isLeapYear";
 import normalizeTime from "./utils/common/normalizeTime";
+import DateUint from "./types/DateUnit";
+import DateType from "./types/DateType";
+import getTime from "./utils/common/getTime";
+import dffDates from "./utils/common/diffDates";
 
 /**
  * Represents a Persian date and time.
@@ -117,8 +121,8 @@ export default class PersianDate extends Date {
     return formatDate(this.getTime(), template, this.formatters);
   }
 
-  diff(date: PersianDate): number {
-    return Math.abs(this.getTime() - date.getTime());
+  diff(value: DateType, unit?: DateUint): number {
+    return dffDates(this.getTime(), getTime(value), unit);
   }
 
   /**
@@ -132,8 +136,6 @@ export default class PersianDate extends Date {
    * date.isLeapYear(); // Returns `true` if the year is a leap year.
    */
   isLeapYear(): boolean {
-    console.log(this.getFullYear());
-    
     return isLeapYear(this.getFullYear(), this.options.calendar);
   }
 }
