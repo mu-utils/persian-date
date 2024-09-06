@@ -4,7 +4,7 @@ import {
   PERSIAN_CYCLE_LENGTH,
 } from "../../constants/calendarConstants";
 import CalculatePersianCalendar from "../../types/CalculatePersianCalendar";
-import toGregorianTime from "./toGregorianTime";
+import toGregorianDate from "./toGregorianDate";
 import calculateGregorianYear from "./calculateGregorianYear";
 
 /**

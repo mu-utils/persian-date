@@ -1,6 +1,6 @@
 import FormatOptions from "../../types/FormatOptions";
 import Options from "../../types/Options";
-import toGregorianTime from "../gregorian/toGregorianTime";
+import toGregorianDate from "../gregorian/toGregorianDate";
 import { isPersianYear } from "../persian";
 import isValidPersian from "../persian/isValidPersian";
 import localizeTime from "./localizeTime";
@@ -47,7 +47,7 @@ export default function normalizeTime(
   }
 
   if (validPersianTime) {
-    return toGregorianTime(localeTime);
+    // return NaN toGregorianTime(localeTime);
   }
 
   return localeTime;

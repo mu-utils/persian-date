@@ -16,9 +16,6 @@ export const toPersianDate = (
     timeZone,
   });
 
-  console.log(localeTime, 'localetime');
-  
-
   const [year, month, day] = localeTime.split("/").map(Number);
   return { year, month, day };
 };
