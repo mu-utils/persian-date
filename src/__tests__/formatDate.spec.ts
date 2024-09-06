@@ -1,13 +1,10 @@
 import PersianDate from "../PersianDate";
-import createFormatters from "../utils/createFormatters";
-import formatDate from "../utils/formatTime";
+import formatDate from "../utils/common/formatTime";
+import createFormatters from "../utils/formatters/createFormatters";
 
 describe("formatDate", () => {
   const formatters = createFormatters({
     timeZone: "America/New_York",
-    calendar: "gregorian",
-    ignoreCalendar: false,
-    invalidDateSeverity: "error",
   });
   const date = new PersianDate("1403/06/12");
   const time = date.getTime();

@@ -11,7 +11,7 @@ export const PERSIAN_MONTHS_DAYS = [
  * The epoch of the Persian calendar.
  * The epoch is the point in time from which the calendar is counted.
  */
-export const PERSIAN_EPOCH = 1948321;
+export const PERSIAN_EPOCH = 1948320.5;
 
 /**
  * The number of days in a Persian year.

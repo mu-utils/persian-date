@@ -3,11 +3,12 @@ import PersianDate from "../PersianDate";
 describe("PersianDate", () => {
   describe("normalizeDate", () => {
     it("should throw error for year 2003 in strict mode", () => {
-      const date = new PersianDate("2003", {
-        ignoreCalendar: false,
-        invalidDateSeverity: "error",
-      });
-      expect(date.getUTCFullYear()).toBe(1381);
+      expect(
+        () =>
+          new PersianDate("2003", {
+            invalidDateSeverity: "error",
+          })
+      ).toThrow("Invalid Date");
     });
 
     it("should throw Invalid Date 1399/12/31 23:59:59.999 in strict mode", () => {
@@ -27,7 +28,6 @@ describe("PersianDate", () => {
     it("should set date to NaN and don't throw error for invalid date", () => {
       const date = new PersianDate("1393/12/31", {
         invalidDateSeverity: "default",
-        ignoreCalendar: false,
       });
       expect(date.getDate()).toBe(NaN);
     });
@@ -101,11 +101,7 @@ describe("PersianDate", () => {
 
     it("should add last days of the Tir month correctly", () => {
       const date = new PersianDate(1402, 6, 30);
-      console.log(date);
-      
       const result = date.add("days", 1);
-      console.log(result.toLocaleDateString());
-      
       expect(result.getMonth()).toBe(4);
     });
 

@@ -1,1 +1,1 @@
-export { isPersianYear } from "./isPersianTime";
+export { isPersianYear } from "./isValidPersian";

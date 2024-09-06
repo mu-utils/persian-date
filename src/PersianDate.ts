@@ -11,12 +11,14 @@ import createFormatOptions from "./utils/options/createFormatOptions";
 import Options from "./types/Options";
 import FormatOptions from "./types/FormatOptions";
 import isLeapYear from "./utils/common/isLeapYear";
-import normalizeTime from "./utils/common/normalizeTime";
 import DateUint from "./types/DateUnit";
-import DateType from "./types/DateType";
 import getTime from "./utils/common/getTime";
 import dffDates from "./utils/common/diffDates";
+import DateValue from "./types/DateValue";
+import DateType from "./types/DateType";
 import modifyTime from "./utils/common/modifyTime";
+import { DEFAULT_CALENDAR } from "./constants/defaultOptions";
+import { toPersianDate } from "./utils/persian/toPersianDate";
 
 /**
  * Represents a Persian date and time.
@@ -34,6 +36,7 @@ export default class PersianDate extends Date {
   private options: Options;
   private formatters!: Formatters;
   private formatOptions: FormatOptions;
+  private persianDate!: DateType;
 
   constructor(options?: PersianDateOptions);
   constructor(value: Date, options?: PersianDateOptions);
@@ -81,21 +84,23 @@ export default class PersianDate extends Date {
     options?: PersianDateOptions
   );
   constructor(...args: unknown[]) {
-    const [newArguments, options] = normalizeArguments(args);
-    super(...(newArguments as []));
-    this.options = createOptions(options);
-    this.formatOptions = createFormatOptions(options);
+    const [time, options, formatOptions] = normalizeArguments(args);
+    super(time);
+    this.options = options;
+    this.formatOptions = formatOptions;
     this.update();
   }
 
   private update() {
-    const time = normalizeTime(
-      this.getTime(),
-      this.options,
-      this.formatOptions
-    );
-    this.setTime(time);
+    // const time = normalizeTime(
+    //   this.getTime(),
+    //   this.options,
+    //   this.formatOptions
+    // );
+    // this.setTime(time);
+    // this.persianDate = toPersianDate(time, this.formatOptions);
     this.formatters = createFormatters(this.formatOptions);
+    this.persianDate = toPersianDate(this.getTime(), this.formatOptions);
   }
 
   /**
@@ -114,7 +119,8 @@ export default class PersianDate extends Date {
 
   setCalendar(calendar: Calendar) {
     this.options.calendar = calendar;
-    this.formatOptions = createFormatOptions(this.options);
+    this.formatOptions.calendar =
+      calendar === "gregorian" ? undefined : DEFAULT_CALENDAR;
     this.update();
   }
 
@@ -122,7 +128,7 @@ export default class PersianDate extends Date {
     return formatDate(this.getTime(), template, this.formatters);
   }
 
-  diff(value: DateType, unit?: DateUint): number {
+  diff(value: DateValue, unit?: DateUint): number {
     return dffDates(this.getTime(), getTime(value), unit);
   }
 
@@ -134,6 +140,26 @@ export default class PersianDate extends Date {
   subtract(unit: DateUint, value: number): PersianDate {
     this.setTime(modifyTime(this.getTime(), unit, -value));
     return this;
+  }
+
+  getMonth(): number {
+    return super.getMonth() + 1;
+  }
+
+  getFullYear(): number {
+    if (this.options.calendar === "gregorian") {
+      return super.getFullYear();
+    }
+
+    return this.persianDate.year;
+  }
+
+  getDate(): number {
+    if (this.options.calendar === "gregorian") {
+      return super.getDate();
+    }
+
+    return this.persianDate.day;
   }
 
   /**

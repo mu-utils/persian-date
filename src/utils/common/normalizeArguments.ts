@@ -1,31 +1,128 @@
 import PersianDate from "../../PersianDate";
+import Calendar from "../../types/Calendar";
+import DateType from "../../types/DateType";
+import DateValue from "../../types/DateValue";
+import FormatOptions from "../../types/FormatOptions";
+import Options from "../../types/Options";
 import PersianDateOptions from "../../types/PersianDateOptions";
+import toGregorianDate from "../gregorian/toGregorianDate";
+import createFormatOptions from "../options/createFormatOptions";
+import createOptions from "../options/createOptions";
+import isValidPersian from "../persian/isValidPersian";
+import localizeTime from "./localizeTime";
 
 type NormalizeArguments = [
-  newArguments: unknown[],
-  options: PersianDateOptions | undefined
+  time: number,
+  options: Options,
+  formatOptions: FormatOptions
 ];
 
-export default function normalizeArguments(
-  args: unknown[]
-): NormalizeArguments {
-  let newArguments: unknown[] = [];
-  let options: PersianDateOptions | undefined = undefined;
+const toIntegerArray = (values: string[]) =>
+  values.map((value) => parseInt(value, 10));
+
+function extractDateParts(arg: string): number[] | null {
+  const result = arg.match(/(\d+)/g);
+
+  return result ? toIntegerArray(result) : null;
+}
+
+function setTimeComponents(date: Date, timeParts: number[]): void {
+  const [hours, minutes, seconds, milliseconds] = timeParts;
+
+  if (hours !== undefined) date.setHours(hours);
+  if (minutes !== undefined) date.setMinutes(minutes);
+  if (seconds !== undefined) date.setSeconds(seconds);
+  if (milliseconds !== undefined) date.setMilliseconds(milliseconds);
+}
+
+type ExtractArguments = [
+  newArguments: DateValue[],
+  options: Options,
+  formatOptions: FormatOptions
+];
+
+// Main function to normalize arguments
+function extractArguments(args: (DateValue | object)[]): ExtractArguments {
+  let newArguments: DateValue[] = [];
+  let persianDateOptions: PersianDateOptions | undefined;
 
   if (args.length > 8) {
     throw new Error("Invalid number of arguments");
   }
 
   for (const arg of args) {
-    if (!isOptions(arg)) {
-      newArguments.push(arg);
-    } else {
-      options = arg;
+    if (isOptions(arg)) {
+      persianDateOptions = arg as PersianDateOptions;
+      break;
     }
+
+    newArguments.push(arg);
   }
 
-  return [newArguments, options];
+  const options = createOptions(persianDateOptions);
+  const formatOptions = createFormatOptions(persianDateOptions);
+
+  return [newArguments, options, formatOptions];
 }
 
-const isOptions = (arg: unknown): arg is PersianDateOptions =>
+function parseDate(args: DateValue[], calendar: Calendar): Date | undefined {
+  let date: Date | undefined;
+  let dateParts: number[] = [];
+
+  if (args.length === 1) {
+    if (typeof args[0] === "string") {
+      const result = extractDateParts(args[0]);
+
+      if (!result) {
+        return;
+      }
+
+      dateParts = result;
+    }
+  } else {
+    dateParts = toIntegerArray(args as string[]);
+  }
+
+  const [year, month, day, ...rest] = dateParts;
+  const validPersian = isValidPersian(year, month, day);
+
+  if (
+    (calendar === "gregorian" && validPersian) ||
+    (calendar === "persian" && !validPersian)
+  ) {
+    return;
+  } else if (validPersian) {
+    date = toGregorianDate(year, month, day);
+  } else {
+    date = new Date(year, month, day);
+  }
+
+  setTimeComponents(date, rest);
+
+  return date;
+}
+
+export default function normalizeArguments(
+  args: unknown[]
+): NormalizeArguments {
+  const [newArguments, options, formatOptions] = extractArguments(
+    args as (DateValue | object)[]
+  );
+  let time: number;
+  const date = parseDate(newArguments, options.calendar);
+
+  if (!date) {
+    if (options.invalidDateSeverity === "error") {
+      throw new Error("Invalid Date");
+    }
+
+    time = NaN;
+  } else {
+    time = localizeTime(date.getTime(), formatOptions.timeZone);
+  }
+
+  return [time, options, formatOptions];
+}
+
+const isOptions = (arg: unknown): arg is object =>
   typeof arg === "object" && !(arg instanceof PersianDate);

@@ -3,6 +3,9 @@ import Formatters from "../../types/Formatters";
 
 function createFormatter(options: FormatOptions): Formatters {
   const locale = options.calendar === "persian" ? "fa-IR" : "en-US";
+  const timeZone = options.timeZone;
+
+  console.log(locale);
 
   return [
     new Intl.DateTimeFormat(locale, { weekday: "long", ...options }),

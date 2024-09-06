@@ -1,9 +1,8 @@
 import FormatOptions from "../../types/FormatOptions";
 import Options from "../../types/Options";
-import toGregorianTime from "../gregorian/toGregorianTime";
+import toGregorianDate from "../gregorian/toGregorianDate";
 import { isPersianYear } from "../persian";
-import isPersianTime from "../persian/isPersianTime";
-import { toPersianTime } from "../persian/toPersianTime";
+import isValidPersian from "../persian/isValidPersian";
 import localizeTime from "./localizeTime";
 
 /**
@@ -34,7 +33,7 @@ export default function normalizeTime(
   { timeZone }: FormatOptions
 ): number {
   const localeTime = localizeTime(time, timeZone);
-  const validPersianTime = isPersianTime(localeTime);
+  const validPersianTime = false;
 
   if (
     isNaN(localeTime) ||
@@ -47,15 +46,9 @@ export default function normalizeTime(
     return NaN;
   }
 
-  if (calendar === "gregorian") {
-    return validPersianTime ? toGregorianTime(localeTime) : localeTime;
+  if (validPersianTime) {
+    // return NaN toGregorianTime(localeTime);
   }
 
-  if (calendar === "persian") {
-    return validPersianTime
-      ? localeTime
-      : toPersianTime(localeTime, { timeZone });
-  }
-
-  return NaN;
+  return localeTime;
 }
