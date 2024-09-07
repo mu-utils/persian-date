@@ -1,16 +1,16 @@
 import { persianDate } from "persian-date";
 
 const persianDate1 = persianDate("2023-06-12T03:05:03", {
-  calendar: "gregorian",
+  // calendar: "gregorian",
   timeZone: "America/New_York",
 });
 
 // persianDate1.setTimeZone("Asia/Tehran");
 // console.log(persianDate1);
-persianDate1.setCalendar("persian");
 // persianDate1.setCalendar("gregorian");
 
-console.log(persianDate1.getHours());
+console.log(persianDate1.format("YYYY/MM/DD HH:mm:ss"), persianDate1);
+
 
 // const d = new Date("2023-06-12T03:05:03");
 // const b = new Date(d.toLocaleString("en-US", { timeZone: "America/New_York" }));

@@ -88,9 +88,9 @@ function parseDate(args: DateValue[], calendar: Calendar): Date | undefined {
 
   if (
     (calendar === "gregorian" && validPersian) ||
-    (calendar === "persian" && !validPersian)
+    (calendar === "persian" && !validPersian) 
   ) {
-    return;
+    // return;
   } else if (validPersian) {
     date = toGregorianDate(year, month, day);
   } else {
