@@ -1,20 +1,30 @@
 import FormatOptions from "../../types/FormatOptions";
 import Formatters from "../../types/Formatters";
 
-function createFormatter(options: FormatOptions): Formatters {
-  const locale = options.calendar === "persian" ? "fa-IR" : "en-US";
+function createFormatters(options: FormatOptions): Formatters {
+  const formatterFactory = createFormatter(options);
 
   return [
-    new Intl.DateTimeFormat(locale, {
-      dateStyle: "full",
-      timeStyle: "full",
-      ...options,
+    formatterFactory({
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
     }),
-    new Intl.DateTimeFormat(locale, { weekday: "long", ...options }),
-    new Intl.DateTimeFormat(locale, { weekday: "short", ...options }),
-    new Intl.DateTimeFormat(locale, { month: "long", ...options }),
-    new Intl.DateTimeFormat(locale, { month: "short", ...options }),
+    formatterFactory({ weekday: "long" }),
+    formatterFactory({ weekday: "short" }),
+    formatterFactory({ month: "long" }),
+    formatterFactory({ month: "short" }),
   ];
 }
 
-export default createFormatter;
+const createFormatter = (originalOptions: FormatOptions) => {
+  const locale = originalOptions.calendar === "persian" ? "fa-IR" : "en-GB";
+
+  return (options: Intl.DateTimeFormatOptions) =>
+    new Intl.DateTimeFormat(locale, { ...originalOptions, ...options });
+};
+
+export default createFormatters;
