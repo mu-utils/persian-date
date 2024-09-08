@@ -3,6 +3,7 @@ import Calendar from "../../types/Calendar";
 import DateType from "../../types/DateType";
 import DateValue from "../../types/DateValue";
 import FormatOptions from "../../types/FormatOptions";
+import InvalidDateSeverity from "../../types/InvalidDateSeverity";
 import Options from "../../types/Options";
 import PersianDateOptions from "../../types/PersianDateOptions";
 import toGregorianDate from "../gregorian/toGregorianDate";
@@ -65,7 +66,11 @@ function extractArguments(args: (DateValue | object)[]): ExtractArguments {
   return [newArguments, options, formatOptions];
 }
 
-function parseDate(args: DateValue[], calendar: Calendar): Date | undefined {
+function parseDate(
+  args: DateValue[],
+  calendar: Calendar,
+  invalidDateSeverity: InvalidDateSeverity
+): Date | undefined {
   let date: Date | undefined;
   let dateParts: number[] = [];
 
@@ -87,11 +92,14 @@ function parseDate(args: DateValue[], calendar: Calendar): Date | undefined {
   const validPersian = isValidPersian(year, month, day);
 
   if (
-    (calendar === "gregorian" && validPersian) ||
-    (calendar === "persian" && !validPersian) 
+    invalidDateSeverity === "error" &&
+    ((calendar === "persian" && !validPersian) ||
+      (calendar === "gregorian" && validPersian))
   ) {
-    // return;
-  } else if (validPersian) {
+    throw new Error("Invalid date");
+  }
+
+  if (validPersian) {
     date = toGregorianDate(year, month, day);
   } else {
     date = new Date(year, month, day);
@@ -109,13 +117,13 @@ export default function normalizeArguments(
     args as (DateValue | object)[]
   );
   let time: number;
-  const date = parseDate(newArguments, options.calendar);
+  const date = parseDate(
+    newArguments,
+    options.calendar,
+    options.invalidDateSeverity
+  );
 
   if (!date) {
-    if (options.invalidDateSeverity === "error") {
-      throw new Error("Invalid Date");
-    }
-
     time = NaN;
   } else {
     time = localizeTime(date.getTime(), formatOptions.timeZone);

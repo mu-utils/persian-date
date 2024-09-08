@@ -11,6 +11,7 @@ const createFormatOptions = ({
 }: PersianDateOptions | undefined = {}): FormatOptions => ({
   timeZone: timeZone ?? DEFAULT_TIME_ZONE,
   calendar: calendar === "gregorian" ? undefined : DEFAULT_CALENDAR,
+  numberingSystem: "latn",
 });
 
 export default createFormatOptions;

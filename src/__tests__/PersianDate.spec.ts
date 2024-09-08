@@ -22,6 +22,10 @@ describe("PersianDate", () => {
 
     it("should return 1399-10-13", () => {
       const date = new PersianDate("1399/10/13");
+
+      console.log(date.format("YYYY-MM-DD"));
+      
+
       expect(date.format("YYYY-MM-DD")).toBe("1399-10-13");
     });
 

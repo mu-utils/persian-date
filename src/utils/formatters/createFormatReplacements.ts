@@ -1,8 +1,27 @@
 import DateTimeSegment from "../../types/DateTimeSegment";
 import Formatters from "../../types/Formatters";
 
-const formatter = (formatter: Intl.DateTimeFormat, date: Date) =>
-  formatter.format(date);
+const formatter = (time: number) => (formatter: Intl.DateTimeFormat) =>
+  formatter.format(time);
+
+type DateTimeTuple = [
+  year: number,
+  month: number,
+  day: number,
+  hour: number,
+  minute: number,
+  second: number
+];
+
+function extractDateTime(formattedDateTime: string): DateTimeTuple {
+  const result = formattedDateTime.match(/\d+/g)?.map(Number);
+
+  if (!result) {
+    throw new Error("Invalid date");
+  }
+
+  return result as DateTimeTuple;
+}
 
 const padTwoDigits = (num: number) => num.toString().padStart(2, "0");
 
@@ -21,18 +40,13 @@ const padTwoDigits = (num: number) => num.toString().padStart(2, "0");
  */
 export default function createFormatReplacements(
   time: number,
-  [longWeekday, shortWeekday, longMonth, shortMonth]: Formatters
+  [dateTime, longWeekday, shortWeekday, longMonth, shortMonth]: Formatters
 ): Record<DateTimeSegment, string> {
-  const date = new Date(time);
-  const [hours, minutes, seconds, day, month, year] = [
-    date.getHours(),
-    date.getMinutes(),
-    date.getSeconds(),
-    date.getDate(),
-    date.getMonth() + 1,
-    date.getFullYear(),
-  ];
+  const [year, month, day, hours, minutes, seconds] = extractDateTime(
+    formatter(dateTime, date)
+  );
   const [h12, amPm] = [hours % 12 || 12, hours < 12 ? "am" : "pm"];
+  const formatterFactory = formatter;
 
   console.log(longWeekday.resolvedOptions());
   
