@@ -99,6 +99,7 @@ export default class PersianDate extends Date {
     // );
     // this.setTime(time);
     // this.persianDate = toPersianDate(time, this.formatOptions);
+
     this.formatters = createFormatters(this.formatOptions);
     this.persianDate = toPersianDate(this.getTime(), this.formatOptions);
   }

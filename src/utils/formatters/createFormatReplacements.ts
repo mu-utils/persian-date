@@ -34,6 +34,10 @@ export default function createFormatReplacements(
   ];
   const [h12, amPm] = [hours % 12 || 12, hours < 12 ? "am" : "pm"];
 
+
+  console.log(longWeekday.format(date));
+  
+
   return {
     YYYY: year.toString(),
     MM: padTwoDigits(month),
