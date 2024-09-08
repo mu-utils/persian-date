@@ -21,9 +21,12 @@ const padTwoDigits = (num: number) => num.toString().padStart(2, "0");
  */
 export default function createFormatReplacements(
   time: number,
-  [longWeekday, shortWeekday, longMonth, shortMonth]: Formatters
+  [dateTime, longWeekday, shortWeekday, longMonth, shortMonth]: Formatters
 ): Record<DateTimeSegment, string> {
   const date = new Date(time);
+
+  formatter(dateTime, date)
+
   const [hours, minutes, seconds, day, month, year] = [
     date.getHours(),
     date.getMinutes(),
@@ -34,9 +37,7 @@ export default function createFormatReplacements(
   ];
   const [h12, amPm] = [hours % 12 || 12, hours < 12 ? "am" : "pm"];
 
-
-  console.log(longWeekday.format(date));
-  
+  console.log(longMonth.format(date), date);
 
   return {
     YYYY: year.toString(),

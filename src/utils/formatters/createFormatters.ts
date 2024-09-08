@@ -5,6 +5,11 @@ function createFormatter(options: FormatOptions): Formatters {
   const locale = options.calendar === "persian" ? "fa-IR" : "en-US";
 
   return [
+    new Intl.DateTimeFormat(locale, {
+      dateStyle: "full",
+      timeStyle: "full",
+      ...options,
+    }),
     new Intl.DateTimeFormat(locale, { weekday: "long", ...options }),
     new Intl.DateTimeFormat(locale, { weekday: "short", ...options }),
     new Intl.DateTimeFormat(locale, { month: "long", ...options }),
