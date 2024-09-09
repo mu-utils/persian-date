@@ -42,14 +42,13 @@ export default function createFormatReplacements(
   time: number,
   [dateTime, longWeekday, shortWeekday, longMonth, shortMonth]: Formatters
 ): Record<DateTimeSegment, string> {
+  const formatterFactory = formatter(time);
   const [year, month, day, hours, minutes, seconds] = extractDateTime(
-    formatter(dateTime, date)
+    formatterFactory(dateTime)
   );
   const [h12, amPm] = [hours % 12 || 12, hours < 12 ? "am" : "pm"];
-  const formatterFactory = formatter;
 
   console.log(longWeekday.resolvedOptions());
-  
 
   return {
     YYYY: year.toString(),
@@ -58,12 +57,12 @@ export default function createFormatReplacements(
     HH: padTwoDigits(hours),
     mm: padTwoDigits(minutes),
     ss: padTwoDigits(seconds),
-    dddd: formatter(longWeekday, date),
-    MMM: formatter(shortMonth, date),
-    MMMM: formatter(longMonth, date),
+    dddd: formatterFactory(longWeekday),
+    MMM: formatterFactory(shortMonth),
+    MMMM: formatterFactory(longMonth),
     YY: year.toString().slice(-2),
     D: day.toString(),
-    ddd: formatter(shortWeekday, date),
+    ddd: formatterFactory(shortWeekday),
     Do: padTwoDigits(day),
     M: month.toString(),
     h: h12.toString(),
