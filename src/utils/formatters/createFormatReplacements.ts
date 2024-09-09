@@ -43,12 +43,15 @@ export default function createFormatReplacements(
   [dateTime, longWeekday, shortWeekday, longMonth, shortMonth]: Formatters
 ): Record<DateTimeSegment, string> {
   const formatterFactory = formatter(time);
-  const [year, month, day, hours, minutes, seconds] = extractDateTime(
+  const [day, month, year, hours, minutes, seconds] = extractDateTime(
     formatterFactory(dateTime)
   );
   const [h12, amPm] = [hours % 12 || 12, hours < 12 ? "am" : "pm"];
 
-  console.log(longWeekday.resolvedOptions());
+  console.log( extractDateTime(
+    formatterFactory(dateTime)
+  ));
+  
 
   return {
     YYYY: year.toString(),
