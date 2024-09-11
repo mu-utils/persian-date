@@ -1,5 +1,4 @@
 import DateFormatTemplate from "../../types/DateFormatTemplate";
-import DateTimeSegment from "../../types/DateTimeSegment";
 import Formatters from "../../types/Formatters";
 import createFormatReplacements from "../formatters/createFormatReplacements";
 
