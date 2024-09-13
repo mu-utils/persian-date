@@ -2,7 +2,7 @@
 A Persian date to convert from gregorian and behavie like a date in Javascript project.
 
 ## Description
-Persian date is a simple, easy-to-use, and fully customizable date picker component for web applications. Whether you need a basic date input or a complex, multi-feature calendar interface, Persian date can be easily integrated into your project.
+Persian date is a simple, easy-to-use, fully customizable date picker component for web applications. Persian date can be easily integrated into your project, whether you need a basic date input or a complex, multi-feature calendar interface.
 
 ## Installation
 ### Via npm
