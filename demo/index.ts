@@ -1,9 +1,8 @@
 import { persianDate } from "persian-date";
 
 const persianDate1 = persianDate("2023-06-12T03:05:03", {
-  // calendar: "gregorian",
-ateSeverity: "error",
   timeZone: "America/New_York",
+  // calendar: "gregorian"
 });
 
 // persianDate1.setTimeZone("Asia/Tehran");
