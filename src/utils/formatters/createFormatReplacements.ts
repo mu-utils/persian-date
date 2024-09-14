@@ -48,10 +48,10 @@ export default function createFormatReplacements(
   );
   const [h12, amPm] = [hours % 12 || 12, hours < 12 ? "am" : "pm"];
 
-  console.log( extractDateTime(
-    formatterFactory(dateTime)
-  ));
+  console.log(year);
   
+
+  // console.log(formatterFactory(dateTime));
 
   return {
     YYYY: year.toString(),
