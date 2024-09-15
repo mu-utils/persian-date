@@ -15,7 +15,7 @@ const p2 = persianDate("2023-06-11T03:05:03", {
 // persianDate1.setCalendar("persian");
 // persianDate1.setCalendar("gregorian");
 
-console.log(p1.add("days", 1).format("YYYY/MM/DD HH:mm:ss"));
+console.log(p1.format("YYYY/MM/DD HH:mm:ss"));
 
 // console.log(p1.format("YYYY/MM/DD HH:mm:ss"), p2.format("YYYY/MM/DD HH:mm:ss"));
 
