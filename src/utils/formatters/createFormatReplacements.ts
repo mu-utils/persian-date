@@ -20,6 +20,17 @@ function extractDateTime(formattedDateTime: string): DateTimeTuple {
     throw new Error("Invalid date");
   }
 
+  /**
+   * Non-Persian date format (e.g., day comes first instead of year)
+   * Assuming the format is [day, month, year, ...rest]
+   * This checks if the first element is not a four-digit year and swaps it with the year.
+   */
+  if (String(result[0]).length === 4) {
+    const [day, , year] = result; // Extract day and year from result
+    result[0] = year; // Set year as the first element
+    result[2] = day; // Set day in the fourth position (assumed day position)
+  }
+
   return result as DateTimeTuple;
 }
 
@@ -47,11 +58,6 @@ export default function createFormatReplacements(
     formatterFactory(dateTime)
   );
   const [h12, amPm] = [hours % 12 || 12, hours < 12 ? "am" : "pm"];
-
-  console.log( extractDateTime(
-    formatterFactory(dateTime)
-  ));
-  
 
   return {
     YYYY: year.toString(),
