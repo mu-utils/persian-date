@@ -1,8 +1,6 @@
 import FormatOptions from "../../types/FormatOptions";
 import Options from "../../types/Options";
-import toGregorianDate from "../gregorian/toGregorianDate";
-import { isPersianYear } from "../persian";
-import isValidPersian from "../persian/isValidPersian";
+import { isPersianYear } from "../persian/isValidPersian";
 import localizeTime from "./localizeTime";
 
 /**
