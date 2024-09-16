@@ -1,8 +1,7 @@
 {
   "name": "persian-date",
   "version": "1.0.0",
-  "type": "module",
-  "description": "A Persian date to convert from gregorian and behavie like a date in Javascript project.",
+  "description": "A Persian date to convert from gregorian and behave like a date in Javascript project.",
   "main": "src/index.ts",
   "types": "dist/index.d.ts",
   "scripts": {
