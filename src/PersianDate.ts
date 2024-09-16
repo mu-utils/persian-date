@@ -1,7 +1,7 @@
 import PersianDateOptions from "./types/PersianDateOptions";
 import normalizeArguments from "./utils/common/normalizeArguments";
 import DateFormatTemplate from "./types/DateFormatTemplate";
-import formatDate from "./utils/formatters/formatTime";
+import formatTime from "./utils/formatters/formatTime";
 import TimeZone from "./types/TimeZone";
 import Calendar from "./types/Calendar";
 import Formatters from "./types/Formatters";
@@ -90,14 +90,6 @@ export default class PersianDate extends Date {
   }
 
   private update() {
-    // const time = normalizeTime(
-    //   this.getTime(),
-    //   this.options,
-    //   this.formatOptions
-    // );
-    // this.setTime(time);
-    // this.persianDate = toPersianDate(time, this.formatOptions);
-
     this.formatters = createFormatters(this.formatOptions);
     this.persianDate = toPersianDate(this.getTime(), this.formatOptions);
   }
@@ -116,35 +108,89 @@ export default class PersianDate extends Date {
     this.update();
   }
 
-  setCalendar(calendar: Calendar) {
+  /**
+   * Sets the calendar used by the PersianDate instance.
+   *
+   * This method updates the calendar option and triggers an update to reflect
+   * the new calendar settings.
+   *
+   * @param {Calendar} calendar - The calendar to set, either "gregorian" or
+   * "persian".
+   * @returns {void}
+   */
+  setCalendar(calendar: Calendar): void {
     this.options.calendar = calendar;
     this.formatOptions.calendar =
       calendar === "gregorian" ? undefined : DEFAULT_CALENDAR;
     this.update();
   }
 
+  /**
+   * Formats the current PersianDate instance using the provided date format
+   * template.
+   *
+   * @param {DateFormatTemplate} template - The date format template to use for
+   * formatting.
+   * @returns {string} The formatted date string.
+   */
   format(template: DateFormatTemplate): string {
-    return formatDate(this.getTime(), template, this.formatters);
+    return formatTime(this.getTime(), template, this.formatters);
   }
 
+  /**
+   * Calculates the difference between the current PersianDate instance and the
+   * provided date value.
+   *
+   * @param {DateValue} value - The date value to compare against.
+   * @param {DateUint} [unit] - The time unit to use for the difference
+   *   - "days"
+   *   - "months"
+   *   - "years"
+   *   - "hours"
+   *   - "minutes"
+   *   - "seconds"
+   *
+   * calculation (e.g. 'days', 'months', 'years'). If not provided, the
+   * difference will be calculated in milliseconds.
+   * @returns {number} The difference between the current PersianDate instance
+   * and the provided date value, in the specified time unit.
+   */
   diff(value: DateValue, unit?: DateUint): number {
     return dffDates(this.getTime(), getTime(value), unit);
   }
 
+  /**
+   * Adds the specified time unit and value to the current PersianDate instance.
+   *
+   * @param {DateUint} unit - The time unit to add, such as "days", "months", or
+   * "years".
+   * @param {number} value - The value to add to the specified time unit.
+   * @returns {PersianDate} The current PersianDate instance with the time
+   * updated.
+   */
   add(unit: DateUint, value: number): PersianDate {
     this.setTime(modifyTime(this.getTime(), unit, value));
     return this;
   }
 
+  /**
+   * Subtracts the specified time unit and value from the current PersianDate instance.
+   *
+   * @param {DateUint} unit - The time unit to subtract, such as "days", "months", or "years".
+   * @param {number} value - The value to subtract from the specified time unit.
+   * @returns {PersianDate} The current PersianDate instance with the time updated.
+   */
   subtract(unit: DateUint, value: number): PersianDate {
     this.setTime(modifyTime(this.getTime(), unit, -value));
     return this;
   }
 
-  getMonth(): number {
-    return super.getMonth() + 1;
-  }
-
+  /**
+   * Gets the full year of the current PersianDate instance for the Persian calendar or
+   * the Gregorian calendar year from the date instance.
+   *
+   * @returns {number} The full year of the current PersianDate instance.
+   */
   getFullYear(): number {
     if (this.options.calendar === "gregorian") {
       return super.getFullYear();
@@ -153,6 +199,12 @@ export default class PersianDate extends Date {
     return this.persianDate.year;
   }
 
+  /**
+   * Gets the day of the current PersianDate instance for the Persian calendar or
+   * the Gregorian calendar day from the date instance.
+   *
+   * @returns {number} The day of the current PersianDate instance.
+   */
   getDate(): number {
     if (this.options.calendar === "gregorian") {
       return super.getDate();
@@ -162,13 +214,25 @@ export default class PersianDate extends Date {
   }
 
   /**
+   * Gets the month of the current PersianDate instance for persian calendar or
+   * gregorian calendar month from date instance.
+   *
+   * @returns {number} The month of the current PersianDate instance.
+   */
+  getMonth(): number {
+    if (this.options.calendar === "gregorian") {
+      return this.persianDate.month;
+    }
+
+    return super.getMonth();
+  }
+
+  /**
    * Determines if the current year is a leap year based on the specified calendar.
    *
-   * @function
    * @returns {boolean} `true` if the current year is a leap year; otherwise, `false`.
    *
    * @example
-   * // Assuming an instance `date` with a specified calendar:
    * date.isLeapYear(); // Returns `true` if the year is a leap year.
    */
   isLeapYear(): boolean {

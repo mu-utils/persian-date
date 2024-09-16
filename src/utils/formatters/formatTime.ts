@@ -16,7 +16,7 @@ import createFormatReplacements from "./createFormatReplacements";
  * @param template - The template to use.
  * @returns The formatted date.
  */
-export default function formatDate(
+export default function formatTime(
   time: number,
   template: DateFormatTemplate,
   formatters: Formatters
