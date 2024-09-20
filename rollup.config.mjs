@@ -9,14 +9,14 @@ export default {
     {
       file: "dist/bundle.min.cjs.js",
       format: "cjs",
-      sourcemap: true, // Keep sourcemap for debugging
-      plugins: [terser()], // Minify output
+      sourcemap: false,
+      plugins: [terser()],
     },
     {
       file: "dist/bundle.min.esm.js",
       format: "esm",
-      sourcemap: false, // No sourcemap for esm output
-      plugins: [terser()], // Minify output
+      sourcemap: false,
+      plugins: [terser()],
     },
   ],
   plugins: [
