@@ -1,11 +1,11 @@
-import { persianDate } from "persian-date";
+import { default as PersianDate } from "persian-date";
 
-const p1 = persianDate("2023-06-12T03:05:03", {
+const p1 = new PersianDate("2023-06-12T03:05:03", {
   // calendar: "gregorian",
   // timeZone: "America/New_York",
 });
 
-const p2 = persianDate("2023-06-11T03:05:03", {
+const p2 = new PersianDate("2023-06-11T03:05:03", {
   calendar: "gregorian",
   // timeZone: "America/New_York",
 });
