@@ -1,58 +1,86 @@
-# persian-date
-A Persian date to convert from gregorian and behavie like a date in Javascript project.
+# PersianDate
 
-## Description
-Persian date is a simple, easy-to-use, fully customizable date picker component for web applications. Persian date can be easily integrated into your project, whether you need a basic date input or a complex, multi-feature calendar interface.
+A JavaScript library for working with Persian (Jalali) dates, extending the native JavaScript Date object.
 
 ## Installation
-### Via npm
-```bash
-npm install persian-datepicker
-```
 
-### Via yarn
-```bash
-yarn add persian-datepicker
-```
+npm install persian-date
 
-### Options
-| Option      | Type     | Default       | Description                                          |
-|-------------|----------|---------------|------------------------------------------------------|
-| `format`    | String   | `MM/DD/YYYY`  | The format in which the selected date will be displayed in the input field. |
-| `minDate`   | Date     | `null`        | The earliest date that can be selected.              |
-| `maxDate`   | Date     | `null`        | The latest date that can be selected.                |
-| `onSelect`  | Function | `null`        | A callback function that is triggered when a date is selected. The selected date is passed as an argument. |
+## Usage
 
-### Basic Example in React
-```jsx
-import React, { useEffect } from 'react';
-import DatePicker from 'path/to/datepicker.js';
-import 'path/to/datepicker.css';
+import PersianDate from 'persian-date';
 
-const DatePickerComponent = () => {
-  useEffect(() => {
-    const datepicker = new DatePicker('#date-picker', {
-      format: 'MM/DD/YYYY',
-      onSelect: function (date) {
-        console.log('Selected date:', date);
-      },
-    });
-  }, []);
+const persianDate = new PersianDate();
+console.log(persianDate.format('YYYY/MM/DD'));
+console.log(persianDate.format('YYYY/MM/DD HH:mm:ss'));
 
-  return <input type="text" id="date-picker" />;
-};
+## Features
 
-export default DatePickerComponent;
-```
+- Supports both Persian (Jalali) and Gregorian calendars
+- Extends the native JavaScript Date object
+- Flexible date formatting
+- Date manipulation (add, subtract)
+- Date comparison and difference calculation
+- Leap year detection
 
+## API
 
-### Explanation:
-1. **`useEffect` Hook**: This ensures that the datepicker is initialized after the component mounts.
-2. **Import Statements**: The `DatePicker` component and its CSS file are imported at the top.
-3. **`input` Element**: The `id="date-picker"` is linked to the DatePicker instance in the `useEffect` hook.
+### Constructor
 
-This example should help users understand how to integrate the date picker into a React component.
+The `PersianDate` constructor supports multiple overloads:
 
+new PersianDate();
+new PersianDate(options);
+new PersianDate(value, options);
+new PersianDate(year, month, options);
+new PersianDate(year, month, date, options);
+new PersianDate(year, month, date, hours, options);
+new PersianDate(year, month, date, hours, minutes, options);
+new PersianDate(year, month, date, hours, minutes, seconds, options);
+new PersianDate(year, month, date, hours, minutes, seconds, ms, options);
 
-## Contact
-For more information, feel free to reach out via [email@example.com](mailto:email@example.com) or visit our [GitHub Discussions](https://github.com/username/datepicker-js/discussions).
+### Methods
+
+#### `setTimeZone(timeZone: TimeZone): void`
+
+Sets the time zone for the PersianDate instance.
+
+#### `setCalendar(calendar: Calendar): void`
+
+Sets the calendar used by the PersianDate instance.
+
+#### `format(template: DateFormatTemplate): string`
+
+Formats the current PersianDate instance using the provided date format template.
+
+#### `diff(value: DateValue, unit?: DateUint): number`
+
+Calculates the difference between the current PersianDate instance and the provided date value.
+
+#### `add(unit: DateUint, value: number): PersianDate`
+
+Adds the specified time unit and value to the current PersianDate instance.
+
+#### `subtract(unit: DateUint, value: number): PersianDate`
+
+Subtracts the specified time unit and value from the current PersianDate instance.
+
+#### `getFullYear(): number`
+
+Gets the full year of the current PersianDate instance.
+
+#### `getDate(): number`
+
+Gets the day of the month for the current PersianDate instance.
+
+#### `getMonth(): number`
+
+Gets the month for the current PersianDate instance.
+
+#### `isLeapYear(): boolean`
+
+Determines if the current year is a leap year based on the selected calendar.
+
+## License
+
+[MIT License](LICENSE)
