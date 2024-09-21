@@ -12,3 +12,5 @@ coverage/
 
 # Ignore build files if you have a build process that you don't want to publish
 dist/
+
+src/
