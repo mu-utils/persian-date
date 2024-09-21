@@ -12,6 +12,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@muhamadzolfaghari/persian-date": "^1.0.1",
     "ts-node": "^10.9.2"
   },
   "devDependencies": {

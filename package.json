@@ -1,12 +1,17 @@
 {
-  "name": "@muzl/persian-date",
+  "name": "@mu-utils/persian-date",
   "version": "1.0.0",
   "description": "A Persian date to convert from gregorian and behave like a date in Javascript project.",
   "main": "dist/bundle.min.cjs.js",
   "module": "dist/bundle.min.esm.js",
   "types": "dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/muhamadzolfaghari/persian-date.git"
+  },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "registry": "https://npm.pkg.github.com"
   },
   "scripts": {
     "start": "npm run watch",
