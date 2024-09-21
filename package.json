@@ -2,7 +2,8 @@
   "name": "persian-date",
   "version": "1.0.0",
   "description": "A Persian date to convert from gregorian and behave like a date in Javascript project.",
-  "main": "src/index.ts",
+  "main": "dist/bundle.min.cjs.js",
+  "module": "dist/bundle.min.esm.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "start": "npm run watch",

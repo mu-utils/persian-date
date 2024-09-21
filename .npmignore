@@ -1,0 +1,14 @@
+# Exclude the demo folder from being published to npm
+demo/
+
+# Optionally exclude test files and other development-related folders
+__tests__/
+*.spec.ts
+coverage/
+
+# Ignore local configuration files
+*.env
+*.log
+
+# Ignore build files if you have a build process that you don't want to publish
+dist/
