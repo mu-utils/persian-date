@@ -1,8 +1,9 @@
-import isPersianTime from "../utils/persian/isPersianTime";
+import PersianDate from "../PersianDate";
+import isPersianTime from "../utils/persian/isPersianLeapYear";
 
 describe("validatePersianDate", () => {
   it("should return false for invalid date", () => {
-    const time = new Date("2023/12/31").getTime();
+    const time = new PersianDate("2023/12/31").getTime();
     expect(isPersianTime(time)).toBe(false);
   });
 
