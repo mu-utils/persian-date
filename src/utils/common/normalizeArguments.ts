@@ -1,6 +1,4 @@
-import PersianDate from "../../PersianDate";
 import Calendar from "../../types/Calendar";
-import DateType from "../../types/DateType";
 import DateValue from "../../types/DateValue";
 import FormatOptions from "../../types/FormatOptions";
 import InvalidDateSeverity from "../../types/InvalidDateSeverity";
@@ -133,4 +131,4 @@ export default function normalizeArguments(
 }
 
 const isOptions = (arg: unknown): arg is object =>
-  typeof arg === "object" && !(arg instanceof PersianDate);
+  typeof arg === "object" && !(arg instanceof Date);

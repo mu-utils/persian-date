@@ -1,4 +1,4 @@
-import { PersianDate } from "@mu-utils/persian-date";
+import PersianDate from "@mu-utils/persian-date";
 
 const p1 = new PersianDate("2023-06-12T03:05:03", {
   // calendar: "gregorian",

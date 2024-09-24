@@ -1,3 +1,3 @@
-export { default as PersianDate } from "./PersianDate";
+import PersianDate from "./PersianDate";
 
-export { default as persianDate } from "./utils/common/createPersianDate";
+export default PersianDate;
