@@ -105,7 +105,8 @@ function parseDate(
   if (validPersian) {
     date = toGregorianDate(year, month, day);
   } else {
-    date = new Date(year, month, day);
+    date = new Date();
+    date.setFullYear(year, month, day);
   }
 
   setTimeComponents(date, rest);

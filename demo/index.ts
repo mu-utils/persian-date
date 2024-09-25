@@ -3,7 +3,7 @@ import PersianDate from "@mu-utils/persian-date";
 
 const p = new PersianDate();
 
-console.log(p);
+// console.log(p);
 
 
 // const p1 = new PersianDate("2023-06-12T03:05:03", {
