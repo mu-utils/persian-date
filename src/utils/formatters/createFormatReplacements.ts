@@ -1,8 +1,20 @@
 import DateTimeSegment from "../../types/DateTimeSegment";
 import Formatters from "../../types/Formatters";
 
-const formatter = (time: number) => (formatter: Intl.DateTimeFormat) =>
-  formatter.format(time);
+const replacePersianNumbers = (input: string) =>
+  input.replace(/[۰-۹]/g, (char) =>
+    String.fromCharCode(char.charCodeAt(0) - 1728)
+  );
+
+const formatter = (time: number) => (formatter: Intl.DateTimeFormat) => {
+  const formattedDate = formatter.format(time);
+
+  if (formatter.resolvedOptions().calendar === "persian") {
+    return replacePersianNumbers(formattedDate);
+  }
+
+  return formattedDate;
+};
 
 type DateTimeTuple = [
   year: number,
@@ -14,6 +26,8 @@ type DateTimeTuple = [
 ];
 
 function extractDateTime(formattedDateTime: string): DateTimeTuple {
+  console.log(formattedDateTime);
+
   const result = formattedDateTime.match(/\d+/g)?.map(Number);
 
   if (!result) {
