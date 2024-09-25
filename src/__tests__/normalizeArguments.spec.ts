@@ -1,4 +1,4 @@
-import normalizeArguments from "../utils/normalizeArguments";
+import normalizeArguments from "../utils/common/normalizeArguments";
 
 describe("normalizeArguments", () => {
   it("should return an tuple of props and options", () => {
