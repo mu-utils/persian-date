@@ -8,9 +8,6 @@ describe("formatDate", () => {
     calendar: "persian",
   });
   const date = new PersianDate("1403/06/12");
-
-  console.log(date.getDate());
-
   const time = date.getTime();
 
   it("should get month", () => {
