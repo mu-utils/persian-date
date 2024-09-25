@@ -1,6 +1,6 @@
 {
   "name": "@mu-utils/persian-date",
-  "version": "1.1.0",
+  "version": "1.0.6",
   "description": "A Persian date to convert from gregorian and behave like a date in Javascript project.",
   "main": "dist/bundle.min.cjs.js",
   "module": "dist/bundle.min.esm.js",
@@ -19,7 +19,8 @@
     "build": "rollup -c",
     "watch": "rollup -c -w",
     "demo": "ts-node demo/index.ts",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "postpublish": "git tag -a v$(node -p \"require('./package.json').version\") -m \"Release v$(node -p \"require('./package.json').version\") [skip ci]\" && git push --follow-tags"
   },
   "keywords": [],
   "author": "",
