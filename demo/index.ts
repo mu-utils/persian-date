@@ -1,7 +1,10 @@
 import PersianDate from "@mu-utils/persian-date";
 
 
-const p = new PersianDate();
+const p = new PersianDate("1403/06/12");
+
+console.log(p.format("YYYY/MM/D"), 'call');
+
 
 // console.log(p);
 

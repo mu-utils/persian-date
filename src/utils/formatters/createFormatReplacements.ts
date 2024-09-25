@@ -1,10 +1,6 @@
 import DateTimeSegment from "../../types/DateTimeSegment";
 import Formatters from "../../types/Formatters";
-
-const replacePersianNumbers = (input: string) =>
-  input.replace(/[۰-۹]/g, (char) =>
-    String.fromCharCode(char.charCodeAt(0) - 1728)
-  );
+import replacePersianNumbers from "../persian/replacePersianNumbers";
 
 const formatter = (time: number) => (formatter: Intl.DateTimeFormat) => {
   const formattedDate = formatter.format(time);

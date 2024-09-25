@@ -4,7 +4,7 @@ import createFormatters from "../utils/formatters/createFormatters";
 
 describe("formatDate", () => {
   const formatters = createFormatters({
-    timeZone: "America/New_York",
+    timeZone: "Asia/Tehran",
     calendar: "persian",
   });
   const date = new PersianDate("1403/06/12");
@@ -23,7 +23,6 @@ describe("formatDate", () => {
   });
 
   it("should deal with surrounding text", () => {
-    
     expect(formatTime(time, "YYYY, MM, DD", formatters)).toBe("1403, 06, 12");
   });
 
