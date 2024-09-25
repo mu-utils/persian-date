@@ -75,11 +75,11 @@ Formats the current PersianDate instance using the provided date format template
 
 Calculates the difference between the current PersianDate instance and the provided date value.
 
-#### `add(unit: DateUint, value: number): PersianDate`
+#### `add(value: number, unit: DateUint): PersianDate`
 
 Adds the specified time unit and value to the current PersianDate instance.
 
-#### `subtract(unit: DateUint, value: number): PersianDate`
+#### `subtract(value: number, unit: DateUint): PersianDate`
 
 Subtracts the specified time unit and value from the current PersianDate instance.
 

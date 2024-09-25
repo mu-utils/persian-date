@@ -87,7 +87,15 @@ describe("PersianDate", () => {
   describe("add", () => {
     it("should add days correctly", () => {
       const date = new PersianDate(1402, 1, 1);
+      console.log(date.getDate(), "before");
+
+
       const result = date.add("days", 5);
+
+      console.log(result.getDate(), "after");
+      
+
+
       expect(result.getDate()).toBe(6);
     });
 
