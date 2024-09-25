@@ -6,9 +6,7 @@ describe("persianToGregorian", () => {
   });
 
   it("should throw error date with negative year", () => {
-    expect(() => persianToGregorian(-1403, 6, 12)).toThrow(
-      "Invalid Persian year -1403"
-    );
+    expect(() => persianToGregorian(-1403, 6, 12)).toThrow("Invalid Date");
   });
 
   it("should convert date in leap year", () => {

@@ -86,6 +86,11 @@ function parseDate(
     dateParts = toIntegerArray(args as string[]);
   }
 
+  if (dateParts.length === 0) {
+    const date = new Date();
+    dateParts = [date.getFullYear(), date.getMonth(), date.getDate()];
+  }
+
   const [year, month, day, ...rest] = dateParts;
   const validPersian = isValidPersian(year, month, day);
 

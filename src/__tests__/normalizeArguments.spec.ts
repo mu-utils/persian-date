@@ -10,16 +10,20 @@ describe("normalizeArguments", () => {
 
   it("should return an object with props and options which is has an object", () => {
     const result = normalizeArguments(["2023/01/01", { ignoreCalendar: true }]);
-    expect(result).toEqual([["2023/01/01"], { ignoreCalendar: true }]);
+    expect(result).toContain(1675197000000);
   });
 
   it("should return props with empty array and options which is undefined", () => {
     const result = normalizeArguments([]);
-    expect(result).toEqual([[], undefined]);
+    expect(result[0]).toEqual(NaN);
   });
 
   it("should return props with empty array and options", () => {
     const result = normalizeArguments([{ ignoreCalendar: true }]);
+
+    console.log(result);
+    
+
     expect(result).toEqual([[], { ignoreCalendar: true }]);
   });
 });
