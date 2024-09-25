@@ -17,7 +17,7 @@
     "start:demo": "cd ./demo && npm run watch",
     "test": "jest",
     "build": "rollup -c",
-    "watch": "tsc --watch",
+    "watch": "rollup -c -w",
     "demo": "ts-node demo/index.ts",
     "prepublishOnly": "npm run build"
   },

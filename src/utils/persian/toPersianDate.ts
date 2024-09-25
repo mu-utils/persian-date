@@ -15,7 +15,10 @@ export const toPersianDate = (
   const localeTime = new Date(value).toLocaleString("fa-IR-u-nu-latn", {
     timeZone,
   });
+  const [year, month, day] = localeTime
+    .match(/(\d+)/g)
+    ?.slice(0, 3)
+    ?.map(Number) ?? [NaN, NaN, NaN];
 
-  const [year, month, day] = localeTime.split("/").map(Number);
   return { year, month, day };
 };
