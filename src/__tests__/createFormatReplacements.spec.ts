@@ -1,5 +1,5 @@
-import createFormatters from "../utils/createFormatters";
-import createFormatReplacements from "../utils/createFormatReplacements";
+import createFormatters from "../utils/formatters/createFormatters";
+import createFormatReplacements from "../utils/formatters/createFormatReplacements";
 
 describe("createFormatReplacements", () => {
   it("should create replacements for the given date", () => {
@@ -9,6 +9,9 @@ describe("createFormatReplacements", () => {
       calendar: "persian",
     });
     const replacements = createFormatReplacements(date.getTime(), formatters);
+
+    console.log(replacements);
+
     expect(replacements).toEqual({
       YYYY: "2023",
       MM: "04",

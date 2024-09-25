@@ -1,4 +1,4 @@
-import persianToGregorian from "../utils/persianToGregorian";
+import persianToGregorian from "../utils/gregorian/persianToGregorian";
 
 describe("persianToGregorian", () => {
   it("should convert persian date to gregorian date", () => {

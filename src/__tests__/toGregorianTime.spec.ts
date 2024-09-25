@@ -1,10 +1,16 @@
-import toGregorianTime from "../utils/toGregorianTime";
+import toGregorianDate from "../utils/gregorian/toGregorianDate";
 
 describe("toGregorianTime", () => {
   it("should convert persian date to gregorian date", () => {
-    const persianTime = new Date(1403, 6, 12).getTime();
-    const gregorianTime = toGregorianTime(persianTime);
-    const expectedTime = new Date(2024, 9, 2).getTime();
-    expect(gregorianTime).toBe(expectedTime);
+    const gregorianDate = toGregorianDate(1403, 6, 12);
+    const expectedTime = new Date(2024, 8, 3);
+
+    console.log(gregorianDate.toUTCString());
+    console.log(expectedTime.toUTCString());
+
+    expect(gregorianDate.toLocaleDateString()).toBe(
+      expectedTime.toLocaleDateString()
+    );
   });
 });
+

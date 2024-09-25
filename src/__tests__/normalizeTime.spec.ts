@@ -1,4 +1,4 @@
-import normalizeTime from "../utils/normalizeTime";
+import normalizeTime from "../utils/common/normalizeTime";
 
 describe("normalizeTime", () => {
   const time = new Date("2023-06-12T03:05:03").getTime();
