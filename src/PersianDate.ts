@@ -176,7 +176,7 @@ export default class PersianDate extends Date {
    * @returns {PersianDate} The updated PersianDate instance.
    */
   add(value: number, unit: DateUint): PersianDate {
-    this.setTime(modifyTime(this.getTime(), unit, value));
+    this.setTime(modifyTime(this.getTime(), value, unit));
     return this;
   }
 
@@ -188,7 +188,7 @@ export default class PersianDate extends Date {
    * @returns {PersianDate} The updated PersianDate instance.
    */
   subtract(value: number, unit: DateUint): PersianDate {
-    this.setTime(modifyTime(this.getTime(), unit, -value));
+    this.setTime(modifyTime(this.getTime(), -value, unit));
     return this;
   }
 

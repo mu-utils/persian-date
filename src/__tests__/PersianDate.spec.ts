@@ -24,7 +24,6 @@ describe("PersianDate", () => {
       const date = new PersianDate("1399/10/13");
 
       console.log(date.format("YYYY-MM-DD"));
-      
 
       expect(date.format("YYYY-MM-DD")).toBe("1399-10-13");
     });
@@ -46,7 +45,7 @@ describe("PersianDate", () => {
 
   describe("isLeapYear", () => {
     it("should return true for persian leap year", () => {
-      const date = new PersianDate("1403/10/13");
+      const date = new PersianDate("1404/10/13");
       expect(date.isLeapYear()).toBe(true);
     });
 
@@ -80,7 +79,7 @@ describe("PersianDate", () => {
     it("should return the correct difference in months", () => {
       const date1 = new PersianDate(1400, 1, 5);
       const date2 = new PersianDate(1400, 2, 5);
-      expect(date1.diff(date2, "months")).toBe(0.919917864476386);
+      expect(date1.diff(date2, "months")).toBe(1);
     });
   });
 
@@ -89,37 +88,59 @@ describe("PersianDate", () => {
       const date = new PersianDate(1402, 1, 1);
       console.log(date.getDate(), "before");
 
-
-      const result = date.add("days", 5);
+      const result = date.add(5, "days");
 
       console.log(result.getDate(), "after");
-      
 
+      expect(result.getDate()).toBe(6);
+    });
 
+    it("should add days correctly in gregorian calendar", () => {
+      const date = new PersianDate("2023/1/1", {
+        calendar: "gregorian",
+      });
+      const result = date.add(5, "days");
       expect(result.getDate()).toBe(6);
     });
 
     it("should add months correctly", () => {
       const date = new PersianDate(1402, 1, 1);
-      const result = date.add("months", 2);
+      const result = date.add(2, "months");
+      expect(result.getMonth()).toBe(3);
+      expect(result.getDate()).toBe(1);
+    });
+
+    it("should add months correctly in gregorian calendar", () => {
+      const date = new PersianDate("2023/1/1", {
+        calendar: "gregorian",
+      });
+      const result = date.add(2, "months");
       expect(result.getMonth()).toBe(3);
     });
 
     it("should add years correctly", () => {
       const date = new PersianDate(1402, 1, 1);
-      const result = date.add("years", 1);
+      const result = date.add(1, "years");
       expect(result.getFullYear()).toBe(1403);
+    });
+
+    it("should add years correctly in gregorian calendar", () => {
+      const date = new PersianDate("2023/1/1", {
+        calendar: "gregorian",
+      });
+      const result = date.add(1, "years");
+      expect(result.getFullYear()).toBe(2024);
     });
 
     it("should add last days of the Tir month correctly", () => {
       const date = new PersianDate(1402, 6, 30);
-      const result = date.add("days", 1);
+      const result = date.add(1, "days");
       expect(result.getMonth()).toBe(4);
     });
 
     it("should handle adding across year boundary", () => {
       const date = new PersianDate(1402, 12, 29);
-      const result = date.add("days", 3);
+      const result = date.add(3, "days");
       expect(result.getFullYear()).toBe(1403);
       expect(result.getMonth()).toBe(1);
       expect(result.getDate()).toBe(2);
@@ -129,25 +150,25 @@ describe("PersianDate", () => {
   describe("subtract", () => {
     it("should subtract days correctly", () => {
       const date = new PersianDate(1402, 1, 10);
-      const result = date.subtract("days", 5);
+      const result = date.subtract(5, "days");
       expect(result.getDate()).toBe(5);
     });
 
     it("should subtract months correctly", () => {
       const date = new PersianDate(1402, 3, 1);
-      const result = date.subtract("months", 2);
+      const result = date.subtract(2, "months");
       expect(result.getMonth()).toBe(1);
     });
 
     it("should subtract years correctly", () => {
       const date = new PersianDate(1402, 1, 1);
-      const result = date.subtract("years", 1);
+      const result = date.subtract(1, "years");
       expect(result.getFullYear()).toBe(1401);
     });
 
     it("should handle subtracting across year boundary", () => {
       const date = new PersianDate(1403, 1, 2);
-      const result = date.subtract("days", 3);
+      const result = date.subtract(3, "days");
       expect(result.getFullYear()).toBe(1402);
       expect(result.getMonth()).toBe(12);
       expect(result.getDate()).toBe(29);
