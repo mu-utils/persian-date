@@ -104,6 +104,11 @@ function parseDate(
 
   if (validPersian) {
     date = toGregorianDate(year, month, day);
+
+    date.setUTCHours(0, 0, 0, 0);
+
+    console.log(date.toLocaleDateString("fa-ir"), 'valid');
+    
   } else {
     date = new Date();
     date.setFullYear(year, month, day);

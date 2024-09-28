@@ -9,6 +9,9 @@
 export default function julianDayToGregorian(julianDay: number): Date {
   const JULIAN_DATE_OFFSET = 2440587.5; // Julian day for Unix epoch (1970-01-01)
   const millisecondsSinceEpoch = (julianDay - JULIAN_DATE_OFFSET) * 86400000;
+
+  console.log(millisecondsSinceEpoch, 'millisecondsSinceEpoch');
+  
   
   return new Date(millisecondsSinceEpoch);
 }

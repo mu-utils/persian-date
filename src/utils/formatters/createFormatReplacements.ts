@@ -22,8 +22,6 @@ type DateTimeTuple = [
 ];
 
 function extractDateTime(formattedDateTime: string): DateTimeTuple {
-  console.log(formattedDateTime);
-
   const result = formattedDateTime.match(/\d+/g)?.map(Number);
 
   if (!result) {
