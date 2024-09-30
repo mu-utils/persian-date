@@ -92,6 +92,7 @@ function parseDate(
   }
 
   const [year, month, day, ...rest] = dateParts;
+
   const validPersian = isValidPersian(year, month, day);
 
   if (
@@ -104,11 +105,6 @@ function parseDate(
 
   if (validPersian) {
     date = toGregorianDate(year, month, day);
-
-    date.setUTCHours(0, 0, 0, 0);
-
-    console.log(date.toLocaleDateString("fa-ir"), 'valid');
-    
   } else {
     date = new Date();
     date.setFullYear(year, month, day);
@@ -136,6 +132,8 @@ export default function normalizeArguments(
     time = NaN;
   } else {
     time = localizeTime(date.getTime(), formatOptions.timeZone);
+
+    console.log(new Date(time), "<<<dafffte>>>");
   }
 
   return [time, options, formatOptions];

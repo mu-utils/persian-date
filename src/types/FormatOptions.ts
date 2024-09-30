@@ -1,7 +1,7 @@
 import TimeZone from "./TimeZone";
 
 type FormatOptions = Intl.DateTimeFormatOptions & {
-  timeZone: TimeZone;
+  timeZone?: TimeZone;
 };
 
 export default FormatOptions;

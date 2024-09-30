@@ -16,6 +16,11 @@ export default function localizeTime(
   timeZone: TimeZone | undefined
 ): number {
   const date = new Date(time);
-  const localeTime = date.toLocaleString("en-US", { timeZone });
+  console.log(date, "date date date");
+
+\
+  
+
+  const localeTime = date.toLocaleString("en-US", {});
   return new Date(localeTime).getTime();
 }

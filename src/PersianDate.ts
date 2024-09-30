@@ -16,7 +16,9 @@ import modifyTime from "./utils/common/modifyTime";
 import normalizeArguments from "./utils/common/normalizeArguments";
 import createFormatters from "./utils/formatters/createFormatters";
 import formatTime from "./utils/formatters/formatTime";
+import overrideDisplayDateInstance from "./utils/formatters/overrideDisplayDateInstance";
 import { toPersianDate } from "./utils/persian/toPersianDate";
+import util from "util";
 
 /**
  * Represents a Persian date and time, extending the native JavaScript Date object.
@@ -242,5 +244,13 @@ export default class PersianDate extends Date {
    */
   isLeapYear(): boolean {
     return isLeapYear(this.getFullYear(), this.options.calendar);
+  }
+
+  /**
+   * Gets the day of the week for the current PersianDate instance.
+   * @returns {number} The day of the week for the current PersianDate instance.
+   */
+  [util.inspect.custom](): string {
+    return overrideDisplayDateInstance(this.getTime());
   }
 }

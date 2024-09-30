@@ -1,44 +1,40 @@
-import { PERSIAN_EPOCH } from "../../constants/persianCalendar";
-import isPersianLeapYear from "./isPersianLeapYear";
+// Constants
+const PERSIAN_EPOCH = 1948320.5; // Julian Day for 622-03-19 AD (Start of Jalali calendar)
+
+// Helper function to calculate the base epoch for Jalali year
+function getEpochBase(year: number): number {
+  return year >= 0 ? year - 474 : year - 473;
+}
+
+// Helper function to calculate Jalali year from epoch base
+function getEpochYear(epochBase: number): number {
+  return 474 + (epochBase % 2820);
+}
 
 /**
- * Converts a Persian (Jalali) date to a Julian Day Number (JDN).
- * @param {number} year - Persian year.
- * @param {number} month - Persian month (1-12).
- * @param {number} day - Persian day of the month.
- * @returns {number} The Julian Day Number corresponding to the Persian date.
- *
- * Defines the Persian epoch and calculates the Julian Day Number by determining the base year
- * and year in the 2820-year cycle, then calculating the number of days up to the given date.
- * Takes leap years into account to adjust the day count.
+ *  Converts a Jalali date to a Julian Day Number (JDN).
+ * @param {number} year - Jalali year.
+ * @param {number} month  - Jalali month (1-12).
+ * @param {number} day - Jalali day of the month.
+ * @returns {number} The Julian Day Number corresponding to the Jalali date.
  */
-export default function persianToJulianDay(
+export default function jalaliToJulianDay(
   year: number,
   month: number,
   day: number
 ): number {
-  const mod = (a: number, b: number): number => a % b;
-
-  const epbase = year - (year >= 0 ? 474 : 473);
-  const epyear = 474 + mod(epbase, 2820);
+  const epochBase = getEpochBase(year);
+  const epochYear = getEpochYear(epochBase);
 
   const dayOfYear =
     day + (month <= 7 ? (month - 1) * 31 : (month - 1) * 30 + 6);
-
-  const yearDays = (epyear - 1) * 365;
-  const leapYears = Math.floor(epbase / 2820) * 1029983;
-  const leapYearDays = Math.floor((epyear * 682 - 110) / 2816);
-
-  const isLeap = isPersianLeapYear(year);
-  const extraDay = isLeap && month > 6 ? 1 : 0;
-
-  return (
-    PERSIAN_EPOCH -
-    1 +
+  const julianDay =
     dayOfYear +
-    yearDays +
-    leapYears +
-    leapYearDays +
-    extraDay
-  );
+    Math.floor((epochYear * 682 - 110) / 2816) +
+    (epochYear - 1) * 365 +
+    Math.floor(epochBase / 2820) * 1029983 +
+    PERSIAN_EPOCH -
+    1;
+
+  return julianDay;
 }
