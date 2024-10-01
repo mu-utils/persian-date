@@ -17,7 +17,7 @@
     "start:demo": "cd ./demo && npm run watch",
     "test": "jest",
     "build": "rollup -c",
-    "watch": "DEBUG=* rollup --config --watch",
+    "watch": "rollup -c -w",
     "demo": "ts-node demo/index.ts",
     "prepublishOnly": "npm run build",
     "postpublish": "git tag -a v$(node -p \"require('./package.json').version\") -m \"Release v$(node -p \"require('./package.json').version\") [skip ci]\" && git push --follow-tags"
@@ -40,6 +40,7 @@
     "dist/"
   ],
   "dependencies": {
-    "persian-date": "^1.1.0"
+    "persian-date": "^1.1.0",
+    "rollup-plugin-watch": "^1.0.4"
   }
 }
