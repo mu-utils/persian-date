@@ -16,18 +16,10 @@ export default function localizeTime(
   timeZone: TimeZone | undefined
 ): number {
   const date = new Date(time);
-  console.log(date, "date date date");
-
   const localeTime = date.toLocaleString("en-US", { timeZone });
-
-  const a = date.getMilliseconds();
-
-  console.log(a, "millisecond");
-
+  const ms = date.getMilliseconds();
   const newDate = new Date(localeTime);
-  newDate.setMilliseconds(a);
-
-  // console.log(localeTime, "localeTime localeTime localeTime");
-
+  newDate.setMilliseconds(ms);
+  
   return newDate.getTime();
 }

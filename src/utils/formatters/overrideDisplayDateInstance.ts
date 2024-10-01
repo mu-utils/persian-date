@@ -11,18 +11,12 @@ import formatTime from "./formatTime";
 export default function overrideDisplayDateInstance(time: number): string {
   const purple = "\x1b[35m";
   const reset = "\x1b[0m";
-
-  const date = new Date(time);
-  // console.log(date.getTimezoneOffset(), 'date');
-
-  // console.log(date, 'date');
-  // console.log(date, 'fdare');
-
-  console.log(date, 'date dfsdfjisdojf');
-  
-
   const formatters = createFormatters({ timeZone: "UTC" });
-  const formattedDate = formatTime(time, "YYYY-MM-DDTHH:mm:ss.SSSZ", formatters);
+  const formattedDate = formatTime(
+    time,
+    "YYYY-MM-DDTHH:mm:ss.SSSZ",
+    formatters
+  );
 
   return `${purple}${formattedDate}${reset}`;
 }

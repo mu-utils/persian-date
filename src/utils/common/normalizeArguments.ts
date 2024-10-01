@@ -132,8 +132,6 @@ export default function normalizeArguments(
     time = NaN;
   } else {
     time = localizeTime(date.getTime(), formatOptions.timeZone);
-
-    console.log(new Date(time), "<<<dafffte>>>");
   }
 
   return [time, options, formatOptions];
