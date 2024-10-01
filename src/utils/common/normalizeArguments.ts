@@ -27,11 +27,11 @@ function extractDateParts(arg: string): number[] | null {
 
 function setTimeComponents(date: Date, timeParts: number[]): void {
   const [hours, minutes, seconds, milliseconds] = timeParts;
-
-  if (hours !== undefined) date.setHours(hours);
-  if (minutes !== undefined) date.setMinutes(minutes);
-  if (seconds !== undefined) date.setSeconds(seconds);
-  if (milliseconds !== undefined) date.setMilliseconds(milliseconds);
+  const newDate = new Date();
+  date.setHours(hours ?? newDate.getHours());
+  date.setMinutes(minutes ?? newDate.getMinutes());
+  date.setSeconds(seconds ?? newDate.getSeconds());
+  date.setMilliseconds(milliseconds ?? newDate.getMilliseconds());
 }
 
 type ExtractArguments = [

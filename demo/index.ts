@@ -1,11 +1,9 @@
 import PersianDate from "@mu-utils/persian-date";
-import persianToJulianDay from "../src/utils/persian/persianToJulianDay";
-import julianDayToGregorian from "../src/utils/gregorian/julianDayToGregorian";
 
 const d1 = new Date();
 console.log(d1, "d1");
 
-const d2 = new PersianDate();
+const d2 = new PersianDate("1403/06/12");
 console.log(d2, "d2");
 
 // const d2 = julianDayToGregorian(persianToJulianDay(1403, 6, 12))
