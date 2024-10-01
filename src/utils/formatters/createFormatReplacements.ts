@@ -1,8 +1,16 @@
 import DateTimeSegment from "../../types/DateTimeSegment";
 import Formatters from "../../types/Formatters";
+import replacePersianNumbers from "../persian/replacePersianNumbers";
 
-const formatter = (time: number) => (formatter: Intl.DateTimeFormat) =>
-  formatter.format(time);
+const formatter = (time: number) => (formatter: Intl.DateTimeFormat) => {
+  const formattedDate = formatter.format(time);
+
+  if (formatter.resolvedOptions().calendar === "persian") {
+    return replacePersianNumbers(formattedDate);
+  }
+
+  return formattedDate;
+};
 
 type DateTimeTuple = [
   year: number,
@@ -58,6 +66,7 @@ export default function createFormatReplacements(
     formatterFactory(dateTime)
   );
   const [h12, amPm] = [hours % 12 || 12, hours < 12 ? "am" : "pm"];
+  const milliseconds = time.toString().slice(-3);
 
   return {
     YYYY: year.toString(),
@@ -76,5 +85,6 @@ export default function createFormatReplacements(
     M: month.toString(),
     h: h12.toString(),
     a: amPm,
+    SSS: milliseconds,
   };
 }

@@ -92,6 +92,7 @@ function parseDate(
   }
 
   const [year, month, day, ...rest] = dateParts;
+
   const validPersian = isValidPersian(year, month, day);
 
   if (
@@ -105,7 +106,8 @@ function parseDate(
   if (validPersian) {
     date = toGregorianDate(year, month, day);
   } else {
-    date = new Date(year, month, day);
+    date = new Date();
+    date.setFullYear(year, month, day);
   }
 
   setTimeComponents(date, rest);

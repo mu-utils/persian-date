@@ -10,7 +10,8 @@ type DateSegment =
   | "ddd"
   | "Do"
   | "M"
-  | "YYYY";
+  | "YYYY"
+  | "SSS";
 
 type TimeSegment = "HH" | "mm" | "ss" | "a" | "h";
 

@@ -1,5 +1,5 @@
-import persianToJulianDay from "../persian/persianToJulianDay";
-import julianDayToGregorian from "./julianDayToGregorian";
+import persianToJulianDay from "../persian/oldPersianToJulianDay";
+import julianDayToGregorian from "./oldjulianDayToGregorian";
 import persianToGregorian from "./persianToGregorian";
 
 /**

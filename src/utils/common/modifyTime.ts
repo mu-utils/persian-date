@@ -28,8 +28,8 @@ import DateUint from "../../types/DateUnit";
  */
 export default function modifyTime(
   time: number,
-  unit: DateUint,
-  value: number
+  value: number,
+  unit: DateUint
 ): number {
   const date = new Date(time);
 

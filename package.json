@@ -1,6 +1,6 @@
 {
   "name": "@mu-utils/persian-date",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "A Persian date to convert from gregorian and behave like a date in Javascript project.",
   "main": "dist/bundle.min.cjs.js",
   "module": "dist/bundle.min.esm.js",
@@ -40,6 +40,7 @@
     "dist/"
   ],
   "dependencies": {
-    "persian-date": "^1.1.0"
+    "persian-date": "^1.1.0",
+    "rollup-plugin-watch": "^1.0.4"
   }
 }

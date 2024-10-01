@@ -2,6 +2,7 @@ import typescript from "rollup-plugin-typescript2";
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import terser from "@rollup/plugin-terser";
+import watch from "rollup-plugin-watch";
 
 export default {
   input: "src/index.ts",
@@ -19,11 +20,23 @@ export default {
       plugins: [terser()],
     },
   ],
+
+
+
+
+
+  
+
+
+
+
+
   plugins: [
     resolve(),
     commonjs(),
     typescript({
       tsconfig: "./tsconfig.json",
     }),
+    watch({ dir: "./src", include: ["**/*.ts"] }),
   ],
 };

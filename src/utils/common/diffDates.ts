@@ -43,7 +43,7 @@ export default function dffDates(
     case "days":
       return diffInMs / MILLISECONDS_PER_DAY;
     case "months":
-      return diffInMs / millisecondsPerMonth;
+      return Math.floor(diffInMs / millisecondsPerMonth);
     case "years":
       return diffInMs / millisecondsPerYear;
     default:

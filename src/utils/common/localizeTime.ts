@@ -17,5 +17,9 @@ export default function localizeTime(
 ): number {
   const date = new Date(time);
   const localeTime = date.toLocaleString("en-US", { timeZone });
-  return new Date(localeTime).getTime();
+  const ms = date.getMilliseconds();
+  const newDate = new Date(localeTime);
+  newDate.setMilliseconds(ms);
+  
+  return newDate.getTime();
 }
