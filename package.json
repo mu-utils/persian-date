@@ -17,7 +17,7 @@
     "start:demo": "cd ./demo && npm run watch",
     "test": "jest",
     "build": "rollup -c",
-    "watch": "rollup -c -w",
+    "watch": "DEBUG=* rollup --config --watch",
     "demo": "ts-node demo/index.ts",
     "prepublishOnly": "npm run build",
     "postpublish": "git tag -a v$(node -p \"require('./package.json').version\") -m \"Release v$(node -p \"require('./package.json').version\") [skip ci]\" && git push --follow-tags"

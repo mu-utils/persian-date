@@ -18,9 +18,14 @@ export default function localizeTime(
   const date = new Date(time);
   console.log(date, "date date date");
 
-\
-  
+  console.log(date.toISOString());
 
-  const localeTime = date.toLocaleString("en-US", {});
+  const localeTime = new Intl.DateTimeFormat("en-GB", {
+    timeZone,
+    timeStyle: "short",
+  }).format(date);
+
+  console.log(localeTime, "localeTime localeTime localeTime");
+
   return new Date(localeTime).getTime();
 }
