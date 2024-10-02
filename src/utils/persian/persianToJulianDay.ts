@@ -18,14 +18,13 @@ function getEpochYear(epochBase: number): number {
  * @param {number} day - Jalali day of the month.
  * @returns {number} The Julian Day Number corresponding to the Jalali date.
  */
-export default function jalaliToJulianDay(
+export default function persianToJulianDay(
   year: number,
   month: number,
   day: number
 ): number {
   const epochBase = getEpochBase(year);
   const epochYear = getEpochYear(epochBase);
-
   const dayOfYear =
     day + (month <= 7 ? (month - 1) * 31 : (month - 1) * 30 + 6);
   const julianDay =

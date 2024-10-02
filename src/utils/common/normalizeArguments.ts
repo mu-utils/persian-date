@@ -4,10 +4,12 @@ import FormatOptions from "../../types/FormatOptions";
 import InvalidDateSeverity from "../../types/InvalidDateSeverity";
 import Options from "../../types/Options";
 import PersianDateOptions from "../../types/PersianDateOptions";
+import julianDayToGregorian from "../gregorian/julianDayToGregorian";
 import toGregorianDate from "../gregorian/toGregorianDate";
 import createFormatOptions from "../options/createFormatOptions";
 import createOptions from "../options/createOptions";
 import isValidPersian from "../persian/isValidPersian";
+import jalaliToJulianDay from "../persian/persianToJulianDay";
 import localizeTime from "./localizeTime";
 
 type NormalizeArguments = [
@@ -106,8 +108,9 @@ function parseDate(
   if (validPersian) {
     date = toGregorianDate(year, month, day);
   } else {
-    date = new Date();
-    date.setFullYear(year, month, day);
+    console.log(year, month, day, "year month day");
+
+    date = new Date(year, month, day);
   }
 
   setTimeComponents(date, rest);
@@ -121,12 +124,17 @@ export default function normalizeArguments(
   const [newArguments, options, formatOptions] = extractArguments(
     args as (DateValue | object)[]
   );
+
+  console.log(newArguments, "newArguments");
+
   let time: number;
   const date = parseDate(
     newArguments,
     options.calendar,
     options.invalidDateSeverity
   );
+
+  console.log(date, "date");
 
   if (!date) {
     time = NaN;
