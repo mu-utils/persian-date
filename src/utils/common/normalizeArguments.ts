@@ -108,8 +108,6 @@ function parseDate(
   if (validPersian) {
     date = toGregorianDate(year, month, day);
   } else {
-    console.log(year, month, day, "year month day");
-
     date = new Date(year, month, day);
   }
 
@@ -125,16 +123,12 @@ export default function normalizeArguments(
     args as (DateValue | object)[]
   );
 
-  console.log(newArguments, "newArguments");
-
   let time: number;
   const date = parseDate(
     newArguments,
     options.calendar,
     options.invalidDateSeverity
   );
-
-  console.log(date, "date");
 
   if (!date) {
     time = NaN;
