@@ -1,5 +1,5 @@
-import persianToJulianDay from "../persian/oldPersianToJulianDay";
-import julianDayToGregorian from "./oldjulianDayToGregorian";
+import persianToJulianDay from "../persian/persianToJulianDay";
+import julianDayToGregorian from "./julianDayToGregorian";
 import persianToGregorian from "./persianToGregorian";
 
 /**
@@ -20,6 +20,7 @@ export default function toGregorianDate(
   persianDay: number
 ): Date {
   const julianDay = persianToJulianDay(persianYear, persianMonth, persianDay);
+  const [year, month, day] = julianDayToGregorian(julianDay);
 
-  return julianDayToGregorian(julianDay);
+  return new Date(year, month - 1, day);
 }
