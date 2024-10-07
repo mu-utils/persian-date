@@ -19,7 +19,7 @@
     "build": "rollup -c",
     "watch": "rollup -c -w",
     "demo": "ts-node demo/index.ts",
-    "prepublishOnly": "npm run build",
+    "prepublishOnly": "npm npm run build",
     "postpublish": "git push && git push --tags"
   },
   "keywords": [],
