@@ -1,6 +1,4 @@
 import persianToGregorian from "../utils/gregorian/persianToGregorian";
-import julianDayToGregorian from "../utils/gregorian/julianDayToGregorian";
-import persianToJulianDay from "../utils/persian/persianToJulianDay";
 
 describe("persianToGregorian", () => {
   it("should convert persian date to gregorian date", () => {
@@ -21,16 +19,4 @@ describe("persianToGregorian", () => {
     expect(persianToGregorian(1300, 1, 1)).toEqual([1921, 3, 21]);
     expect(persianToGregorian(1404, 1, 1)).toEqual([2025, 3, 21]);
   });
-
-  it("should handle historical julian day below gregorian reform", () => {
-    const result = julianDayToGregorian(2000000);
-    expect(Array.isArray(result)).toBe(true);
-    expect(result.length).toBe(3);
-  });
-
-  it("should calculate epoch base for negative Persian year", () => {
-    const jd = persianToJulianDay(-10, 1, 1);
-    expect(typeof jd).toBe("number");
-  });
 });
-

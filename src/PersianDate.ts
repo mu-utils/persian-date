@@ -37,7 +37,7 @@ import util from "util";
  */
 export default class PersianDate extends Date {
   private options: Options;
-  private formatters!: Formatters;
+  private formatters?: Formatters;
   private formatOptions: FormatOptions;
   private persianDate!: DateType;
 
@@ -100,14 +100,21 @@ export default class PersianDate extends Date {
   }
 
   /**
-   * Updates the internal state by creating new formatters and converting
-   * the current time to a Persian date.
+   * Updates the internal state by recalculating the Persian date components.
+   * Formatters are lazily instantiated only when needed for formatting.
    *
    * @private
    */
   private update() {
-    this.formatters = createFormatters(this.formatOptions);
+    this.formatters = undefined;
     this.persianDate = toPersianDate(this.getTime(), this.formatOptions);
+  }
+
+  private getFormatters(): Formatters {
+    if (!this.formatters) {
+      this.formatters = createFormatters(this.formatOptions);
+    }
+    return this.formatters;
   }
 
   /**
@@ -146,7 +153,7 @@ export default class PersianDate extends Date {
     template: DateFormatTemplate = "YYYY/MM/DD",
     options?: FormatOptionsConfig
   ): string {
-    return formatTime(this.getTime(), template, this.formatters, options);
+    return formatTime(this.getTime(), template, this.getFormatters(), options);
   }
 
   /**

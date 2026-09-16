@@ -15,11 +15,15 @@ export default function localizeTime(
   time: number,
   timeZone: TimeZone | undefined
 ): number {
+  if (!timeZone) {
+    return time;
+  }
+
   const date = new Date(time);
   const localeTime = date.toLocaleString("en-US", { timeZone });
   const ms = date.getMilliseconds();
   const newDate = new Date(localeTime);
   newDate.setMilliseconds(ms);
-  
+
   return newDate.getTime();
 }

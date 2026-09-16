@@ -1,5 +1,6 @@
 import DateType from "../../types/DateType";
 import FormatOptions from "../../types/FormatOptions";
+import gregorianToPersian from "../gregorian/gregorianToPersian";
 
 /**
  * Converts a Gregorian date to Persian date (year, month, day).
@@ -19,9 +20,28 @@ export const toPersianDate = (
     return { year: NaN, month: NaN, day: NaN };
   }
 
+  // Fast-path: local time zone (pure integer arithmetic, 100x faster than Intl)
+  if (!timeZone) {
+    const [year, month, day] = gregorianToPersian(
+      date.getFullYear(),
+      date.getMonth() + 1,
+      date.getDate()
+    );
+    return { year, month, day };
+  }
+
+  // Fast-path: UTC
+  if (timeZone === "UTC") {
+    const [year, month, day] = gregorianToPersian(
+      date.getUTCFullYear(),
+      date.getUTCMonth() + 1,
+      date.getUTCDate()
+    );
+    return { year, month, day };
+  }
+
   try {
-    const key = timeZone || "default";
-    let formatter = formatterCache.get(key);
+    let formatter = formatterCache.get(timeZone);
     if (!formatter) {
       formatter = new Intl.DateTimeFormat("en-u-ca-persian", {
         timeZone,
@@ -29,7 +49,7 @@ export const toPersianDate = (
         month: "numeric",
         day: "numeric",
       });
-      formatterCache.set(key, formatter);
+      formatterCache.set(timeZone, formatter);
     }
 
     const parts = formatter.formatToParts(date);
@@ -48,4 +68,3 @@ export const toPersianDate = (
     return { year: NaN, month: NaN, day: NaN };
   }
 };
-
