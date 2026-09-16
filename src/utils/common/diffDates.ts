@@ -13,15 +13,8 @@ import DateUint from "../../types/DateUnit";
  * @param {number} time1 - The timestamp of the first date
  * @param {number} time2 - The timestamp of the second date
  * @param {DateUint} unit - The unit for the difference calculation ("seconds",
- * "minutes", "hours", "days", "months", "years"). @default 'days'
+ * "minutes", "hours", "days", "weeks", "months", "years"). @default 'days'
  * @returns {number} The difference between the dates in the specified unit.
- *
- * @example
- * ```
- * // Get the difference in days between this date and another PersianDate
- * const daysDifference = this.diff(otherDate, 'days');
- * console.log(daysDifference); // Difference in days
- * ```
  */
 export default function dffDates(
   time1: number,
@@ -33,7 +26,11 @@ export default function dffDates(
   const millisecondsPerMonth = (MILLISECONDS_PER_DAY * 365.25) / 12;
   const millisecondsPerYear = MILLISECONDS_PER_DAY * 365.25;
 
-  switch (unit) {
+  const normalizedUnit = unit.endsWith("s")
+    ? unit
+    : (`${unit}s` as DateUint);
+
+  switch (normalizedUnit) {
     case "seconds":
       return diffInMs / MILLISECONDS_PER_SECOND;
     case "minutes":
@@ -42,6 +39,8 @@ export default function dffDates(
       return diffInMs / MILLISECONDS_PER_HOUR;
     case "days":
       return diffInMs / MILLISECONDS_PER_DAY;
+    case "weeks":
+      return diffInMs / (MILLISECONDS_PER_DAY * 7);
     case "months":
       return Math.floor(diffInMs / millisecondsPerMonth);
     case "years":

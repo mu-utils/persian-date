@@ -10,10 +10,17 @@ type DateSegment =
   | "ddd"
   | "Do"
   | "M"
-  | "YYYY"
-  | "SSS";
+  | "SSS"
+  | "jYYYY"
+  | "jYY"
+  | "jMMMM"
+  | "jMMM"
+  | "jMM"
+  | "jM"
+  | "jDD"
+  | "jD";
 
-type TimeSegment = "HH" | "mm" | "ss" | "a" | "h";
+type TimeSegment = "HH" | "H" | "mm" | "m" | "ss" | "s" | "a" | "A" | "h";
 
 type DateTimeSegment = DateSegment | TimeSegment;
 

@@ -16,8 +16,9 @@ import modifyTime from "./utils/common/modifyTime";
 import normalizeArguments from "./utils/common/normalizeArguments";
 import toGregorianDate from "./utils/gregorian/toGregorianDate";
 import createFormatters from "./utils/formatters/createFormatters";
-import formatTime from "./utils/formatters/formatTime";
+import formatTime, { FormatOptionsConfig } from "./utils/formatters/formatTime";
 import overrideDisplayDateInstance from "./utils/formatters/overrideDisplayDateInstance";
+import relativeTime, { RelativeTimeOptions } from "./utils/common/fromNow";
 import { toPersianDate } from "./utils/persian/toPersianDate";
 import util from "util";
 
@@ -141,8 +142,87 @@ export default class PersianDate extends Date {
    * @param {DateFormatTemplate} template - The date format template to use.
    * @returns {string} The formatted date string.
    */
-  format(template: DateFormatTemplate): string {
-    return formatTime(this.getTime(), template, this.formatters);
+  format(
+    template: DateFormatTemplate = "YYYY/MM/DD",
+    options?: FormatOptionsConfig
+  ): string {
+    return formatTime(this.getTime(), template, this.formatters, options);
+  }
+
+  /**
+   * Formats the PersianDate instance using Persian digits (۰-۹).
+   *
+   * @param {DateFormatTemplate} [template="YYYY/MM/DD"] - The template to use.
+   * @returns {string} The formatted date string with Persian digits.
+   */
+  formatFa(template: DateFormatTemplate = "YYYY/MM/DD"): string {
+    return this.format(template, { digits: "fa" });
+  }
+
+  /**
+   * Returns human-readable relative time string comparing this date to another date.
+   *
+   * @param {DateValue} value - Target date to compare from.
+   * @param {boolean} [withoutSuffix=false] - Whether to omit the suffix ("پیش" / "بعد").
+   * @param {RelativeTimeOptions} [options] - Additional formatting options.
+   * @returns {string} Relative time string in Persian.
+   */
+  from(
+    value: DateValue,
+    withoutSuffix?: boolean,
+    options?: RelativeTimeOptions
+  ): string {
+    return relativeTime(this.getTime(), getTime(value), {
+      withoutSuffix,
+      ...options,
+    });
+  }
+
+  /**
+   * Returns human-readable relative time string comparing this date to now.
+   *
+   * @param {boolean} [withoutSuffix=false] - Whether to omit the suffix ("پیش" / "بعد").
+   * @param {RelativeTimeOptions} [options] - Additional formatting options.
+   * @returns {string} Relative time string in Persian (e.g. "۳ روز پیش").
+   */
+  fromNow(
+    withoutSuffix?: boolean,
+    options?: RelativeTimeOptions
+  ): string {
+    return this.from(new Date(), withoutSuffix, options);
+  }
+
+  /**
+   * Returns human-readable relative time string comparing another date to this date.
+   *
+   * @param {DateValue} value - Target date to compare to.
+   * @param {boolean} [withoutSuffix=false] - Whether to omit the suffix.
+   * @param {RelativeTimeOptions} [options] - Additional formatting options.
+   * @returns {string} Relative time string in Persian.
+   */
+  to(
+    value: DateValue,
+    withoutSuffix?: boolean,
+    options?: RelativeTimeOptions
+  ): string {
+    return relativeTime(getTime(value), this.getTime(), {
+      withoutSuffix,
+      ...options,
+    });
+  }
+
+  /**
+   * Returns human-readable relative time string comparing now to this date.
+   *
+   * @param {boolean} [withoutSuffix=false] - Whether to omit the suffix.
+   * @param {RelativeTimeOptions} [options] - Additional formatting options.
+   * @returns {string} Relative time string in Persian.
+   */
+  toNow(
+    withoutSuffix?: boolean,
+    options?: RelativeTimeOptions
+  ): string {
+    return this.to(new Date(), withoutSuffix, options);
   }
 
   /**
@@ -458,10 +538,40 @@ export default class PersianDate extends Date {
   }
 
   /**
+   * Returns the day of the week in the Persian calendar.
+   * 0: Saturday (Shanbeh), 1: Sunday, 2: Monday, 3: Tuesday,
+   * 4: Wednesday, 5: Thursday, 6: Friday (Jom'eh).
+   *
+   * @returns {number} The Persian day of week (0-6).
+   */
+  getDayOfWeek(): number {
+    return (super.getDay() + 1) % 7;
+  }
+
+  /**
+   * Checks if the date falls on the weekend in the Persian calendar (Friday / Jom'eh).
+   *
+   * @returns {boolean} `true` if the day is Friday.
+   */
+  isWeekend(): boolean {
+    return this.getDayOfWeek() === 6;
+  }
+
+  /**
+   * Returns the Persian quarter (1-4).
+   * Q1: Farvardin-Khordad, Q2: Tir-Shahrivar, Q3: Mehr-Azar, Q4: Dey-Esfand.
+   *
+   * @returns {number} The quarter of the year (1-4).
+   */
+  quarter(): number {
+    return Math.ceil(this.getMonth() / 3);
+  }
+
+  /**
    * Sets the date to the start of a specified unit of time.
    */
   startOf(
-    unit: "year" | "month" | "day" | "hour" | "minute" | "second" | DateUint
+    unit: "year" | "month" | "week" | "day" | "hour" | "minute" | "second" | DateUint
   ): this {
     const u = unit.endsWith("s") ? unit.slice(0, -1) : unit;
     switch (u) {
@@ -473,6 +583,12 @@ export default class PersianDate extends Date {
         this.setDate(1);
         this.setHours(0, 0, 0, 0);
         break;
+      case "week": {
+        const dow = this.getDayOfWeek();
+        this.subtract(dow, "days");
+        this.setHours(0, 0, 0, 0);
+        break;
+      }
       case "day":
         this.setHours(0, 0, 0, 0);
         break;
@@ -493,7 +609,7 @@ export default class PersianDate extends Date {
    * Sets the date to the end of a specified unit of time.
    */
   endOf(
-    unit: "year" | "month" | "day" | "hour" | "minute" | "second" | DateUint
+    unit: "year" | "month" | "week" | "day" | "hour" | "minute" | "second" | DateUint
   ): this {
     const u = unit.endsWith("s") ? unit.slice(0, -1) : unit;
     switch (u) {
@@ -512,6 +628,12 @@ export default class PersianDate extends Date {
         this.setDate(this.daysInMonth());
         this.setHours(23, 59, 59, 999);
         break;
+      case "week": {
+        const dow = this.getDayOfWeek();
+        this.add(6 - dow, "days");
+        this.setHours(23, 59, 59, 999);
+        break;
+      }
       case "day":
         this.setHours(23, 59, 59, 999);
         break;

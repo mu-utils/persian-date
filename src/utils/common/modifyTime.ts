@@ -23,19 +23,30 @@ export default function modifyTime(
   if (isNaN(time)) return NaN;
 
   const date = new Date(time);
+  const normalizedUnit = unit.endsWith("s")
+    ? unit
+    : (`${unit}s` as DateUint);
 
-  if (calendar === "persian" && (unit === "months" || unit === "years")) {
+  if (normalizedUnit === "weeks") {
+    date.setDate(date.getDate() + value * 7);
+    return date.getTime();
+  }
+
+  if (
+    calendar === "persian" &&
+    (normalizedUnit === "months" || normalizedUnit === "years")
+  ) {
     const persian = toPersianDate(time, { calendar: "persian" });
 
     let newYear = persian.year;
     let newMonth = persian.month;
 
-    if (unit === "years") {
+    if (normalizedUnit === "years") {
       newYear += value;
-    } else if (unit === "months") {
-      const totalMonths = (persian.year * 12) + (persian.month - 1) + value;
+    } else if (normalizedUnit === "months") {
+      const totalMonths = persian.year * 12 + (persian.month - 1) + value;
       newYear = Math.floor(totalMonths / 12);
-      newMonth = ((totalMonths % 12) + 12) % 12 + 1;
+      newMonth = (((totalMonths % 12) + 12) % 12) + 1;
     }
 
     let maxDays = PERSIAN_MONTHS_DAYS[newMonth - 1];
@@ -54,7 +65,7 @@ export default function modifyTime(
     return newDate.getTime();
   }
 
-  switch (unit) {
+  switch (normalizedUnit) {
     case "days":
       date.setDate(date.getDate() + value);
       break;
@@ -79,4 +90,3 @@ export default function modifyTime(
 
   return date.getTime();
 }
-

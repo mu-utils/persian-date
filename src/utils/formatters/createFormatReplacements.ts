@@ -37,25 +37,43 @@ export default function createFormatReplacements(
 
   const [h12, amPm] = [hours % 12 || 12, hours < 12 ? "am" : "pm"];
   const milliseconds = String(new Date(time).getMilliseconds()).padStart(3, "0");
+  const yearStr = year.toString();
+  const yearShort = yearStr.slice(-2);
+  const monthStr = month.toString();
+  const monthPad = padTwoDigits(month);
+  const dayStr = day.toString();
+  const dayPad = padTwoDigits(day);
 
   return {
-    YYYY: year.toString(),
-    MM: padTwoDigits(month),
-    DD: padTwoDigits(day),
+    YYYY: yearStr,
+    MM: monthPad,
+    DD: dayPad,
     HH: padTwoDigits(hours),
+    H: hours.toString(),
     mm: padTwoDigits(minutes),
+    m: minutes.toString(),
     ss: padTwoDigits(seconds),
+    s: seconds.toString(),
     dddd: formatterFactory(longWeekday),
     MMM: formatterFactory(shortMonth),
     MMMM: formatterFactory(longMonth),
-    YY: year.toString().slice(-2),
-    D: day.toString(),
+    YY: yearShort,
+    D: dayStr,
     ddd: formatterFactory(shortWeekday),
-    Do: padTwoDigits(day),
-    M: month.toString(),
+    Do: dayPad,
+    M: monthStr,
     h: h12.toString(),
     a: amPm,
+    A: amPm.toUpperCase(),
     SSS: milliseconds,
+    // Jalali token aliases
+    jYYYY: yearStr,
+    jYY: yearShort,
+    jMMMM: formatterFactory(longMonth),
+    jMMM: formatterFactory(shortMonth),
+    jMM: monthPad,
+    jM: monthStr,
+    jDD: dayPad,
+    jD: dayStr,
   };
 }
-

@@ -6,21 +6,28 @@
 [![License: ISC](https://img.shields.io/badge/License-ISC-yellow.svg?style=flat-square)](LICENSE)
 [![Zero Dependencies](https://img.shields.io/badge/dependencies-0-success.svg?style=flat-square)](package.json)
 
-A modern, high-performance TypeScript/JavaScript library for working with Persian (Jalali / Shamsi) dates. It extends the native JavaScript `Date` object seamlessly and comes with **first-class built-in Day.js plugin support** as a drop-in replacement for `jalali-plugin-dayjs`.
+A modern, high-performance TypeScript/JavaScript library for working with Persian (Jalali / Shamsi) dates. It can be used as a **zero-dependency, ultra-lightweight standalone replacement for Day.js / Moment.js**, or as a **first-class Day.js plugin** (`jalaliday`).
 
 ---
 
 ## ✨ Features
 
-- 🪶 **Zero Runtime Dependencies**: Ultra-lightweight core with zero dependencies.
-- 🎯 **100% Test Coverage**: Fully verified with 100% branch, statement, function, and line coverage.
-- 🧩 **Extends Native `Date`**: `new PersianDate() instanceof Date === true` — works directly with standard JavaScript APIs, date pickers, React components, and JSON serializers without conversion wrappers.
-- ⚡ **Built-in Day.js Plugin (`jalaliday` / `dayjsPlugin`)**: Drop-in replacement for `jalali-plugin-dayjs` without installing extra packages.
-- 🗓️ **Accurate Astronomical Leap Years**: Uses the official Iranian 33-year cycle (correctly identifies **1403** as a leap year where Esfand has 30 days).
-- 🕒 **Full Date Arithmetic & Manipulation**: `.add()`, `.subtract()`, `.startOf()`, `.endOf()`.
-- 🔍 **Intuitive Comparisons**: `.isBefore()`, `.isAfter()`, `.isSame()`, and `.diff()`.
-- 🎨 **Flexible Formatting**: Rich token support (`YYYY`, `MMMM`, `dddd`, `HH:mm:ss`) with bracketed text escaping `[Today is] YYYY/MM/DD`.
-- 🌐 **Time Zone & Dual-Calendar Aware**: Supports both Persian (`jalali`) and Gregorian calendars with timezone overrides (`Asia/Tehran`, `UTC`, etc.).
+- 🪶 **Zero Runtime Dependencies**: Ultra-lightweight core with 0 external dependencies.
+- 🎯 **100% Test Coverage Across All Metrics**: 100% Statements, 100% Branches, 100% Functions, and 100% Lines verified.
+- ⚡ **Why Replace Day.js / Moment with `persianDate`?**:
+  - Native Persian-first calculations without requiring bloated plugin chains or Intl timezone workarounds.
+  - Zero dependencies vs. Day.js + plugins + locale files.
+  - Chainable, intuitive syntax: `persianDate('1403/06/12').add(1, 'week').formatFa()`.
+  - Extends native `Date`: works directly with standard JS APIs, date pickers, React components, and JSON serializers.
+- 🔄 **Pure Integer Calendar Converters**: Direct, ultra-fast `gregorianToPersian(gy, gm, gd)` and `persianToGregorian(jy, jm, jd)` without creating Date objects.
+- 🔢 **Native Persian Digits Support**: Convert English digits to Persian (`۰-۹`) seamlessly with `.formatFa()` or `{ digits: "fa" }`.
+- ⏱️ **Relative Time Humanizer (`fromNow`, `toNow`, `from`)**: Full Persian relative strings ("چند ثانیه پیش", "۳ روز پیش", "یک ماه بعد").
+- 📅 **Calendar Helpers for Building Real UIs**:
+  - `getDayOfWeek()`: Saturday (شنبه) = 0 .. Friday (جمعه) = 6.
+  - `isWeekend()`: Checks if the day is Friday (جمعه).
+  - `quarter()`: Persian quarters (Q1 Farvardin–Khordad to Q4 Dey–Esfand).
+  - `startOf("week")` / `endOf("week")`: Snap directly to Saturday or Friday.
+- 🗓️ **Accurate Astronomical Leap Years**: Uses the official Iranian 33-year solar cycle (correctly identifies **1403** as a leap year with 30 days in Esfand).
 
 ---
 
@@ -39,104 +46,144 @@ pnpm add @mu-utils/persian-date
 
 ### Installing from GitHub Packages
 
-If installing directly from **[GitHub Packages](https://github.com/mu-utils/persian-date/packages)**, add the following to your project's `.npmrc`:
+If installing directly from **[GitHub Packages](https://github.com/mu-utils/persian-date/packages)**, add the following to your `.npmrc`:
 
 ```ini
 @mu-utils:registry=https://npm.pkg.github.com
 //npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
 ```
 
-Then install normally:
-
-```bash
-npm install @mu-utils/persian-date
-```
-
 ---
 
-## 🚀 Quick Start
+## 🚀 Converting Persian <-> Gregorian
 
-You can use this library in **two ways**:
-1. **[Standalone `PersianDate`](#1-standalone-persiandate-no-dayjs-needed)** — Zero dependencies, no extra libraries needed.
-2. **[Day.js Plugin](#2-dayjs-plugin-jalaliday--dayjsplugin)** — If your project already uses Day.js.
-
----
-
-### 1. Standalone `PersianDate` (No Day.js needed!)
+High-performance, pure integer functions that run with zero object allocations:
 
 ```typescript
-import PersianDate from "@mu-utils/persian-date";
+import { 
+  gregorianToPersian, 
+  persianToGregorian 
+} from "@mu-utils/persian-date";
 
-// Current date
-const now = new PersianDate();
-console.log(now.format("YYYY/MM/DD HH:mm:ss")); // e.g. "1405/06/25 12:30:00"
-console.log(now.format("dddd DD MMMM YYYY"));   // e.g. "سه‌شنبه 25 شهریور 1405"
+// Gregorian to Persian [year, month, day]
+const [jy, jm, jd] = gregorianToPersian(2024, 9, 2);
+console.log(jy, jm, jd); // 1403, 6, 12
 
-// Parse Persian date string
-const date = new PersianDate("1403/06/12 14:30:00");
-console.log(date.getFullYear()); // 1403
-console.log(date.getMonth());    // 6 (1-indexed: Shahrivar)
-console.log(date.getDate());     // 12
+// Persian to Gregorian [year, month, day]
+const [gy, gm, gd] = persianToGregorian(1403, 6, 12);
+console.log(gy, gm, gd); // 2024, 9, 2
+```
 
-// Parse ISO UTC string (e.g. from backend API)
-const apiDate = new PersianDate("2024-09-02T14:30:00.000Z");
-console.log(apiDate.format("YYYY/MM/DD HH:mm:ss")); // "1403/06/12 18:00:00" (in Tehran UTC+3:30)
+You can also convert dynamically using `PersianDate` / `persianDate`:
 
-// Date Arithmetic
-const nextWeek = date.add(7, "days");
-console.log(nextWeek.format("YYYY/MM/DD")); // "1403/06/19"
+```typescript
+import { persianDate } from "@mu-utils/persian-date";
 
-const prevMonth = date.subtract(1, "month");
-console.log(prevMonth.format("YYYY/MM/DD")); // "1403/05/12"
+// From Gregorian Date string or Date object
+const pDate = persianDate("2024-09-02");
+console.log(pDate.format("YYYY/MM/DD")); // "1403/06/12"
 
-// Comparisons
-console.log(date.isBefore(nextWeek)); // true
-console.log(date.isAfter(nextWeek));  // false
-console.log(date.isSame(new PersianDate("1403/06/12"), "day")); // true
-
-// Boundaries
-console.log(date.startOf("month").format("YYYY/MM/DD")); // "1403/06/01"
-console.log(date.endOf("year").format("YYYY/MM/DD"));   // "1403/12/30" (1403 is leap)
-
-// Month info
-console.log(date.daysInMonth()); // 31
-console.log(date.isLeapYear());  // true (1403 is a leap year)
+// Switch calendar mode to Gregorian
+pDate.setCalendar("gregorian");
+console.log(pDate.format("YYYY/MM/DD")); // "2024/09/02"
 ```
 
 ---
 
-### 2. Day.js Plugin (`jalaliday` / `dayjsPlugin`)
+## 💡 How to Use as a Lightweight Alternative to Day.js
 
-If you are currently using `dayjs` and `jalali-plugin-dayjs`, `@mu-utils/persian-date` provides a complete drop-in replacement:
+Day.js requires loading multiple plugins (`utc`, `timezone`, `jalaliday`, `locale/fa`, `relativeTime`) to work with Persian dates, adding bundle size and configuration boilerplate.
+
+With `@mu-utils/persian-date`, everything works **out of the box with zero dependencies**:
+
+```typescript
+import { persianDate } from "@mu-utils/persian-date";
+
+// 1. Instantiation (mimics Day.js syntax)
+const d = persianDate("1403/06/12 14:30:00");
+
+// 2. Arithmetic (supports singular and plural units)
+d.add(1, "week");      // adds 7 days
+d.subtract(2, "months"); // subtracts 2 Persian months
+d.add(3, "days");
+
+// 3. Formatting with Persian Digits
+console.log(d.format("YYYY/MM/DD"));    // "1403/04/22" (English digits)
+console.log(d.formatFa("YYYY/MM/DD"));  // "۱۴۰۳/۰۴/۲۲" (Persian digits)
+console.log(d.format("dddd DD MMMM"));  // "جمعه 22 تیر"
+
+// 4. Relative Time
+console.log(persianDate().subtract(3, "days").fromNow()); // "3 روز پیش"
+console.log(persianDate().add(2, "hours").fromNow());     // "2 ساعت بعد"
+console.log(persianDate().subtract(5, "minutes").fromNow(false, { digits: "fa" })); // "۵ دقیقه پیش"
+
+// 5. Period Boundaries
+const start = persianDate().startOf("week"); // Saturday 00:00:00
+const end = persianDate().endOf("week");     // Friday 23:59:59.999
+```
+
+---
+
+## 🎨 Building a Real Persian Calendar UI
+
+Here is an example of generating a full month calendar grid (e.g. for React, Vue, Svelte, or Vanilla JS):
+
+```typescript
+import { persianDate, toPersianDigits } from "@mu-utils/persian-date";
+
+export function generateMonthGrid(year: number, month: number) {
+  const firstDay = persianDate(year, month, 1);
+  const totalDays = firstDay.daysInMonth();
+  const startingWeekday = firstDay.getDayOfWeek(); // 0 = شنبه, ..., 6 = جمعه
+
+  const days = [];
+
+  // Empty padding cells before 1st of month
+  for (let i = 0; i < startingWeekday; i++) {
+    days.push({ empty: true });
+  }
+
+  // Days of the month
+  for (let day = 1; day <= totalDays; day++) {
+    const date = persianDate(year, month, day);
+    days.push({
+      empty: false,
+      dayNumber: day,
+      dayNumberFa: toPersianDigits(day),
+      isWeekend: date.isWeekend(), // Friday
+      dateString: date.format("YYYY/MM/DD"),
+      weekdayName: date.format("dddd"),
+    });
+  }
+
+  return days;
+}
+
+// Example usage:
+const grid = generateMonthGrid(1403, 6);
+console.log(grid);
+```
+
+---
+
+## 🔌 Day.js Plugin (`jalaliday` / `dayjsPlugin`)
+
+If your codebase already uses Day.js, `@mu-utils/persian-date` is a 100% drop-in replacement:
 
 ```typescript
 import dayjs from "dayjs";
 import { jalaliday } from "@mu-utils/persian-date";
-// or: import { dayjsPlugin } from "@mu-utils/persian-date";
 
 dayjs.extend(jalaliday);
 
-// Current date in Jalali
+// Current Jalali date
 const now = dayjs().calendar("jalali");
-console.log(now.format("YYYY/MM/DD HH:mm:ss")); // "1405/06/25 12:30:00"
-console.log(now.format("DD MMMM YYYY"));        // "25 شهریور 1405"
+console.log(now.format("YYYY/MM/DD HH:mm:ss")); // "1405/06/26 12:30:00"
 
-// Parse Persian date string
+// Parse Persian date
 const custom = dayjs("1403/06/12", { jalali: true } as any);
-console.log(custom.format("YYYY/MM/DD")); // "1403/06/12"
-console.log(custom.daysInMonth());        // 31
-console.log(custom.year());               // 1403
-console.log(custom.month());              // 5 (0-indexed)
-
-// Arithmetic & Boundaries
-console.log(custom.add(5, "days").format("YYYY/MM/DD"));      // "1403/06/17"
-console.log(custom.startOf("month").format("YYYY/MM/DD"));    // "1403/06/01"
-console.log(custom.endOf("year").format("YYYY/MM/DD"));      // "1403/12/30"
-
-// Global Calendar setting
-dayjs.calendar("jalali");
-console.log(dayjs("1403/06/12").format("YYYY/MM/DD")); // "1403/06/12"
-dayjs.calendar("gregory"); // Switch back
+console.log(custom.format("jYYYY/jMM/jDD (dddd)")); // "1403/06/12 (دوشنبه)"
+console.log(custom.daysInMonth()); // 31
 ```
 
 ---
@@ -160,100 +207,96 @@ persianDate.format("[امروز:] dddd DD MMMM YYYY [ساعت] HH:mm");
 | `M` / `jM` | `6` | 1-digit month (1–12) |
 | `DD` / `jDD` | `12` | 2-digit day of month (01–31) |
 | `D` / `jD` | `12` | 1-digit day of month (1–31) |
-| `dddd` | `دوشنبه` | Day of week (e.g. شنبه, یکشنبه, ...) |
+| `dddd` | `دوشنبه` | Day of week (شنبه, یکشنبه, ...) |
 | `ddd` | `د` | Short day of week |
-| `HH` | `14` | 24-hour format (00–23) |
+| `HH` | `14` | 24-hour padded (00–23) |
+| `H` | `14` / `9` | 24-hour single-digit (0–23) |
 | `h` | `2` | 12-hour format (1–12) |
-| `mm` | `30` | Minutes (00–59) |
-| `ss` | `05` | Seconds (00–59) |
+| `mm` | `30` | Minutes padded (00–59) |
+| `m` | `30` / `5` | Minutes single-digit (0–59) |
+| `ss` | `05` | Seconds padded (00–59) |
+| `s` | `5` | Seconds single-digit (0–59) |
 | `SSS` | `042` | Milliseconds (000–999) |
 | `a` | `pm` / `am` | Ante / Post meridiem |
+| `A` | `PM` / `AM` | Uppercase Ante / Post meridiem |
 | `[...]` | `[Text]` | Escaped literal text |
 
 ---
 
-## 📚 API Reference (`PersianDate`)
+## 📚 Complete API Reference
 
-### Constructor Overloads
+### Standalone Functions
 
-```typescript
-new PersianDate()                                          // Current date and time
-new PersianDate("1403/06/12")                              // Persian date string
-new PersianDate("2024-09-02T14:30:00.000Z")                // ISO 8601 string
-new PersianDate(1725270600000)                             // Timestamp (ms)
-new PersianDate(new Date())                                // Native Date instance
-new PersianDate(1403, 6, 12)                               // year, month, day
-new PersianDate(1403, 6, 12, 14, 30, 0, 0)                 // with hours, min, sec, ms
-new PersianDate("1403/06/12", { timeZone: "Asia/Tehran" }) // with options
-```
+- **`persianDate(...args): PersianDate`**: Factory function (supports all constructor overloads).
+- **`gregorianToPersian(gy, gm, gd): [jy, jm, jd]`**: Pure integer conversion from Gregorian to Persian.
+- **`persianToGregorian(jy, jm, jd): [gy, gm, gd]`**: Pure integer conversion from Persian to Gregorian.
+- **`toPersianDigits(input: string | number): string`**: Replaces `0-9` with `۰-۹`.
+- **`replacePersianNumbers(input: string): string`**: Replaces `۰-۹` with `0-9`.
+- **`isPersianLeapYear(year: number): boolean`**: Checks if a Persian year is leap.
+- **`relativeTime(fromTime, toTime, options?): string`**: Persian relative time generator.
 
-### Methods
+### `PersianDate` Methods
 
-#### Formatting & Conversion
-- **`format(template: string): string`**: Formats the date using tokens.
-- **`toArray(): [year, month, day, hour, min, sec, ms]`**: Returns components as a tuple.
-- **`clone(): PersianDate`**: Creates a clone of the instance.
+#### Formatting
+- **`format(template?: string, options?: { digits?: "en" | "fa" }): string`**: Formats date. Default template is `"YYYY/MM/DD"`.
+- **`formatFa(template?: string): string`**: Formats directly with Persian digits.
+- **`toArray(): [year, month, day, hour, min, sec, ms]`**: Returns date components.
+- **`clone(): PersianDate`**: Returns a clone.
 
-#### Getters & Setters
-- **`getFullYear(): number`**: Returns the Persian year (or Gregorian if calendar set to Gregorian).
-- **`getMonth(): number`**: Returns the 1-based month (1 to 12).
-- **`getDate(): number`**: Returns the day of month (1 to 31).
-- **`setFullYear(year, month?, date?): number`**: Sets year and updates components.
-- **`setMonth(month, date?): number`**: Sets 1-based month.
-- **`setDate(date): number`**: Sets day of month.
+#### Calendar Helpers
+- **`getDayOfWeek(): number`**: Persian weekday (0 = Saturday, 1 = Sunday, ..., 6 = Friday).
+- **`isWeekend(): boolean`**: Returns `true` if the day is Friday.
+- **`quarter(): number`**: Returns the Persian quarter (1–4).
+- **`isLeapYear(): boolean`**: Returns `true` if current year is leap.
+- **`daysInMonth(): number`**: Days in active month (31 for months 1–6, 30 for 7–11, 30/29 for Esfand).
 
-#### Arithmetic
-- **`add(value: number, unit: DateUnit): PersianDate`** (or `add(unit, value)`): Adds time. Units: `"years"`, `"months"`, `"days"`, `"hours"`, `"minutes"`, `"seconds"`.
-- **`subtract(value: number, unit: DateUnit): PersianDate`** (or `subtract(unit, value)`): Subtracts time.
+#### Relative Time
+- **`fromNow(withoutSuffix?, options?): string`**: e.g. `"۳ روز پیش"`.
+- **`toNow(withoutSuffix?, options?): string`**: e.g. `"در ۳ روز"`.
+- **`from(date, withoutSuffix?, options?): string`**: Relative time from another date.
+- **`to(date, withoutSuffix?, options?): string`**: Relative time to another date.
+
+#### Arithmetic & Boundaries
+- **`add(value, unit)` / `add(unit, value)`**: Adds time. Units: `"year" | "years" | "month" | "months" | "week" | "weeks" | "day" | "days" | "hour" | "hours" | "minute" | "minutes" | "second" | "seconds"`.
+- **`subtract(value, unit)` / `subtract(unit, value)`**: Subtracts time.
+- **`startOf(unit)`**: Sets to beginning of `"year" | "month" | "week" | "day" | "hour" | "minute" | "second"`.
+- **`endOf(unit)`**: Sets to end of `"year" | "month" | "week" | "day" | "hour" | "minute" | "second"`.
 
 #### Comparisons
-- **`isBefore(otherDate: DateValue): boolean`**: Checks if current date is before `otherDate`.
-- **`isAfter(otherDate: DateValue): boolean`**: Checks if current date is after `otherDate`.
-- **`isSame(otherDate: DateValue, unit?: DateUnit): boolean`**: Checks if dates match (optionally within `"year"`, `"month"`, `"day"`, `"hour"`, etc.).
-- **`diff(otherDate: DateValue, unit?: DateUnit): number`**: Computes the difference in the given unit.
-
-#### Period Boundaries
-- **`startOf(unit: "year" | "month" | "day" | "hour" | "minute" | "second"): this`**: Sets to the beginning of the period.
-- **`endOf(unit: "year" | "month" | "day" | "hour" | "minute" | "second"): this`**: Sets to the end of the period.
-
-#### Calendar & Leap Year
-- **`isLeapYear(): boolean`**: Returns `true` if the year is a Persian leap year.
-- **`daysInMonth(): number`**: Returns 31 for months 1–6, 30 for months 7–11, and 30 (leap) / 29 (non-leap) for Esfand.
-- **`setCalendar(calendar: "persian" | "gregorian"): void`**: Switches between Persian and Gregorian modes.
-- **`setTimeZone(timeZone: string): void`**: Sets time zone (e.g. `"Asia/Tehran"`, `"UTC"`).
+- **`isBefore(otherDate)`**: Checks if date is earlier.
+- **`isAfter(otherDate)`**: Checks if date is later.
+- **`isSame(otherDate, unit?)`**: Checks equality (optionally within `"year"`, `"month"`, `"day"`, etc.).
+- **`diff(otherDate, unit?)`**: Difference in specified unit.
 
 ---
 
 ## 🔬 Leap Year Accuracy: 1403 vs 1404
 
-Traditional algorithms (such as Ahmad Birashk's theoretical 2820-year cycle) placed the leap year at **1404** instead of **1403**. 
+Traditional algorithms (such as Ahmad Birashk's theoretical 2820-year cycle) erroneously placed the leap year at **1404** instead of **1403**. 
 
-In the official Iranian astronomical calendar (and in government civil calendars), **1403 is a leap year (Esfand has 30 days)**, and 1404 has 29 days. `@mu-utils/persian-date` uses the official 33-year solar cycle calculation, ensuring complete accuracy for contemporary and historical dates:
+In the official astronomical calendar (and in Iranian civil calendars), **1403 is a leap year (Esfand has 30 days)**, and 1404 has 29 days. `@mu-utils/persian-date` uses the official 33-year solar cycle calculation:
 
 ```typescript
-new PersianDate(1403, 12, 1).isLeapYear();   // true (30 days in Esfand 1403)
-new PersianDate(1403, 12, 1).daysInMonth();  // 30
+persianDate(1403, 12, 1).isLeapYear();   // true (30 days in Esfand 1403)
+persianDate(1403, 12, 1).daysInMonth();  // 30
 
-new PersianDate(1404, 12, 1).isLeapYear();   // false (29 days in Esfand 1404)
-new PersianDate(1404, 12, 1).daysInMonth();  // 29
+persianDate(1404, 12, 1).isLeapYear();   // false (29 days in Esfand 1404)
+persianDate(1404, 12, 1).daysInMonth();  // 29
 ```
 
 ---
 
 ## 🧪 Testing
 
-This project adheres to strict quality standards with 100% test coverage:
-
 ```bash
-# Run all tests with coverage
+# Run all 16 test suites with 100% coverage
 npm test -- --coverage
 
 # Build bundles
 npm run build
 
-# Run interactive demo & benchmark
+# Run demonstration
 npm run demo
-npx ts-node demo/benchmark.ts
 ```
 
 ---

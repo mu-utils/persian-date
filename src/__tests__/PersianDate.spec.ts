@@ -1,6 +1,12 @@
 import PersianDate from "../PersianDate";
+import { persianDate } from "../index";
 
 describe("PersianDate", () => {
+  it("should create PersianDate via persianDate factory function", () => {
+    const pd = persianDate("1403/06/12");
+    expect(pd).toBeInstanceOf(PersianDate);
+    expect(pd.format("YYYY/MM/DD")).toBe("1403/06/12");
+  });
   describe("normalizeDate", () => {
     it("should throw Invalid Date 1399/12/31 23:59:59.999 in strict mode", () => {
       expect(
@@ -306,6 +312,11 @@ describe("PersianDate", () => {
 
       const d3 = new PersianDate(1401, 1, 1);
       expect(d3.diff(d1, "years")).toBeCloseTo(1, 1);
+      expect(d3.diff(d1, "year")).toBeCloseTo(1, 1);
+
+      const dWeek = new PersianDate(1400, 1, 15);
+      expect(dWeek.diff(d1, "weeks")).toBeCloseTo(2, 1);
+      expect(dWeek.diff(d1, "week")).toBeCloseTo(2, 1);
 
       // diff with string date
       expect(d2.diff("1400/01/01 00:00:00", "seconds")).toBe(90);
@@ -563,6 +574,76 @@ describe("PersianDate", () => {
       const isoWithOffset = new PersianDate("2024-09-02T14:30:00+03:30");
       expect(isNaN(isoWithOffset.getTime())).toBe(false);
       expect(isoWithOffset.getFullYear()).toBe(1403);
+    });
+
+    it("should support default format template and formatFa", () => {
+      const d = new PersianDate("1403/06/12");
+      expect(d.format()).toBe("1403/06/12");
+      expect(d.formatFa()).toBe("۱۴۰۳/۰۶/۱۲");
+      expect(d.format("YYYY/MM/DD", { digits: "fa" })).toBe("۱۴۰۳/۰۶/۱۲");
+    });
+
+    it("should format with single-digit time tokens, A, and Jalali aliases", () => {
+      const d = new PersianDate("1403/06/12 09:05:04");
+      expect(d.format("H:m:s")).toBe("9:5:4");
+      expect(d.format("HH:mm:ss")).toBe("09:05:04");
+      expect(d.format("A")).toBe("AM");
+      expect(d.format("jYYYY/jMM/jDD")).toBe("1403/06/12");
+      expect(d.format("jYY/jM/jD")).toBe("03/6/12");
+      expect(d.format("jMMMM")).toBe(d.format("MMMM"));
+      expect(d.format("jMMM")).toBe(d.format("MMM"));
+
+      const pmDate = new PersianDate("1403/06/12 18:00:00");
+      expect(pmDate.format("A")).toBe("PM");
+    });
+
+    it("should return day of week, isWeekend, and quarter", () => {
+      // 1403/06/12 is 2024-09-02 (Monday) -> Persian day of week = 2 (Doshanbeh)
+      const d = new PersianDate("1403/06/12");
+      expect(d.getDayOfWeek()).toBe(2);
+      expect(d.isWeekend()).toBe(false);
+
+      // 2024-08-31 is Saturday (Shanbeh) -> 0
+      const sat = new PersianDate("2024-08-31");
+      expect(sat.getDayOfWeek()).toBe(0);
+      expect(sat.isWeekend()).toBe(false);
+
+      // 2024-09-06 is Friday (Jom'eh) -> 6
+      const fri = new PersianDate("2024-09-06");
+      expect(fri.getDayOfWeek()).toBe(6);
+      expect(fri.isWeekend()).toBe(true);
+
+      // Quarters
+      expect(new PersianDate(1403, 1, 1).quarter()).toBe(1);
+      expect(new PersianDate(1403, 4, 1).quarter()).toBe(2);
+      expect(new PersianDate(1403, 7, 1).quarter()).toBe(3);
+      expect(new PersianDate(1403, 11, 1).quarter()).toBe(4);
+    });
+
+    it("should support startOf('week') and endOf('week')", () => {
+      // 1403/06/12 is Monday. Week started on Saturday (1403/06/10)
+      const d = new PersianDate("1403/06/12 15:30:00");
+      const weekStart = d.clone().startOf("week");
+      expect(weekStart.getDayOfWeek()).toBe(0);
+      expect(weekStart.getHours()).toBe(0);
+      expect(weekStart.getMinutes()).toBe(0);
+
+      const weekEnd = d.clone().endOf("week");
+      expect(weekEnd.getDayOfWeek()).toBe(6);
+      expect(weekEnd.getHours()).toBe(23);
+      expect(weekEnd.getMinutes()).toBe(59);
+    });
+
+    it("should support relative time methods: from, fromNow, to, toNow", () => {
+      const past = new PersianDate("1403/06/01");
+      const future = new PersianDate("1403/06/20");
+
+      expect(past.from(future)).toContain("روز پیش");
+      expect(past.from(future, true)).not.toContain("پیش");
+      expect(past.from(future, false, { digits: "fa" })).toContain("پیش");
+      expect(future.to(past)).toContain("روز پیش");
+      expect(past.fromNow()).toBeDefined();
+      expect(past.toNow()).toBeDefined();
     });
   });
 });

@@ -47,5 +47,31 @@ describe("modifyTime", () => {
     const result = modifyTime(time, 1, "months", "persian");
     expect(typeof result).toBe("number");
   });
+
+  test("adds weeks and singular units correctly", () => {
+    const weekResult = modifyTime(initialTime, 2, "weeks");
+    expect(weekResult).toBe(new Date("2023-01-15T00:00:00Z").getTime());
+
+    const singularDay = modifyTime(initialTime, 1, "day");
+    expect(singularDay).toBe(new Date("2023-01-02T00:00:00Z").getTime());
+
+    const singularWeek = modifyTime(initialTime, 1, "week");
+    expect(singularWeek).toBe(new Date("2023-01-08T00:00:00Z").getTime());
+
+    const singularMonth = modifyTime(initialTime, 1, "month");
+    expect(singularMonth).toBe(new Date("2023-02-01T00:00:00Z").getTime());
+
+    const singularYear = modifyTime(initialTime, 1, "year");
+    expect(singularYear).toBe(new Date("2024-01-01T00:00:00Z").getTime());
+
+    const singularHour = modifyTime(initialTime, 1, "hour");
+    expect(singularHour).toBe(new Date("2023-01-01T01:00:00Z").getTime());
+
+    const singularMinute = modifyTime(initialTime, 1, "minute");
+    expect(singularMinute).toBe(new Date("2023-01-01T00:01:00Z").getTime());
+
+    const singularSecond = modifyTime(initialTime, 1, "second");
+    expect(singularSecond).toBe(new Date("2023-01-01T00:00:01Z").getTime());
+  });
 });
 

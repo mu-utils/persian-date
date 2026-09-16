@@ -1,3 +1,17 @@
-type DateUint = "seconds" | "minutes" | "hours" | "days" | "months" | "years";
+type DateUnit =
+  | "second"
+  | "seconds"
+  | "minute"
+  | "minutes"
+  | "hour"
+  | "hours"
+  | "day"
+  | "days"
+  | "week"
+  | "weeks"
+  | "month"
+  | "months"
+  | "year"
+  | "years";
 
-export default DateUint;
+export default DateUnit;
