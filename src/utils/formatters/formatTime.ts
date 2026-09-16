@@ -23,7 +23,7 @@ export default function formatTime(
 
   return `${template}`.replace(REGEX_FORMAT, (match, escaped) => {
     if (escaped) return escaped;
-    return (replacements as Record<string, string>)[match] ?? match;
+    return (replacements as Record<string, string>)[match];
   });
 }
 

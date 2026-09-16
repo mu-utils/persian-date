@@ -31,21 +31,16 @@ export default function normalizeTime(
   { timeZone }: FormatOptions
 ): number {
   const localeTime = localizeTime(time, timeZone);
-  const validPersianTime = false;
 
   if (
     isNaN(localeTime) ||
-    (calendar === "persian" && !validPersianTime && isPersianYear(localeTime))
+    (calendar === "persian" && isPersianYear(localeTime))
   ) {
     if (invalidDateSeverity === "error") {
       throw new Error("Invalid Date");
     }
 
     return NaN;
-  }
-
-  if (validPersianTime) {
-    // return NaN toGregorianTime(localeTime);
   }
 
   return localeTime;

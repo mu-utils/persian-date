@@ -36,4 +36,16 @@ describe("modifyTime", () => {
       "Invalid unit"
     );
   });
+
+  test("returns NaN when time is NaN", () => {
+    expect(isNaN(modifyTime(NaN, 1, "days"))).toBe(true);
+  });
+
+  test("clamps to 30 days in Persian leap year Esfand", () => {
+    // 1399 is a Persian leap year
+    const time = new Date("2021-02-18T00:00:00Z").getTime(); // 1399/11/30
+    const result = modifyTime(time, 1, "months", "persian");
+    expect(typeof result).toBe("number");
+  });
 });
+

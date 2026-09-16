@@ -224,6 +224,213 @@ describe("PersianDate", () => {
       expect(cloned.getDate()).toBe(11);
       expect(date.getDate()).toBe(10);
     });
+
+    it("should update time zone", () => {
+      const date = new PersianDate("1402/01/01 12:00:00");
+      date.setTimeZone("UTC");
+      date.setTimeZone("Asia/Tehran");
+      expect(date.format("YYYY/MM/DD")).toBe("1402/01/01");
+    });
+
+    it("should switch calendar between persian and gregorian", () => {
+      const date = new PersianDate("1403/06/13");
+      date.setCalendar("gregorian");
+      expect(date.getFullYear()).toBe(2024);
+      expect(date.getMonth()).toBe(9);
+      expect(date.getDate()).toBe(3);
+      date.setCalendar("persian");
+      expect(date.getFullYear()).toBe(1403);
+    });
+
+    it("should set full year with month and date in Gregorian and Persian", () => {
+      const pDate = new PersianDate("1402/01/01");
+      pDate.setFullYear(1403, 5, 10);
+      expect(pDate.getFullYear()).toBe(1403);
+      expect(pDate.getMonth()).toBe(5);
+      expect(pDate.getDate()).toBe(10);
+
+      const gDate = new PersianDate("2023-01-01", { calendar: "gregorian" });
+      gDate.setFullYear(2025, 4, 15);
+      expect(gDate.getFullYear()).toBe(2025);
+      expect(gDate.getMonth()).toBe(4);
+      expect(gDate.getDate()).toBe(15);
+    });
+
+    it("should set month with date in Gregorian and Persian", () => {
+      const pDate = new PersianDate("1402/01/01");
+      pDate.setMonth(6, 20);
+      expect(pDate.getMonth()).toBe(6);
+      expect(pDate.getDate()).toBe(20);
+
+      const gDate = new PersianDate("2023-01-01", { calendar: "gregorian" });
+      gDate.setMonth(8, 25);
+      expect(gDate.getMonth()).toBe(8);
+      expect(gDate.getDate()).toBe(25);
+    });
+
+    it("should set date in Gregorian", () => {
+      const gDate = new PersianDate("2023-01-01", { calendar: "gregorian" });
+      gDate.setDate(20);
+      expect(gDate.getDate()).toBe(20);
+    });
+
+    it("should set hours, minutes, seconds, milliseconds with optional arguments", () => {
+      const date = new PersianDate("1402/01/01");
+      date.setHours(10, 20, 30, 400);
+      expect(date.getHours()).toBe(10);
+      expect(date.getMinutes()).toBe(20);
+      expect(date.getSeconds()).toBe(30);
+      expect(date.getMilliseconds()).toBe(400);
+
+      date.setMinutes(45, 50, 600);
+      expect(date.getMinutes()).toBe(45);
+      expect(date.getSeconds()).toBe(50);
+      expect(date.getMilliseconds()).toBe(600);
+
+      date.setSeconds(15, 700);
+      expect(date.getSeconds()).toBe(15);
+      expect(date.getMilliseconds()).toBe(700);
+
+      date.setMilliseconds(800);
+      expect(date.getMilliseconds()).toBe(800);
+    });
+
+    it("should calculate diff in seconds, minutes, years, and throw on invalid unit", () => {
+      const d1 = new PersianDate(1400, 1, 1, 0, 0, 0);
+      const d2 = new PersianDate(1400, 1, 1, 0, 1, 30);
+      expect(d2.diff(d1, "seconds")).toBe(90);
+      expect(d2.diff(d1, "minutes")).toBe(1.5);
+
+      const d3 = new PersianDate(1401, 1, 1);
+      expect(d3.diff(d1, "years")).toBeCloseTo(1, 1);
+
+      // diff with string date
+      expect(d2.diff("1400/01/01 00:00:00", "seconds")).toBe(90);
+
+      // diff with invalid unit
+      expect(() => d2.diff(d1, "invalid" as any)).toThrow("Invalid unit");
+    });
+
+    it("should return false for gregorian non-leap years", () => {
+      const d1 = new PersianDate("2023/01/01", { calendar: "gregorian" });
+      expect(d1.isLeapYear()).toBe(false);
+      const d2 = new PersianDate("1900/01/01", { calendar: "gregorian" });
+      expect(d2.isLeapYear()).toBe(false);
+    });
+
+    it("should throw error if more than 8 arguments passed to constructor", () => {
+      expect(() => new (PersianDate as any)(1, 2, 3, 4, 5, 6, 7, 8, 9)).toThrow(
+        "Invalid number of arguments"
+      );
+    });
+
+    it("should handle string with no digits or invalid format", () => {
+      const d = new PersianDate("hello");
+      expect(isNaN(d.getTime())).toBe(true);
+
+      expect(
+        () =>
+          new PersianDate("2021/13/45", {
+            invalidDateSeverity: "error",
+            calendar: "persian",
+          })
+      ).toThrow("Invalid date");
+    });
+
+    it("should handle invalid dates in gregorian mode", () => {
+      expect(
+        () =>
+          new PersianDate("1402/01/01", {
+            calendar: "gregorian",
+            invalidDateSeverity: "error",
+          })
+      ).toThrow("Invalid date");
+
+      const d = new PersianDate("1402/01/01", {
+        calendar: "gregorian",
+        invalidDateSeverity: "default",
+      });
+      expect(isNaN(d.getTime())).toBe(true);
+    });
+
+    it("should handle invalid date tuples in strict and default modes", () => {
+      expect(
+        () =>
+          new PersianDate(1402, 12, 35, { invalidDateSeverity: "error" })
+      ).toThrow("Invalid date");
+
+      const d = new PersianDate(1402, 12, 35, { invalidDateSeverity: "default" });
+      expect(isNaN(d.getTime())).toBe(true);
+
+      const gDate = new PersianDate(2024, 5, 10, { calendar: "gregorian" });
+      expect(gDate.getFullYear()).toBe(2024);
+    });
+
+    it("should handle options with ignoreCalendar", () => {
+      const d = new PersianDate({ ignoreCalendar: false });
+      expect(d.getFullYear()).toBeDefined();
+    });
+
+    it("should support util.inspect custom formatting", () => {
+      const util = require("util");
+      const date = new PersianDate("1402/01/01 12:00:00");
+      const inspected = util.inspect(date);
+      expect(typeof inspected).toBe("string");
+    });
+
+    it("should support setters with single arguments in both Persian and Gregorian", () => {
+      const pDate = new PersianDate("1402/01/01");
+      pDate.setFullYear(1405);
+      expect(pDate.getFullYear()).toBe(1405);
+      pDate.setMonth(5);
+      expect(pDate.getMonth()).toBe(5);
+      pDate.setHours(8);
+      expect(pDate.getHours()).toBe(8);
+      pDate.setMinutes(25);
+      expect(pDate.getMinutes()).toBe(25);
+      pDate.setSeconds(40);
+      expect(pDate.getSeconds()).toBe(40);
+
+      const gDate = new PersianDate("2023-01-01", { calendar: "gregorian" });
+      gDate.setFullYear(2026);
+      expect(gDate.getFullYear()).toBe(2026);
+      gDate.setMonth(7);
+      expect(gDate.getMonth()).toBe(7);
+    });
+
+    it("should handle invalid Date instance, valid timestamp, and ISO string", () => {
+      const invalidDate = new PersianDate(new Date(NaN));
+      expect(isNaN(invalidDate.getTime())).toBe(true);
+
+      const nanTimestamp = new PersianDate(NaN);
+      expect(isNaN(nanTimestamp.getTime())).toBe(true);
+
+      const validTimestamp = new PersianDate(1600000000000);
+      expect(validTimestamp.getTime()).toBe(1600000000000);
+
+      const notADate = new PersianDate("not a date");
+      expect(isNaN(notADate.getTime())).toBe(true);
+
+      const isoDate = new PersianDate("2024-03-20T10:00:00Z");
+      expect(isoDate.getFullYear()).toBeDefined();
+
+      const defaultDayDate = new PersianDate(1402, 5);
+      expect(defaultDayDate.getDate()).toBe(1);
+
+      const defaultDayString = new PersianDate("1402/05");
+      expect(defaultDayString.getDate()).toBe(1);
+    });
+
+    it("should handle invalid timezone and Date instance in toPersianDate", () => {
+      const { toPersianDate } = require("../utils/persian/toPersianDate");
+      const res = toPersianDate(Date.now(), { timeZone: "Invalid/Zone" as any });
+      expect(isNaN(res.year)).toBe(true);
+
+      const resWithDate = toPersianDate(new Date(1600000000000), { timeZone: "UTC" });
+      expect(resWithDate.year).toBeDefined();
+    });
   });
 });
+
+
 

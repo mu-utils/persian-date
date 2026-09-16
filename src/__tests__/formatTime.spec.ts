@@ -10,4 +10,16 @@ describe("formatTime", () => {
     const result = formatTime(time, "YYYY-MM-DD", formatters);
     expect(result).toBe("2022-04-03");
   });
+
+  it("should return Invalid Date when time is NaN", () => {
+    const formatters = createFormatters({ timeZone: "UTC" });
+    expect(formatTime(NaN, "YYYY-MM-DD", formatters)).toBe("Invalid Date");
+  });
+
+  it("should handle unmatched or static tokens", () => {
+    const formatters = createFormatters({ timeZone: "UTC" });
+    const time = new Date("2022-04-03").getTime();
+    expect(formatTime(time, "UNKNOWN_TOKEN", formatters)).toBe("UNKNOWN_TOKEN");
+  });
 });
+

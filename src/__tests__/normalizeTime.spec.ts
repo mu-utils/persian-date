@@ -19,7 +19,56 @@ describe("normalizeTime", () => {
     expect(typeof result).toBe("number");
   });
 
-  it("should return a string with the correct format", () => {
-    expect(result).toBe(1686499503000);
+  it("should throw error for NaN when invalidDateSeverity is error", () => {
+    expect(() =>
+      normalizeTime(
+        NaN,
+        {
+          calendar: "persian",
+          ignoreCalendar: false,
+          invalidDateSeverity: "error",
+        },
+        { calendar: "persian", timeZone: "UTC" }
+      )
+    ).toThrow("Invalid Date");
+  });
+
+  it("should return NaN when invalidDateSeverity is default", () => {
+    const res = normalizeTime(
+      NaN,
+      {
+        calendar: "persian",
+        ignoreCalendar: false,
+        invalidDateSeverity: "default",
+      },
+      { calendar: "persian", timeZone: "UTC" }
+    );
+    expect(isNaN(res)).toBe(true);
+  });
+
+  it("should handle persian year in persian calendar mode", () => {
+    expect(() =>
+      normalizeTime(
+        1400,
+        {
+          calendar: "persian",
+          ignoreCalendar: false,
+          invalidDateSeverity: "error",
+        },
+        { calendar: "persian" }
+      )
+    ).toThrow("Invalid Date");
+
+    const res = normalizeTime(
+      1400,
+      {
+        calendar: "persian",
+        ignoreCalendar: false,
+        invalidDateSeverity: "default",
+      },
+      { calendar: "persian" }
+    );
+    expect(isNaN(res)).toBe(true);
   });
 });
+

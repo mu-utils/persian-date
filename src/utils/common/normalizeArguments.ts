@@ -82,8 +82,7 @@ function parseDate(
     if (typeof singleArg === "string") {
       const dateParts = extractDateParts(singleArg);
       if (!dateParts || dateParts.length === 0) {
-        const d = new Date(singleArg);
-        return isNaN(d.getTime()) ? undefined : d;
+        return undefined;
       }
 
       const [year, month, day = 1, ...timeParts] = dateParts;
@@ -114,8 +113,11 @@ function parseDate(
       } else {
         // calendar === "gregorian"
         const validPersian = isValidPersian(year, month, day);
-        if (invalidDateSeverity === "error" && validPersian) {
-          throw new Error("Invalid date");
+        if (validPersian) {
+          if (invalidDateSeverity === "error") {
+            throw new Error("Invalid date");
+          }
+          return undefined;
         }
         const date = new Date(year, month - 1, day);
         setTimeComponents(date, timeParts);

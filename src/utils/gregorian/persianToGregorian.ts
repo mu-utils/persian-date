@@ -1,18 +1,9 @@
 import DateTuple from "../../types/DateTuple";
-import { julianDayNumberToGregorian } from "./julianDay";
-import persianToJulianDayNumber from "./persianToJulianDayNumber";
+import persianToJulianDay from "../persian/persianToJulianDay";
+import julianDayToGregorian from "./julianDayToGregorian";
 
 /**
  * Converts a Persian date to Gregorian date.
- *
- * Firstly converts Persian date to Julian day number, then converts Julian day
- * number to Gregorian date. Lastly, returns Gregorian date in tuple of year,
- * month, and day.
- *
- * @example
- * ```
- * persianToGregorian(1403, 6, 12); // [2024, 9, 2]
- * ```
  *
  * @param {number} persianYear - Persian year.
  * @param {number} persianMonth - Persian month.
@@ -24,10 +15,10 @@ export default function persianToGregorian(
   persianMonth: number,
   persianDay: number
 ): DateTuple {
-  const julianDayNumber = persianToJulianDayNumber(
-    persianYear,
-    persianMonth,
-    persianDay
-  );
-  return julianDayNumberToGregorian(julianDayNumber);
+  if (persianYear < 0) {
+    throw new Error("Invalid Date");
+  }
+  const julianDay = persianToJulianDay(persianYear, persianMonth, persianDay);
+  return julianDayToGregorian(julianDay);
 }
+

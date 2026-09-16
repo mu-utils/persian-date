@@ -26,7 +26,6 @@ export default function modifyTime(
 
   if (calendar === "persian" && (unit === "months" || unit === "years")) {
     const persian = toPersianDate(time, { calendar: "persian" });
-    if (isNaN(persian.year)) return NaN;
 
     let newYear = persian.year;
     let newMonth = persian.month;
