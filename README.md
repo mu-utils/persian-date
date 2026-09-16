@@ -37,6 +37,21 @@ yarn add @mu-utils/persian-date
 pnpm add @mu-utils/persian-date
 ```
 
+### Installing from GitHub Packages
+
+If installing directly from **[GitHub Packages](https://github.com/mu-utils/persian-date/packages)**, add the following to your project's `.npmrc`:
+
+```ini
+@mu-utils:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
+```
+
+Then install normally:
+
+```bash
+npm install @mu-utils/persian-date
+```
+
 ---
 
 ## 🚀 Quick Start
