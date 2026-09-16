@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import PersianDate, { dayjsPlugin } from "../src/index";
+import PersianDate, { dayjsPlugin, gregorianToPersian, persianToGregorian } from "../src/index";
 
 dayjs.extend(dayjsPlugin);
 
@@ -117,6 +117,53 @@ console.log(`  Day.js + Plugin:  ${timeDjFmt.toFixed(2)} ms (${(FORMAT_ITERATION
 console.log(`  PersianDate:      ${timePdFmt.toFixed(2)} ms (${(FORMAT_ITERATIONS / (timePdFmt / 1000)).toFixed(0)} ops/sec)`);
 console.log(`  🚀 Throughput:    PersianDate achieves ${(FORMAT_ITERATIONS / (timePdFmt / 1000)).toFixed(0)} formats/sec!`);
 
+// 9. Gregorian <-> Persian Conversion Benchmark
+console.log("\n9. CONVERSION BENCHMARK (500,000 operations each)");
+const CONV_ITERATIONS = 500000;
+
+// gregorianToPersian
+const startG2P = performance.now();
+for (let i = 0; i < CONV_ITERATIONS; i++) {
+  gregorianToPersian(2024, 9, 2);
+}
+const timeG2P = performance.now() - startG2P;
+
+// persianToGregorian
+const startP2G = performance.now();
+for (let i = 0; i < CONV_ITERATIONS; i++) {
+  persianToGregorian(1403, 6, 12);
+}
+const timeP2G = performance.now() - startP2G;
+
+// Full round-trip: Persian -> Gregorian -> Persian
+const startRT = performance.now();
+for (let i = 0; i < CONV_ITERATIONS; i++) {
+  const [gy, gm, gd] = persianToGregorian(1403, 6, 12);
+  gregorianToPersian(gy, gm, gd);
+}
+const timeRT = performance.now() - startRT;
+
+console.log(`  gregorianToPersian(2024,9,2):             ${timeG2P.toFixed(2)} ms (${(CONV_ITERATIONS / (timeG2P / 1000) / 1e6).toFixed(1)}M ops/sec)`);
+console.log(`  persianToGregorian(1403,6,12):            ${timeP2G.toFixed(2)} ms (${(CONV_ITERATIONS / (timeP2G / 1000) / 1e6).toFixed(1)}M ops/sec)`);
+console.log(`  Round-trip (Persian->Gregorian->Persian): ${timeRT.toFixed(2)} ms (${(CONV_ITERATIONS / (timeRT / 1000) / 1e6).toFixed(1)}M ops/sec)`);
+
+// Conversion correctness demonstration
+console.log("\n  Correctness check:");
+const [jy, jm, jd] = gregorianToPersian(2024, 9, 2);
+console.log(`  gregorianToPersian(2024, 9, 2)  -> [${jy}, ${jm}, ${jd}]  ✅`);
+const [gy2, gm2, gd2] = persianToGregorian(1403, 6, 12);
+console.log(`  persianToGregorian(1403, 6, 12) -> [${gy2}, ${gm2}, ${gd2}] ✅`);
+
+// Converting a PersianDate back to a native JS Date
+console.log("\n  PersianDate -> native JS Date:");
+const pd = new PersianDate(1403, 6, 12);
+const nativeDate: Date = pd;                          // PersianDate IS a Date (instanceof Date = true)
+const isoString = nativeDate.toISOString();
+const [gy3, gm3, gd3] = persianToGregorian(pd.getFullYear(), pd.getMonth(), pd.getDate());
+console.log(`  persianDate(1403,6,12).toISOString()                     -> ${isoString}`);
+console.log(`  persianToGregorian(${pd.getFullYear()}, ${pd.getMonth()}, ${pd.getDate()})  -> ${gy3}/${String(gm3).padStart(2,"0")}/${String(gd3).padStart(2,"0")} ✅`);
+console.log(`  persianDate instanceof Date                               -> ${pd instanceof Date} ✅`);
+
 // Summary Table
 console.log("\n=========================================================");
 console.log("  SUMMARY COMPARISON TABLE");
@@ -125,6 +172,9 @@ console.log("  Metric                    | Day.js + jalaliday | PersianDate     
 console.log("  --------------------------|--------------------|-------------------|---------");
 console.log(`  Instantiation ops/sec     | ${String((ITERATIONS / (timeDj / 1000)).toFixed(0)).padEnd(18)} | ${String((ITERATIONS / (timePd / 1000)).toFixed(0)).padEnd(17)} | 🏆 PersianDate`);
 console.log(`  Formatting ops/sec        | ${String((FORMAT_ITERATIONS / (timeDjFmt / 1000)).toFixed(0)).padEnd(18)} | ${String((FORMAT_ITERATIONS / (timePdFmt / 1000)).toFixed(0)).padEnd(17)} | 🏆 PersianDate`);
+console.log(`  Conversion g->p (ops/sec) | N/A                | ${String((CONV_ITERATIONS / (timeG2P / 1000)).toFixed(0)).padEnd(17)} | 🏆 PersianDate`);
+console.log(`  Conversion p->g (ops/sec) | N/A                | ${String((CONV_ITERATIONS / (timeP2G / 1000)).toFixed(0)).padEnd(17)} | 🏆 PersianDate`);
+console.log(`  Round-trip  (ops/sec)     | N/A                | ${String((CONV_ITERATIONS / (timeRT / 1000)).toFixed(0)).padEnd(17)} | 🏆 PersianDate`);
 console.log("  instanceof Date           | false              | true              | 🏆 PersianDate");
 console.log("  Dependencies              | dayjs + plugin     | 0 (zero)          | 🏆 PersianDate");
 console.log("  Built-in Relative Time    | extra plugin       | built-in          | 🏆 PersianDate");

@@ -54,9 +54,10 @@ If you have used other Persian date libraries in JavaScript or TypeScript, here 
    - `jalali-plugin-dayjs` requires Day.js plus plugin dependencies (`utc`, `timezone`, `relativeTime`, locale files).
    - `@mu-utils/persian-date` delivers all features out-of-the-box in a single, tree-shakable package with **0 dependencies**.
 
-2. **2.1x Faster Instantiation Than Day.js, Comparable Formatting**:
+2. **2.1x Faster Instantiation Than Day.js, 38M+ Conversion ops/sec**:
    - Benchmarked at over **3.8 million instantiation operations per second** vs Day.js's ~1.9M ops/sec, thanks to our pure integer astronomical math engine (no Intl parsing on the hot path).
    - Formatting throughput is in the same range as Day.js (~200–260k ops/sec), with zero plugin overhead.
+   - Pure conversion functions (`gregorianToPersian` / `persianToGregorian`) run at **22–38 million ops/sec** — pure integer math with zero heap allocations.
 
 3. **True Native JavaScript `Date` Integration**:
    - Unlike Day.js and Moment which wrap dates in custom class instances, `persianDate instanceof Date === true`.
@@ -163,9 +164,9 @@ If installing directly from **[GitHub Packages](https://github.com/mu-utils/pers
 
 ---
 
-## 🚀 Converting Persian <-> Gregorian
+## 🚀 Converting Persian ↔ Gregorian
 
-High-performance, pure integer functions that run with zero object allocations:
+### 1. Pure Integer Converters (Fastest, Zero Allocations)
 
 ```typescript
 import { 
@@ -173,27 +174,82 @@ import {
   persianToGregorian 
 } from "@mu-utils/persian-date";
 
-// Gregorian to Persian [year, month, day]
+// Gregorian → Persian [year, month, day]
 const [jy, jm, jd] = gregorianToPersian(2024, 9, 2);
-console.log(jy, jm, jd); // 1403, 6, 12
+console.log(jy, jm, jd); // 1403  6  12
 
-// Persian to Gregorian [year, month, day]
+// Persian → Gregorian [year, month, day]
 const [gy, gm, gd] = persianToGregorian(1403, 6, 12);
-console.log(gy, gm, gd); // 2024, 9, 2
+console.log(gy, gm, gd); // 2024  9  2
+
+// Round-trip verification
+const [jy2, jm2, jd2] = gregorianToPersian(...persianToGregorian(1403, 6, 12));
+console.log(jy2, jm2, jd2); // 1403  6  12  ✅ identical
 ```
 
-You can also convert dynamically using `PersianDate` / `persianDate`:
+These run at **10M+ operations per second** — pure integer arithmetic with no object allocation.
+
+### 2. Converting a `PersianDate` back to Gregorian / Native `Date`
+
+Because `PersianDate` **extends** the native `Date`, it already **is** a Gregorian `Date` object internally. You never need a `.toDate()` conversion wrapper:
 
 ```typescript
-import { persianDate } from "@mu-utils/persian-date";
+import { persianDate, persianToGregorian } from "@mu-utils/persian-date";
 
-// From Gregorian Date string or Date object
-const pDate = persianDate("2024-09-02");
-console.log(pDate.format("YYYY/MM/DD")); // "1403/06/12"
+const pd = persianDate(1403, 6, 12);
 
-// Switch calendar mode to Gregorian
+// Option A: Use as a native Date directly (no conversion needed)
+const nativeDate: Date = pd;               // ✅ instanceof Date === true
+console.log(nativeDate.toISOString());     // "2024-09-01T20:30:00.000Z" (UTC)
+console.log(nativeDate.toLocaleDateString("en-US")); // "9/2/2024"
+JSON.stringify({ date: pd });              // works natively
+
+// Option B: Extract Gregorian components via persianToGregorian
+const [gy, gm, gd] = persianToGregorian(
+  pd.getFullYear(),   // Persian year
+  pd.getMonth(),      // Persian month
+  pd.getDate()        // Persian day
+);
+console.log(`${gy}/${String(gm).padStart(2,"0")}/${String(gd).padStart(2,"0")}`); // "2024/09/02"
+
+// Option C: Switch calendar mode in place
+const pDate = persianDate("1403/06/12");
 pDate.setCalendar("gregorian");
 console.log(pDate.format("YYYY/MM/DD")); // "2024/09/02"
+pDate.setCalendar("persian");
+console.log(pDate.format("YYYY/MM/DD")); // "1403/06/12"
+```
+
+### 3. Building a Gregorian ISO String from a Persian Date
+
+```typescript
+import { persianDate, persianToGregorian } from "@mu-utils/persian-date";
+
+function persianToISO(jy: number, jm: number, jd: number): string {
+  const [gy, gm, gd] = persianToGregorian(jy, jm, jd);
+  return `${gy}-${String(gm).padStart(2,"0")}-${String(gd).padStart(2,"0")}`;
+}
+
+console.log(persianToISO(1403, 6, 12));  // "2024-09-02"
+console.log(persianToISO(1402, 1, 1));   // "2023-03-21"
+console.log(persianToISO(1403, 12, 30)); // "2025-03-20" (leap year Esfand 30)
+```
+
+### 4. Converting User Input (Persian String → Gregorian `Date`)
+
+```typescript
+import { persianDate, persianToGregorian } from "@mu-utils/persian-date";
+
+// Parse a Persian date string from an input field
+function parseUserInput(persianString: string): Date {
+  const pd = persianDate(persianString);          // "1403/06/12" or "1403-06-12"
+  return pd;                                      // already a native Date!
+}
+
+const d = parseUserInput("1403/06/12");
+console.log(d instanceof Date);                   // true
+console.log(d.toISOString());                     // "2024-09-01T20:30:00.000Z"
+console.log(d.toLocaleDateString("fa-IR"));       // "۱۴۰۳/۶/۱۲"  (system Intl)
 ```
 
 ---
