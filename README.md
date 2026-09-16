@@ -190,9 +190,60 @@ const diffInDays = date2.diff(date1, "days"); // 93
 
 ```javascript
 const date = new PersianDate(1403, 1, 1);
-console.log(date.isLeapYear()); // false
-const leapDate = new PersianDate(1404, 1, 1);
-console.log(leapDate.isLeapYear()); // true
+console.log(date.isLeapYear()); // true (1403 is a leap year in the official Iranian calendar)
+const nonLeapDate = new PersianDate(1404, 1, 1);
+console.log(nonLeapDate.isLeapYear()); // false
+```
+
+## Day.js Plugin Support (`jalaliday` / `dayjsPlugin`)
+
+`@mu-utils/persian-date` comes with built-in first-class support for **[Day.js](https://day.js.org/)**! You do not need any external packages (such as `jalali-plugin-dayjs`).
+
+### Quick Start with Day.js
+
+```typescript
+import dayjs from "dayjs";
+import { dayjsPlugin } from "@mu-utils/persian-date";
+// or: import { jalaliday } from "@mu-utils/persian-date";
+
+dayjs.extend(dayjsPlugin);
+
+// Format current date in Jalali
+const now = dayjs().calendar("jalali");
+console.log(now.format("YYYY/MM/DD HH:mm:ss")); // e.g. "1405/06/25 11:30:00"
+console.log(now.format("DD MMMM YYYY"));        // e.g. "25 شهریور 1405"
+
+// Parse a Persian date string
+const custom = dayjs("1403/06/12", { jalali: true });
+console.log(custom.format("YYYY/MM/DD")); // "1403/06/12"
+console.log(custom.daysInMonth());        // 31
+
+// Getters & Setters
+console.log(custom.year());  // 1403
+console.log(custom.month()); // 5 (0-indexed: 5 = Shahrivar)
+console.log(custom.date());  // 12
+
+// Arithmetic
+const next = custom.add(5, "days");
+console.log(next.format("YYYY/MM/DD")); // "1403/06/17"
+
+// Start of / End of
+console.log(custom.startOf("month").format("YYYY/MM/DD")); // "1403/06/01"
+console.log(custom.endOf("year").format("YYYY/MM/DD"));   // "1403/12/30" (leap year)
+```
+
+### Global Jalali Calendar
+
+You can set the default calendar globally for all Day.js instances:
+
+```typescript
+dayjs.calendar("jalali");
+
+const date = dayjs("1403/06/12");
+console.log(date.format("YYYY/MM/DD")); // "1403/06/12"
+
+// Switch back to Gregorian when needed
+dayjs.calendar("gregory");
 ```
 
 ## License

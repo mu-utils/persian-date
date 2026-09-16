@@ -21,3 +21,12 @@ console.log("After subtracting 1 month:", custom.format("YYYY/MM/DD"));
 const fromGregorian = new PersianDate("2021/01/02 23:59:59.999");
 console.log("\nFrom Gregorian 2021/01/02:", fromGregorian.format("YYYY/MM/DD HH:mm:ss"));
 
+// Day.js plugin demonstration
+import dayjs from "dayjs";
+import { dayjsPlugin } from "../src/index";
+
+dayjs.extend(dayjsPlugin);
+console.log("\n=== Day.js Plugin Demo ===");
+const dj = dayjs().calendar("jalali");
+console.log("Day.js Jalali current:", dj.format("YYYY/MM/DD HH:mm:ss"));
+console.log("Day.js parsed Jalali:", dayjs("1403/06/12", { jalali: true } as any).format("YYYY/MM/DD (MMMM)"));
