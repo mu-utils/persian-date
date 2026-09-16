@@ -20,7 +20,7 @@ type DateSegment =
   | "jDD"
   | "jD";
 
-type TimeSegment = "HH" | "H" | "mm" | "m" | "ss" | "s" | "a" | "A" | "h";
+type TimeSegment = "HH" | "H" | "hh" | "h" | "mm" | "m" | "ss" | "s" | "a" | "A";
 
 type DateTimeSegment = DateSegment | TimeSegment;
 

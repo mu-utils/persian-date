@@ -15,5 +15,14 @@ describe("createFormatReplacements", () => {
 
   it("should create replacements have correct day name", () => {
     expect(replacements.dddd).toBe("جمعه");
+    expect(replacements.ddd).toBeDefined();
+    expect(replacements.jMMMM).toBeDefined();
+    expect(replacements.jMMM).toBeDefined();
+  });
+
+  it("should expose hh (padded 12-hour) token", () => {
+    // date = new Date(2023, 3, 1) local time at midnight -> h12 = 12
+    expect(replacements.hh).toMatch(/^\d{2}$/);
+    expect(replacements.h).toBeDefined();
   });
 });

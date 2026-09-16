@@ -4,7 +4,7 @@ import toPersianDigits from "../persian/toPersianDigits";
 import createFormatReplacements from "./createFormatReplacements";
 
 const REGEX_FORMAT =
-  /\[([^\]]+)\]|jYYYY|jYY|jMMMM|jMMM|jMM|jM|jDD|jD|YYYY|YY|MMMM|MMM|MM|M|dddd|ddd|DD|Do|D|HH|H|mm|m|ss|s|SSS|A|a|h/g;
+  /\[([^\]]+)\]|jYYYY|jYY|jMMMM|jMMM|jMM|jM|jDD|jD|YYYY|YY|MMMM|MMM|MM|M|dddd|ddd|DD|Do|D|HH|H|hh|h|mm|m|ss|s|SSS|A|a/g;
 
 export interface FormatOptionsConfig {
   digits?: "en" | "fa";

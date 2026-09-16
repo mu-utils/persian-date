@@ -21,5 +21,17 @@ describe("formatTime", () => {
     const time = new Date("2022-04-03").getTime();
     expect(formatTime(time, "UNKNOWN_TOKEN", formatters)).toBe("UNKNOWN_TOKEN");
   });
-});
 
+  it("should format hh (12-hour padded) token", () => {
+    const formatters = createFormatters({ timeZone: "UTC" });
+    // 2022-04-03T00:00:00Z -> 12-hour = 12 -> hh = "12"
+    const time = new Date("2022-04-03T00:00:00.000Z").getTime();
+    const result = formatTime(time, "hh", formatters);
+    expect(result).toMatch(/^\d{2}$/);
+
+    // 2022-04-03T09:00:00Z -> 12-hour = 9 -> hh = "09"
+    const time9 = new Date("2022-04-03T09:00:00.000Z").getTime();
+    const result9 = formatTime(time9, "hh", formatters);
+    expect(result9).toBe("09");
+  });
+});
