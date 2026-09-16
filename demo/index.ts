@@ -1,11 +1,23 @@
-import PersianDate from "@mu-utils/persian-date";
+import PersianDate from "../src/index";
 
-const d1 = new Date();
-console.log(d1, "d1");
+console.log("=== PersianDate Demo ===");
 
-const d2 = new PersianDate("2021/09/02 23:59:59.999");
-console.log(d2, "d2");
+const now = new PersianDate();
+console.log("Current Persian Date:", now.format("YYYY/MM/DD HH:mm:ss"));
+console.log("Full year:", now.getFullYear());
+console.log("Month (1-12):", now.getMonth());
+console.log("Day of month:", now.getDate());
+console.log("Is leap year:", now.isLeapYear());
 
-// const d2 = julianDayToGregorian(persianToJulianDay(1403, 6, 12))
-// console.log(d1);
-// console.log(new Date(d2[0], d2[1] - 1, d2[2]));
+const custom = new PersianDate(1403, 6, 12, 12, 0, 0);
+console.log("\nCustom date (1403/06/12):", custom.format("YYYY/MM/DD HH:mm:ss"));
+
+custom.add(5, "days");
+console.log("After adding 5 days:", custom.format("YYYY/MM/DD"));
+
+custom.subtract("months", 1);
+console.log("After subtracting 1 month:", custom.format("YYYY/MM/DD"));
+
+const fromGregorian = new PersianDate("2021/01/02 23:59:59.999");
+console.log("\nFrom Gregorian 2021/01/02:", fromGregorian.format("YYYY/MM/DD HH:mm:ss"));
+

@@ -2,31 +2,17 @@ import PersianDate from "../PersianDate";
 
 describe("PersianDate", () => {
   describe("normalizeDate", () => {
-    // todo: test for invalid date
-    // it("should throw error for year 2003 in strict mode", () => {
-    //   expect(
-    //     () =>
-    //       new PersianDate("2003", {
-    //         calendar: "persian",
-    //         invalidDateSeverity: "error",
-    //       })
-    //   ).toThrow("Invalid Date");
-    // });
-
     it("should throw Invalid Date 1399/12/31 23:59:59.999 in strict mode", () => {
       expect(
         () =>
           new PersianDate("1399/12/31 23:59:59.999", {
             invalidDateSeverity: "error",
           })
-      ).toThrow("Invalid Date");
+      ).toThrow("Invalid date");
     });
 
     it("should return 1399-10-13", () => {
       const date = new PersianDate("1399/10/13");
-
-      console.log(date.format("YYYY-MM-DD"));
-
       expect(date.format("YYYY-MM-DD")).toBe("1399-10-13");
     });
 
@@ -36,12 +22,33 @@ describe("PersianDate", () => {
       });
       expect(date.getDate()).toBe(NaN);
     });
+
+    it("should support constructor with Date instance", () => {
+      const jsDate = new Date(2024, 8, 3); // 2024-09-03 -> 1403-06-13
+      const persianDate = new PersianDate(jsDate);
+      expect(persianDate.getFullYear()).toBe(1403);
+      expect(persianDate.getMonth()).toBe(6);
+      expect(persianDate.getDate()).toBe(13);
+    });
+
+    it("should support constructor with numeric timestamp", () => {
+      const timestamp = new Date(2024, 8, 3).getTime();
+      const persianDate = new PersianDate(timestamp);
+      expect(persianDate.getFullYear()).toBe(1403);
+      expect(persianDate.getMonth()).toBe(6);
+      expect(persianDate.getDate()).toBe(13);
+    });
   });
 
   describe("format", () => {
     it("should format date 2021/1/2 23:59:59.999", () => {
-      const date = new PersianDate("2021/09/02 23:59:59.999");
+      const date = new PersianDate("2021/01/02 23:59:59.999");
       expect(date.format("YYYY-MM-DD")).toBe("1399-10-13");
+    });
+
+    it("should support escaped text in format template", () => {
+      const date = new PersianDate("1403/06/12");
+      expect(date.format("[Date:] YYYY/MM/DD")).toBe("Date: 1403/06/12");
     });
   });
 
@@ -92,6 +99,12 @@ describe("PersianDate", () => {
       expect(result.getDate()).toBe(6);
     });
 
+    it("should support unit-first argument order for add", () => {
+      const date = new PersianDate(1402, 1, 1);
+      const result = date.add("days", 5);
+      expect(result.getDate()).toBe(6);
+    });
+
     it("should add days correctly in gregorian calendar", () => {
       const date = new PersianDate("2023/1/1", {
         calendar: "gregorian",
@@ -130,14 +143,15 @@ describe("PersianDate", () => {
     });
 
     it("should add last days of the Tir month correctly", () => {
-      const date = new PersianDate(1402, 6, 30);
+      const date = new PersianDate(1402, 4, 31);
       const result = date.add(1, "days");
-      expect(result.getMonth()).toBe(4);
+      expect(result.getMonth()).toBe(5);
+      expect(result.getDate()).toBe(1);
     });
 
     it("should handle adding across year boundary", () => {
       const date = new PersianDate(1402, 12, 29);
-      const result = date.add(3, "days");
+      const result = date.add(2, "days");
       expect(result.getFullYear()).toBe(1403);
       expect(result.getMonth()).toBe(1);
       expect(result.getDate()).toBe(2);
@@ -148,6 +162,12 @@ describe("PersianDate", () => {
     it("should subtract days correctly", () => {
       const date = new PersianDate(1402, 1, 10);
       const result = date.subtract(5, "days");
+      expect(result.getDate()).toBe(5);
+    });
+
+    it("should support unit-first argument order for subtract", () => {
+      const date = new PersianDate(1402, 1, 10);
+      const result = date.subtract("days", 5);
       expect(result.getDate()).toBe(5);
     });
 
@@ -165,10 +185,45 @@ describe("PersianDate", () => {
 
     it("should handle subtracting across year boundary", () => {
       const date = new PersianDate(1403, 1, 2);
-      const result = date.subtract(3, "days");
+      const result = date.subtract(2, "days");
       expect(result.getFullYear()).toBe(1402);
       expect(result.getMonth()).toBe(12);
       expect(result.getDate()).toBe(29);
     });
   });
+
+  describe("mutations and state synchronization", () => {
+    it("should update year when setFullYear is called", () => {
+      const date = new PersianDate(1402, 1, 1);
+      date.setFullYear(1405);
+      expect(date.getFullYear()).toBe(1405);
+      expect(date.getMonth()).toBe(1);
+      expect(date.getDate()).toBe(1);
+    });
+
+    it("should update month when setMonth is called", () => {
+      const date = new PersianDate(1402, 1, 1);
+      date.setMonth(7);
+      expect(date.getMonth()).toBe(7);
+      expect(date.getFullYear()).toBe(1402);
+    });
+
+    it("should update date when setDate is called", () => {
+      const date = new PersianDate(1402, 1, 1);
+      date.setDate(15);
+      expect(date.getDate()).toBe(15);
+    });
+
+    it("should clone properly", () => {
+      const date = new PersianDate(1402, 5, 10);
+      const cloned = date.clone();
+      expect(cloned.getFullYear()).toBe(date.getFullYear());
+      expect(cloned.getMonth()).toBe(date.getMonth());
+      expect(cloned.getDate()).toBe(date.getDate());
+      cloned.add(1, "days");
+      expect(cloned.getDate()).toBe(11);
+      expect(date.getDate()).toBe(10);
+    });
+  });
 });
+

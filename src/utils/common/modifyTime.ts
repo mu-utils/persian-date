@@ -18,7 +18,7 @@ export default function modifyTime(
   time: number,
   value: number,
   unit: DateUint,
-  calendar: Calendar = "persian"
+  calendar: Calendar = "gregorian"
 ): number {
   if (isNaN(time)) return NaN;
 

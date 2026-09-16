@@ -14,6 +14,7 @@ import getTime from "./utils/common/getTime";
 import isLeapYear from "./utils/common/isLeapYear";
 import modifyTime from "./utils/common/modifyTime";
 import normalizeArguments from "./utils/common/normalizeArguments";
+import toGregorianDate from "./utils/gregorian/toGregorianDate";
 import createFormatters from "./utils/formatters/createFormatters";
 import formatTime from "./utils/formatters/formatTime";
 import overrideDisplayDateInstance from "./utils/formatters/overrideDisplayDateInstance";
@@ -42,22 +43,6 @@ export default class PersianDate extends Date {
   /**
    * Multiple constructor overloads to support various input types
    * for initializing PersianDate instances.
-   *
-   * Supports:
-   * - No parameters (defaults to the current date and time).
-   * - A Date object.
-   * - A numeric timestamp.
-   * - A date string.
-   * - Year and month (for both Persian and Gregorian calendars).
-   * - Year, month, and date.
-   * - Year, month, date, and hours.
-   * - Year, month, date, hours, and minutes.
-   * - Year, month, date, hours, minutes, and seconds.
-   * - Year, month, date, hours, minutes, seconds, and milliseconds.
-   *
-   * @example
-   * const persianDate = new PersianDate(1400, 6, 12); // Persian calendar
-   * const gregorianDate = new PersianDate(2021, 8, 3); // Gregorian calendar
    */
   constructor(options?: PersianDateOptions);
   constructor(value: Date, options?: PersianDateOptions);
@@ -173,24 +158,32 @@ export default class PersianDate extends Date {
   /**
    * Adds the specified time unit and value to the current PersianDate instance.
    *
-   * @param {DateUint} unit - The time unit to add (e.g., "days", "months", "years").
-   * @param {number} value - The value to add to the specified time unit.
+   * @param {number} value - The value to add (or unit if passing unit first).
+   * @param {DateUint} unit - The time unit to add (or value if passing value second).
    * @returns {PersianDate} The updated PersianDate instance.
    */
-  add(value: number, unit: DateUint): PersianDate {
-    this.setTime(modifyTime(this.getTime(), value, unit));
+  add(value: number, unit: DateUint): PersianDate;
+  add(unit: DateUint, value: number): PersianDate;
+  add(arg1: number | DateUint, arg2: DateUint | number): PersianDate {
+    const value = typeof arg1 === "number" ? arg1 : (arg2 as number);
+    const unit = typeof arg1 === "string" ? arg1 : (arg2 as DateUint);
+    this.setTime(modifyTime(this.getTime(), value, unit, this.options.calendar));
     return this;
   }
 
   /**
    * Subtracts the specified time unit and value from the current PersianDate instance.
    *
-   * @param {DateUint} unit - The time unit to subtract (e.g., "days", "months", "years").
-   * @param {number} value - The value to subtract from the specified time unit.
+   * @param {number} value - The value to subtract (or unit if passing unit first).
+   * @param {DateUint} unit - The time unit to subtract (or value if passing value second).
    * @returns {PersianDate} The updated PersianDate instance.
    */
-  subtract(value: number, unit: DateUint): PersianDate {
-    this.setTime(modifyTime(this.getTime(), -value, unit));
+  subtract(value: number, unit: DateUint): PersianDate;
+  subtract(unit: DateUint, value: number): PersianDate;
+  subtract(arg1: number | DateUint, arg2: DateUint | number): PersianDate {
+    const value = typeof arg1 === "number" ? arg1 : (arg2 as number);
+    const unit = typeof arg1 === "string" ? arg1 : (arg2 as DateUint);
+    this.setTime(modifyTime(this.getTime(), -value, unit, this.options.calendar));
     return this;
   }
 
@@ -201,7 +194,7 @@ export default class PersianDate extends Date {
    *
    * @returns {number} The year of the PersianDate instance.
    */
-  getFullYear(): number {
+  override getFullYear(): number {
     if (this.options.calendar === "gregorian") {
       return super.getFullYear();
     }
@@ -211,11 +204,11 @@ export default class PersianDate extends Date {
 
   /**
    * Gets the day of the month for the current PersianDate instance.
-   * Returns the day in the Persian calendar or the Gregorian calendar.
+   * Returns the day in the Persian calendar (1-31) or the Gregorian calendar (1-31).
    *
    * @returns {number} The day of the PersianDate instance.
    */
-  getDate(): number {
+  override getDate(): number {
     if (this.options.calendar === "gregorian") {
       return super.getDate();
     }
@@ -224,17 +217,135 @@ export default class PersianDate extends Date {
   }
 
   /**
-   * Gets the month for the current PersianDate instance. Returns the month in
-   * the Persian calendar or the Gregorian calendar.
+   * Gets the month for the current PersianDate instance.
+   * Returns the month (1-12) in the Persian calendar or the Gregorian calendar.
    *
-   * @returns {number} The month of the PersianDate instance (0-based index).
+   * @returns {number} The 1-based month of the PersianDate instance (1-12).
    */
-  getMonth(): number {
+  override getMonth(): number {
     if (this.options.calendar === "gregorian") {
-      return this.persianDate.month;
+      return super.getMonth() + 1;
     }
 
-    return super.getMonth();
+    return this.persianDate.month;
+  }
+
+  /**
+   * Sets the time of the PersianDate instance.
+   *
+   * @param {number} time - Number of milliseconds since January 1, 1970, 00:00:00 UTC.
+   * @returns {number} The new timestamp.
+   */
+  override setTime(time: number): number {
+    const result = super.setTime(time);
+    this.update();
+    return result;
+  }
+
+  /**
+   * Sets the full year of the PersianDate instance.
+   */
+  override setFullYear(year: number, month?: number, date?: number): number {
+    if (this.options.calendar === "gregorian") {
+      const result = super.setFullYear(
+        year,
+        ...(month !== undefined ? [month - 1] : []),
+        ...(date !== undefined ? [date] : [])
+      );
+      this.update();
+      return result;
+    }
+
+    const m = month !== undefined ? month : this.persianDate.month;
+    const d = date !== undefined ? date : this.persianDate.day;
+    const newDate = toGregorianDate(year, m, d);
+    newDate.setHours(
+      this.getHours(),
+      this.getMinutes(),
+      this.getSeconds(),
+      this.getMilliseconds()
+    );
+    return this.setTime(newDate.getTime());
+  }
+
+  /**
+   * Sets the month of the PersianDate instance.
+   */
+  override setMonth(month: number, date?: number): number {
+    if (this.options.calendar === "gregorian") {
+      const result = super.setMonth(
+        month - 1,
+        ...(date !== undefined ? [date] : [])
+      );
+      this.update();
+      return result;
+    }
+
+    const y = this.persianDate.year;
+    const d = date !== undefined ? date : this.persianDate.day;
+    const newDate = toGregorianDate(y, month, d);
+    newDate.setHours(
+      this.getHours(),
+      this.getMinutes(),
+      this.getSeconds(),
+      this.getMilliseconds()
+    );
+    return this.setTime(newDate.getTime());
+  }
+
+  /**
+   * Sets the date (day of month) of the PersianDate instance.
+   */
+  override setDate(date: number): number {
+    if (this.options.calendar === "gregorian") {
+      const result = super.setDate(date);
+      this.update();
+      return result;
+    }
+
+    const y = this.persianDate.year;
+    const m = this.persianDate.month;
+    const newDate = toGregorianDate(y, m, date);
+    newDate.setHours(
+      this.getHours(),
+      this.getMinutes(),
+      this.getSeconds(),
+      this.getMilliseconds()
+    );
+    return this.setTime(newDate.getTime());
+  }
+
+  override setHours(hours: number, min?: number, sec?: number, ms?: number): number {
+    const result = super.setHours(
+      hours,
+      ...(min !== undefined ? [min] : []),
+      ...(sec !== undefined ? [sec] : []),
+      ...(ms !== undefined ? [ms] : [])
+    );
+    this.update();
+    return result;
+  }
+
+  override setMinutes(min: number, sec?: number, ms?: number): number {
+    const result = super.setMinutes(
+      min,
+      ...(sec !== undefined ? [sec] : []),
+      ...(ms !== undefined ? [ms] : [])
+    );
+    this.update();
+    return result;
+  }
+
+  override setSeconds(sec: number, ms?: number): number {
+    const result = super.setSeconds(sec, ...(ms !== undefined ? [ms] : []));
+    this.update();
+    return result;
+  }
+
+  override setMilliseconds(ms: number): number {
+    const result = super.setMilliseconds(ms);
+    this.update();
+    return result;
   }
 
   /**
@@ -247,10 +358,21 @@ export default class PersianDate extends Date {
   }
 
   /**
-   * Gets the day of the week for the current PersianDate instance.
-   * @returns {number} The day of the week for the current PersianDate instance.
+   * Returns a clone of the current PersianDate instance.
+   */
+  clone(): PersianDate {
+    return new PersianDate(this.getTime(), {
+      calendar: this.options.calendar,
+      timeZone: this.formatOptions.timeZone,
+      invalidDateSeverity: this.options.invalidDateSeverity,
+    });
+  }
+
+  /**
+   * Formats the PersianDate instance for console inspection.
    */
   [util.inspect.custom](): string {
     return overrideDisplayDateInstance(this.getTime());
   }
 }
+

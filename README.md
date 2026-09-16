@@ -1,6 +1,6 @@
 # PersianDate
 
-A JavaScript library for working with Persian (Jalali) dates, extending the native JavaScript Date object.
+A JavaScript/TypeScript library for working with Persian (Jalali) dates, extending the native JavaScript Date object.
 
 ## Table of Contents
 
@@ -10,6 +10,7 @@ A JavaScript library for working with Persian (Jalali) dates, extending the nati
 - [API](#api)
   - [Constructor](#constructor)
   - [Methods](#methods)
+  - [Format Template Tokens](#format-template-tokens)
 - [Algorithm](#algorithm)
 - [Examples](#examples)
 - [License](#license)
@@ -33,11 +34,12 @@ console.log(persianDate.format("YYYY/MM/DD HH:mm:ss"));
 ## Features
 
 - Supports both Persian (Jalali) and Gregorian calendars
-- Extends the native JavaScript Date object
-- Flexible date formatting
-- Date manipulation (add, subtract)
-- Date comparison and difference calculation
-- Leap year detection
+- Extends the native JavaScript `Date` object seamlessly
+- Flexible date formatting with escaping support (`[Text] YYYY/MM/DD`)
+- Calendar-aware date arithmetic (`add`, `subtract`) supporting flexible argument orders
+- Date comparison and difference calculation across units (`diff`)
+- Leap year detection for both Persian (astronomical 2820-year cycle) and Gregorian calendars
+- Automatic state synchronization on date mutations (`setFullYear`, `setMonth`, `setDate`, `setTime`)
 
 ## API
 
@@ -45,167 +47,155 @@ console.log(persianDate.format("YYYY/MM/DD HH:mm:ss"));
 
 The `PersianDate` constructor supports multiple overloads:
 
-```javascript
+```typescript
 new PersianDate();
-new PersianDate(options);
-new PersianDate(value, options);
-new PersianDate(year, month, options);
-new PersianDate(year, month, date, options);
-new PersianDate(year, month, date, hours, options);
-new PersianDate(year, month, date, hours, minutes, options);
-new PersianDate(year, month, date, hours, minutes, seconds, options);
-new PersianDate(year, month, date, hours, minutes, seconds, ms, options);
+new PersianDate(options?: PersianDateOptions);
+new PersianDate(value: Date, options?: PersianDateOptions);
+new PersianDate(value: number, options?: PersianDateOptions);
+new PersianDate(value: string, options?: PersianDateOptions);
+new PersianDate(year: number, month: number, options?: PersianDateOptions);
+new PersianDate(year: number, month: number, date: number, options?: PersianDateOptions);
+new PersianDate(year: number, month: number, date: number, hours: number, options?: PersianDateOptions);
+new PersianDate(year: number, month: number, date: number, hours: number, minutes: number, options?: PersianDateOptions);
+new PersianDate(year: number, month: number, date: number, hours: number, minutes: number, seconds: number, options?: PersianDateOptions);
+new PersianDate(year: number, month: number, date: number, hours: number, minutes: number, seconds: number, ms: number, options?: PersianDateOptions);
 ```
 
 ### Methods
 
-#### `setTimeZone(timeZone: TimeZone): void`
-
-Sets the time zone for the PersianDate instance.
-
-#### `setCalendar(calendar: Calendar): void`
-
-Sets the calendar used by the PersianDate instance.
-
 #### `format(template: DateFormatTemplate): string`
 
-Formats the current PersianDate instance using the provided date format template.
+Formats the current PersianDate instance using the provided date format template. Supports escaping with square brackets (e.g. `[Today:] YYYY/MM/DD`).
+
+#### `add(value: number, unit: DateUint): PersianDate`
+#### `add(unit: DateUint, value: number): PersianDate`
+
+Adds the specified time unit and value to the current date. Supports both `(value, unit)` and `(unit, value)` signatures. Units: `"years"`, `"months"`, `"days"`, `"hours"`, `"minutes"`, `"seconds"`.
+
+#### `subtract(value: number, unit: DateUint): PersianDate`
+#### `subtract(unit: DateUint, value: number): PersianDate`
+
+Subtracts the specified time unit and value from the current date. Supports both `(value, unit)` and `(unit, value)` signatures.
 
 #### `diff(value: DateValue, unit?: DateUint): number`
 
-Calculates the difference between the current PersianDate instance and the provided date value.
-
-#### `add(value: number, unit: DateUint): PersianDate`
-
-Adds the specified time unit and value to the current PersianDate instance.
-
-#### `subtract(value: number, unit: DateUint): PersianDate`
-
-Subtracts the specified time unit and value from the current PersianDate instance.
+Calculates the difference between the current date and the provided date value in the specified unit (defaults to `"days"`).
 
 #### `getFullYear(): number`
 
-Gets the full year of the current PersianDate instance.
-
-#### `getDate(): number`
-
-Gets the day of the month for the current PersianDate instance.
+Gets the full year (Persian year when calendar is Persian, Gregorian year when calendar is Gregorian).
 
 #### `getMonth(): number`
 
-Gets the month for the current PersianDate instance.
+Gets the 1-based month index (1 to 12). 1 corresponds to Farvardin / January; 12 corresponds to Esfand / December.
+
+#### `getDate(): number`
+
+Gets the day of the month (1 to 31).
 
 #### `isLeapYear(): boolean`
 
-Determines if the current year is a leap year based on the selected calendar.
+Determines if the current year is a leap year based on the active calendar.
+
+#### `setTimeZone(timeZone: TimeZone): void`
+
+Sets the time zone (e.g., `"Asia/Tehran"`, `"UTC"`).
+
+#### `setCalendar(calendar: Calendar): void`
+
+Sets the active calendar (`"persian"` or `"gregorian"`).
+
+#### `clone(): PersianDate`
+
+Returns a cloned `PersianDate` instance.
+
+### Format Template Tokens
+
+| Token | Output | Description |
+| :--- | :--- | :--- |
+| `YYYY` | 1403 | 4-digit year |
+| `YY` | 03 | 2-digit year |
+| `MMMM` | فروردین | Full month name |
+| `MMM` | فرو | Short month name |
+| `MM` | 06 | 2-digit month (01-12) |
+| `M` | 6 | 1-digit month (1-12) |
+| `DD` | 12 | 2-digit day of month (01-31) |
+| `D` | 12 | 1-digit day of month (1-31) |
+| `dddd` | دوشنبه | Full day of the week |
+| `ddd` | د | Short day of the week |
+| `HH` | 14 | 2-digit 24-hour format (00-23) |
+| `h` | 2 | 12-hour format (1-12) |
+| `mm` | 05 | 2-digit minute (00-59) |
+| `ss` | 09 | 2-digit second (00-59) |
+| `SSS` | 045 | 3-digit millisecond (000-999) |
+| `a` | pm / am | Ante / Post meridiem |
+| `[...]` | Text | Escaped literal text (e.g. `[تاریخ:]`) |
 
 ## Algorithm
 
-The conversion from Gregorian to Persian (Jalali) dates is based on an algorithm that involves the following steps:
-
-1. **Ephemeris Base Calculation**: The base year is adjusted depending on whether the year is negative or positive.
-
-   ```javascript
-   const epbase = year - (year >= 0 ? 474 : 473);
-   ```
-
-2. **Ephemeris Year Calculation**: This determines the ephemeris year based on the adjusted base.
-
-   ```javascript
-   const epyear = 474 + mod(epbase, 2820);
-   ```
-
-3. **Day of Year Calculation**: The day of the year is computed by considering whether the month is within the first seven months or the latter five.
-
-   ```javascript
-   const dayOfYear =
-     day + (month <= 7 ? (month - 1) * 31 : (month - 1) * 30 + 6);
-   ```
-
-4. **Total Days Calculation**: The total number of days is calculated based on the ephemeris year, accounting for leap years.
-
-   ```javascript
-   const yearDays = (epyear - 1) * 365;
-   const leapYears = Math.floor(epbase / 2820) * 1029983;
-   const leapYearDays = Math.floor((epyear * 682 - 110) / 2816);
-   ```
-
-5. **Leap Year Adjustment**: The algorithm checks if the current year is a leap year and makes necessary adjustments based on the month.
-   ```javascript
-   const isLeap = isPersianLeapYear(year);
-   const extraDay = isLeap && month > 6 ? 1 : 0;
-   ```
-
-This algorithm ensures accurate conversion between the two calendar systems, handling the complexities of leap years and month lengths.
+The conversion between Gregorian and Persian (Jalali) calendars uses the Birashk 2820-year cycle algorithm with astronomical accuracy:
+1. **Epoch Base Calculation**: Base year offset based on epoch cycles.
+2. **Cycle Year**: Determining cycle coordinates within the 2820-year leap cycle.
+3. **Julian Day Numbers (JDN)**: Bidirectional, continuous integer day mapping avoiding floating point rounding drifts.
 
 ## Examples
 
 ### 1. Create a Persian Date Instance
 
-Create an instance of `PersianDate` using the current date:
-
 ```javascript
 import PersianDate from "@mu-utils/persian-date";
 
 const currentDate = new PersianDate();
-console.log(currentDate.format("YYYY/MM/DD")); // e.g., "1403/07/01"
+console.log(currentDate.format("YYYY/MM/DD")); // e.g., "1403/06/12"
 ```
 
-### 2. Create a Persian Date with Specific Date
-
-Create a Persian date using a specific year, month, and day:
+### 2. Create a Persian Date with Specific Components
 
 ```javascript
-const specificDate = new PersianDate(1402, 12, 25);
-console.log(specificDate.format("YYYY/MM/DD")); // e.g., "1402/12/25"
+const specificDate = new PersianDate(1402, 12, 29);
+console.log(specificDate.format("YYYY/MM/DD")); // "1402/12/29"
 ```
 
-### 3. Format a Date
-
-Format a Persian date instance using a custom template:
+### 3. Format with Time and Escaped Text
 
 ```javascript
-const formattedDate = currentDate.format("YYYY/MM/DD HH:mm:ss");
-console.log(formattedDate); // e.g., "1403/07/01 12:34:56"
+const formatted = currentDate.format("[تاریخ:] YYYY/MM/DD [ساعت:] HH:mm:ss");
+console.log(formatted);
 ```
 
-### 4. Add Days to a Date
-
-Add days to the current date:
+### 4. Add Days or Months
 
 ```javascript
-const futureDate = currentDate.add("days", 10);
-console.log(futureDate.format("YYYY/MM/DD")); // e.g., "1403/07/11"
+// Supports both (amount, unit) and (unit, amount)
+const futureDate = currentDate.add(10, "days");
+const nextMonth = currentDate.add("months", 1);
 ```
 
-### 5. Subtract Months from a Date
-
-Subtract months from a specific date:
+### 5. Subtract Time
 
 ```javascript
-const pastDate = specificDate.subtract("months", 3);
-console.log(pastDate.format("YYYY/MM/DD")); // e.g., "1402/09/25"
+const pastDate = specificDate.subtract(3, "months");
+console.log(pastDate.format("YYYY/MM/DD"));
 ```
 
-### 6. Calculate the Difference Between Dates
-
-Calculate the difference in days between two dates:
+### 6. Calculate Difference
 
 ```javascript
-const anotherDate = new PersianDate(1403, 07, 01);
-const daysDifference = anotherDate.diff(specificDate, "days");
-console.log(`Difference in days: ${daysDifference}`); // e.g., "Difference in days: 90"
+const date1 = new PersianDate(1402, 1, 1);
+const date2 = new PersianDate(1402, 4, 1);
+const diffInDays = date2.diff(date1, "days"); // 93
 ```
 
 ### 7. Check for Leap Year
 
-Check if the current year is a leap year:
-
 ```javascript
-const isLeap = currentDate.isLeapYear();
-console.log(`Is the current year a leap year? ${isLeap}`); // e.g., "Is the current year a leap year? true"
+const date = new PersianDate(1403, 1, 1);
+console.log(date.isLeapYear()); // false
+const leapDate = new PersianDate(1404, 1, 1);
+console.log(leapDate.isLeapYear()); // true
 ```
 
 ## License
 
-[MIT License](LICENSE)
+[ISC License](LICENSE)
+
