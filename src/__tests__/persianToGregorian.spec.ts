@@ -15,6 +15,13 @@ describe("persianToGregorian", () => {
     expect(persianToGregorian(1402, 6, 12)).toEqual([2023, 9, 3]);
   });
 
+  it("should convert historical dates across century boundaries and leap cycles", () => {
+    expect(persianToGregorian(1400, 1, 1)).toEqual([2021, 3, 21]);
+    expect(persianToGregorian(1279, 1, 1)).toEqual([1900, 3, 21]);
+    expect(persianToGregorian(1300, 1, 1)).toEqual([1921, 3, 21]);
+    expect(persianToGregorian(1404, 1, 1)).toEqual([2025, 3, 21]);
+  });
+
   it("should handle historical julian day below gregorian reform", () => {
     const result = julianDayToGregorian(2000000);
     expect(Array.isArray(result)).toBe(true);

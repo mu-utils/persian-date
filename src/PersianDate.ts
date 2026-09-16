@@ -369,6 +369,105 @@ export default class PersianDate extends Date {
   }
 
   /**
+   * Returns the number of days in the current month for the active calendar.
+   */
+  daysInMonth(): number {
+    if (this.options.calendar === "gregorian") {
+      return new Date(super.getFullYear(), super.getMonth() + 1, 0).getDate();
+    }
+    const month = this.getMonth();
+    if (month <= 6) return 31;
+    if (month <= 11) return 30;
+    return this.isLeapYear() ? 30 : 29;
+  }
+
+  /**
+   * Returns an array representation of the date: [year, month, date, hours, minutes, seconds, milliseconds].
+   */
+  toArray(): [number, number, number, number, number, number, number] {
+    return [
+      this.getFullYear(),
+      this.getMonth(),
+      this.getDate(),
+      this.getHours(),
+      this.getMinutes(),
+      this.getSeconds(),
+      this.getMilliseconds(),
+    ];
+  }
+
+  /**
+   * Sets the date to the start of a specified unit of time.
+   */
+  startOf(
+    unit: "year" | "month" | "day" | "hour" | "minute" | "second" | DateUint
+  ): this {
+    const u = unit.endsWith("s") ? unit.slice(0, -1) : unit;
+    switch (u) {
+      case "year":
+        this.setMonth(1, 1);
+        this.setHours(0, 0, 0, 0);
+        break;
+      case "month":
+        this.setDate(1);
+        this.setHours(0, 0, 0, 0);
+        break;
+      case "day":
+        this.setHours(0, 0, 0, 0);
+        break;
+      case "hour":
+        this.setMinutes(0, 0, 0);
+        break;
+      case "minute":
+        this.setSeconds(0, 0);
+        break;
+      case "second":
+        this.setMilliseconds(0);
+        break;
+    }
+    return this;
+  }
+
+  /**
+   * Sets the date to the end of a specified unit of time.
+   */
+  endOf(
+    unit: "year" | "month" | "day" | "hour" | "minute" | "second" | DateUint
+  ): this {
+    const u = unit.endsWith("s") ? unit.slice(0, -1) : unit;
+    switch (u) {
+      case "year":
+        this.setMonth(
+          12,
+          this.options.calendar === "persian"
+            ? this.isLeapYear()
+              ? 30
+              : 29
+            : 31
+        );
+        this.setHours(23, 59, 59, 999);
+        break;
+      case "month":
+        this.setDate(this.daysInMonth());
+        this.setHours(23, 59, 59, 999);
+        break;
+      case "day":
+        this.setHours(23, 59, 59, 999);
+        break;
+      case "hour":
+        this.setMinutes(59, 59, 999);
+        break;
+      case "minute":
+        this.setSeconds(59, 999);
+        break;
+      case "second":
+        this.setMilliseconds(999);
+        break;
+    }
+    return this;
+  }
+
+  /**
    * Formats the PersianDate instance for console inspection.
    */
   [util.inspect.custom](): string {

@@ -54,8 +54,11 @@ describe("PersianDate", () => {
 
   describe("isLeapYear", () => {
     it("should return true for persian leap year", () => {
-      const date = new PersianDate("1404/10/13");
-      expect(date.isLeapYear()).toBe(true);
+      const date1403 = new PersianDate("1403/10/13");
+      expect(date1403.isLeapYear()).toBe(true);
+
+      const date1404 = new PersianDate("1404/10/13");
+      expect(date1404.isLeapYear()).toBe(false);
     });
 
     it("should return true for gregorian leap year", () => {
@@ -428,6 +431,99 @@ describe("PersianDate", () => {
 
       const resWithDate = toPersianDate(new Date(1600000000000), { timeZone: "UTC" });
       expect(resWithDate.year).toBeDefined();
+    });
+
+    it("should calculate daysInMonth correctly for both calendars", () => {
+      const farvardin = new PersianDate("1402/01/15");
+      expect(farvardin.daysInMonth()).toBe(31);
+
+      const mehr = new PersianDate("1402/07/15");
+      expect(mehr.daysInMonth()).toBe(30);
+
+      const esfandNonLeap = new PersianDate("1402/12/15");
+      expect(esfandNonLeap.daysInMonth()).toBe(29);
+
+      const esfandLeap = new PersianDate("1403/12/15");
+      expect(esfandLeap.daysInMonth()).toBe(30);
+
+      const gregJan = new PersianDate("2024-01-10", { calendar: "gregorian" });
+      expect(gregJan.daysInMonth()).toBe(31);
+
+      const gregFebLeap = new PersianDate("2024-02-10", { calendar: "gregorian" });
+      expect(gregFebLeap.daysInMonth()).toBe(29);
+    });
+
+    it("should return toArray representation", () => {
+      const d = new PersianDate("1402/05/10 14:30:45");
+      const arr = d.toArray();
+      expect(arr[0]).toBe(1402);
+      expect(arr[1]).toBe(5);
+      expect(arr[2]).toBe(10);
+      expect(arr[3]).toBe(14);
+      expect(arr[4]).toBe(30);
+      expect(arr[5]).toBe(45);
+    });
+
+    it("should support startOf and endOf across all units", () => {
+      const d = new PersianDate("1403/05/15 14:30:45.500");
+
+      d.startOf("year");
+      expect(d.getMonth()).toBe(1);
+      expect(d.getDate()).toBe(1);
+      expect(d.getHours()).toBe(0);
+
+      d.setMonth(5);
+      d.setDate(15);
+      d.startOf("months");
+      expect(d.getDate()).toBe(1);
+
+      d.setHours(14, 30, 45, 500);
+      d.startOf("days");
+      expect(d.getHours()).toBe(0);
+
+      d.setHours(14, 30, 45, 500);
+      d.startOf("hours");
+      expect(d.getMinutes()).toBe(0);
+
+      d.setMinutes(30, 45, 500);
+      d.startOf("minutes");
+      expect(d.getSeconds()).toBe(0);
+
+      d.setSeconds(45, 500);
+      d.startOf("seconds");
+      expect(d.getMilliseconds()).toBe(0);
+
+      // endOf
+      d.endOf("year");
+      expect(d.getMonth()).toBe(12);
+      expect(d.getDate()).toBe(30); // 1403 is leap year
+      expect(d.getHours()).toBe(23);
+      expect(d.getMinutes()).toBe(59);
+
+      const dNonLeap = new PersianDate("1402/05/15");
+      dNonLeap.endOf("year");
+      expect(dNonLeap.getDate()).toBe(29); // 1402 is non-leap
+
+      d.setMonth(1);
+      d.endOf("months");
+      expect(d.getDate()).toBe(31);
+
+      d.endOf("days");
+      expect(d.getHours()).toBe(23);
+
+      d.endOf("hours");
+      expect(d.getMinutes()).toBe(59);
+
+      d.endOf("minutes");
+      expect(d.getSeconds()).toBe(59);
+
+      d.endOf("seconds");
+      expect(d.getMilliseconds()).toBe(999);
+
+      const greg = new PersianDate("2023-05-15", { calendar: "gregorian" });
+      greg.endOf("year");
+      expect(greg.getMonth()).toBe(12);
+      expect(greg.getDate()).toBe(31);
     });
   });
 });

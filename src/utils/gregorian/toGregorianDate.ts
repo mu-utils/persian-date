@@ -1,26 +1,23 @@
-import persianToJulianDay from "../persian/persianToJulianDay";
-import julianDayToGregorian from "./julianDayToGregorian";
 import persianToGregorian from "./persianToGregorian";
 
 /**
- * Converts a Persian date to Gregorian date. It returns converted date in
- * milliseconds and use input time as a base.
+ * Converts a Persian date to a Gregorian Date instance.
  *
- * @example
- * ```
- * toGregorianTime(1727814600000); // -17876258744000
- * ```
- *
- * @param persianTime - Persian date in milliseconds.
- * @returns Gregorian date in milliseconds.
+ * @param {number} persianYear - Persian year.
+ * @param {number} persianMonth - Persian month.
+ * @param {number} persianDay - Persian day.
+ * @returns {Date} Gregorian Date object.
  */
 export default function toGregorianDate(
   persianYear: number,
   persianMonth: number,
   persianDay: number
 ): Date {
-  const julianDay = persianToJulianDay(persianYear, persianMonth, persianDay);
-  const [year, month, day] = julianDayToGregorian(julianDay);
+  const [year, month, day] = persianToGregorian(
+    persianYear,
+    persianMonth,
+    persianDay
+  );
 
   return new Date(year, month - 1, day);
 }

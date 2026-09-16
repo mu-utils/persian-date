@@ -108,3 +108,39 @@ export const PERSIAN_DAYS_IN_YEAR = 365;
  * The offset of the epoch year.
  */
 export const PERSIAN_EPOCH_OFFSET = 979;
+
+/**
+ * Persian month names in Persian (Farsi).
+ */
+export const PERSIAN_MONTH_NAMES_FA = [
+  "فروردین",
+  "اردیبهشت",
+  "خرداد",
+  "تیر",
+  "مرداد",
+  "شهریور",
+  "مهر",
+  "آبان",
+  "آذر",
+  "دی",
+  "بهمن",
+  "اسفند",
+] as const;
+
+/**
+ * Persian month names transliterated in English.
+ */
+export const PERSIAN_MONTH_NAMES_EN = [
+  "Farvardin",
+  "Ordibehesht",
+  "Khordad",
+  "Tir",
+  "Mordad",
+  "Shahrivar",
+  "Mehr",
+  "Aban",
+  "Azar",
+  "Dey",
+  "Bahman",
+  "Esfand",
+] as const;
