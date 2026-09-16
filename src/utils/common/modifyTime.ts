@@ -1,37 +1,59 @@
+import Calendar from "../../types/Calendar";
 import DateUint from "../../types/DateUnit";
+import { PERSIAN_MONTHS_DAYS } from "../../constants/persianCalendar";
+import isPersianLeapYear from "../persian/isPersianLeapYear";
+import { toPersianDate } from "../persian/toPersianDate";
+import toGregorianDate from "../gregorian/toGregorianDate";
 
 /**
  * Modifies a given timestamp by adding a specified value in the given time unit.
  *
- * This function creates a new `Date` object from the provided timestamp, adjusts it
- * by adding the specified value in the selected time unit, and returns the resulting
- * timestamp.
- *
  * @param {number} time - The timestamp (in milliseconds) to be modified.
- * @param {DateUint} unit - The unit of time for modification. Can be one of:
- *   - "days"
- *   - "months"
- *   - "years"
- *   - "hours"
- *   - "minutes"
- *   - "seconds"
  * @param {number} value - The amount to add in the specified time unit.
+ * @param {DateUint} unit - The unit of time for modification.
+ * @param {Calendar} [calendar="persian"] - The calendar system to use.
  * @returns {number} The new timestamp (in milliseconds) after modification.
- *
- * @throws {Error} Throws an error if an invalid time unit is provided.
- *
- * @example
- * // Add 10 days to a given timestamp
- * const initialTime = new Date().getTime();
- * const newTime = modifyTime(initialTime, 'days', 10);
- * console.log(newTime); // Modified timestamp with 10 days added
  */
 export default function modifyTime(
   time: number,
   value: number,
-  unit: DateUint
+  unit: DateUint,
+  calendar: Calendar = "persian"
 ): number {
+  if (isNaN(time)) return NaN;
+
   const date = new Date(time);
+
+  if (calendar === "persian" && (unit === "months" || unit === "years")) {
+    const persian = toPersianDate(time, { calendar: "persian" });
+    if (isNaN(persian.year)) return NaN;
+
+    let newYear = persian.year;
+    let newMonth = persian.month;
+
+    if (unit === "years") {
+      newYear += value;
+    } else if (unit === "months") {
+      const totalMonths = (persian.year * 12) + (persian.month - 1) + value;
+      newYear = Math.floor(totalMonths / 12);
+      newMonth = ((totalMonths % 12) + 12) % 12 + 1;
+    }
+
+    let maxDays = PERSIAN_MONTHS_DAYS[newMonth - 1];
+    if (newMonth === 12 && isPersianLeapYear(newYear)) {
+      maxDays = 30;
+    }
+    const newDay = Math.min(persian.day, maxDays);
+
+    const newDate = toGregorianDate(newYear, newMonth, newDay);
+    newDate.setHours(
+      date.getHours(),
+      date.getMinutes(),
+      date.getSeconds(),
+      date.getMilliseconds()
+    );
+    return newDate.getTime();
+  }
 
   switch (unit) {
     case "days":
@@ -58,3 +80,4 @@ export default function modifyTime(
 
   return date.getTime();
 }
+

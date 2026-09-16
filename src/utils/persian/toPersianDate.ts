@@ -2,23 +2,43 @@ import DateType from "../../types/DateType";
 import FormatOptions from "../../types/FormatOptions";
 
 /**
- *  Converts a Gregorian date to Persian date. It returns converted date in
- *  milliseconds. It uses the current time as a base.
+ * Converts a Gregorian date to Persian date (year, month, day).
  *
- * @param value - Gregorian date in milliseconds.
- * @returns Persian date in milliseconds.
+ * @param value - Gregorian date as timestamp or Date object.
+ * @param options - Formatting options including timeZone.
+ * @returns An object containing Persian year, month, and day.
  */
 export const toPersianDate = (
   value: number | Date,
   { timeZone }: FormatOptions
 ): DateType => {
-  const localeTime = new Date(value).toLocaleString("fa-IR-u-nu-latn", {
-    timeZone,
-  });
-  const [year, month, day] = localeTime
-    .match(/(\d+)/g)
-    ?.slice(0, 3)
-    ?.map(Number) ?? [NaN, NaN, NaN];
+  const date = typeof value === "number" ? new Date(value) : value;
+  if (isNaN(date.getTime())) {
+    return { year: NaN, month: NaN, day: NaN };
+  }
 
-  return { year, month, day };
+  try {
+    const formatter = new Intl.DateTimeFormat("en-u-ca-persian", {
+      timeZone,
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+    });
+
+    const parts = formatter.formatToParts(date);
+    let year = NaN;
+    let month = NaN;
+    let day = NaN;
+
+    for (const part of parts) {
+      if (part.type === "year") year = parseInt(part.value, 10);
+      else if (part.type === "month") month = parseInt(part.value, 10);
+      else if (part.type === "day") day = parseInt(part.value, 10);
+    }
+
+    return { year, month, day };
+  } catch {
+    return { year: NaN, month: NaN, day: NaN };
+  }
 };
+

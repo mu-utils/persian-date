@@ -2,18 +2,15 @@ import DateFormatTemplate from "../../types/DateFormatTemplate";
 import Formatters from "../../types/Formatters";
 import createFormatReplacements from "./createFormatReplacements";
 
+const REGEX_FORMAT =
+  /\[([^\]]+)\]|YYYY|YY|MMMM|MMM|MM|M|dddd|ddd|DD|Do|D|HH|mm|ss|SSS|a|h/g;
+
 /**
- * Formats a date. It takes a date and a template and returns a formatted date.
- * It uses the template to replace the date with the corresponding value.
+ * Formats a date. It takes a date timestamp and a template and returns a formatted date.
  *
- * @example
- * ```
- * formatDate(122343942384, "YYYY-MM-DD"); // "2023-04-01"
- * ```
- *
- * @param time - The date to format.
- * @param options - The options to use.
+ * @param time - The date timestamp to format.
  * @param template - The template to use.
+ * @param formatters - The formatters to use.
  * @returns The formatted date.
  */
 export default function formatTime(
@@ -21,12 +18,12 @@ export default function formatTime(
   template: DateFormatTemplate,
   formatters: Formatters
 ) {
-  let result = `${template}`;
+  if (isNaN(time)) return "Invalid Date";
   const replacements = createFormatReplacements(time, formatters);
 
-  for (const [key, value] of Object.entries(replacements)) {
-    result = result.replace(new RegExp(key, "g"), value);
-  }
-
-  return result;
+  return `${template}`.replace(REGEX_FORMAT, (match, escaped) => {
+    if (escaped) return escaped;
+    return (replacements as Record<string, string>)[match] ?? match;
+  });
 }
+

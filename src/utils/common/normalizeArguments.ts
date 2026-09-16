@@ -4,12 +4,10 @@ import FormatOptions from "../../types/FormatOptions";
 import InvalidDateSeverity from "../../types/InvalidDateSeverity";
 import Options from "../../types/Options";
 import PersianDateOptions from "../../types/PersianDateOptions";
-import julianDayToGregorian from "../gregorian/julianDayToGregorian";
 import toGregorianDate from "../gregorian/toGregorianDate";
 import createFormatOptions from "../options/createFormatOptions";
 import createOptions from "../options/createOptions";
-import isValidPersian from "../persian/isValidPersian";
-import jalaliToJulianDay from "../persian/persianToJulianDay";
+import isValidPersian, { isPersianYear } from "../persian/isValidPersian";
 import localizeTime from "./localizeTime";
 
 type NormalizeArguments = [
@@ -18,22 +16,17 @@ type NormalizeArguments = [
   formatOptions: FormatOptions
 ];
 
-const toIntegerArray = (values: string[]) =>
-  values.map((value) => parseInt(value, 10));
+const toIntegerArray = (values: (string | number)[]) =>
+  values.map((value) => (typeof value === "number" ? value : parseInt(String(value), 10)));
 
 function extractDateParts(arg: string): number[] | null {
   const result = arg.match(/(\d+)/g);
-
   return result ? toIntegerArray(result) : null;
 }
 
 function setTimeComponents(date: Date, timeParts: number[]): void {
-  const [hours, minutes, seconds, milliseconds] = timeParts;
-  const newDate = new Date();
-  date.setHours(hours ?? newDate.getHours());
-  date.setMinutes(minutes ?? newDate.getMinutes());
-  date.setSeconds(seconds ?? newDate.getSeconds());
-  date.setMilliseconds(milliseconds ?? newDate.getMilliseconds());
+  const [hours = 0, minutes = 0, seconds = 0, milliseconds = 0] = timeParts;
+  date.setHours(hours, minutes, seconds, milliseconds);
 }
 
 type ExtractArguments = [
@@ -42,9 +35,9 @@ type ExtractArguments = [
   formatOptions: FormatOptions
 ];
 
-// Main function to normalize arguments
+// Main function to extract options and clean arguments
 function extractArguments(args: (DateValue | object)[]): ExtractArguments {
-  let newArguments: DateValue[] = [];
+  const newArguments: DateValue[] = [];
   let persianDateOptions: PersianDateOptions | undefined;
 
   if (args.length > 8) {
@@ -56,7 +49,6 @@ function extractArguments(args: (DateValue | object)[]): ExtractArguments {
       persianDateOptions = arg as PersianDateOptions;
       break;
     }
-
     newArguments.push(arg);
   }
 
@@ -71,49 +63,87 @@ function parseDate(
   calendar: Calendar,
   invalidDateSeverity: InvalidDateSeverity
 ): Date | undefined {
-  let date: Date | undefined;
-  let dateParts: number[] = [];
+  if (args.length === 0 || (args.length === 1 && args[0] === undefined)) {
+    return new Date();
+  }
 
   if (args.length === 1) {
-    if (typeof args[0] === "string") {
-      const result = extractDateParts(args[0]);
+    const singleArg = args[0];
 
-      if (!result) {
-        return;
+    if (singleArg instanceof Date) {
+      const t = singleArg.getTime();
+      return isNaN(t) ? undefined : new Date(t);
+    }
+
+    if (typeof singleArg === "number") {
+      return isNaN(singleArg) ? undefined : new Date(singleArg);
+    }
+
+    if (typeof singleArg === "string") {
+      const dateParts = extractDateParts(singleArg);
+      if (!dateParts || dateParts.length === 0) {
+        const d = new Date(singleArg);
+        return isNaN(d.getTime()) ? undefined : d;
       }
 
-      dateParts = result;
+      const [year, month, day = 1, ...timeParts] = dateParts;
+
+      if (calendar === "persian") {
+        if (isPersianYear(year)) {
+          const valid = isValidPersian(year, month, day);
+          if (!valid) {
+            if (invalidDateSeverity === "error") {
+              throw new Error("Invalid date");
+            }
+            return undefined;
+          }
+          const date = toGregorianDate(year, month, day);
+          setTimeComponents(date, timeParts);
+          return date;
+        }
+
+        // Year outside Persian range - check strict mode or parse as Gregorian
+        const validPersian = isValidPersian(year, month, day);
+        if (invalidDateSeverity === "error" && !validPersian) {
+          throw new Error("Invalid date");
+        }
+
+        const date = new Date(year, month - 1, day);
+        setTimeComponents(date, timeParts);
+        return date;
+      } else {
+        // calendar === "gregorian"
+        const validPersian = isValidPersian(year, month, day);
+        if (invalidDateSeverity === "error" && validPersian) {
+          throw new Error("Invalid date");
+        }
+        const date = new Date(year, month - 1, day);
+        setTimeComponents(date, timeParts);
+        return date;
+      }
     }
+  }
+
+  // args.length >= 2 (e.g. year, month, date?, hours?, minutes?, seconds?, ms?)
+  const dateParts = toIntegerArray(args as (string | number)[]);
+  const [year, month, day = 1, ...timeParts] = dateParts;
+
+  if (calendar === "persian") {
+    const valid = isValidPersian(year, month, day);
+    if (!valid) {
+      if (invalidDateSeverity === "error") {
+        throw new Error("Invalid date");
+      }
+      return undefined;
+    }
+    const date = toGregorianDate(year, month, day);
+    setTimeComponents(date, timeParts);
+    return date;
   } else {
-    dateParts = toIntegerArray(args as string[]);
+    const date = new Date(year, month - 1, day);
+    setTimeComponents(date, timeParts);
+    return date;
   }
-
-  if (dateParts.length === 0) {
-    const date = new Date();
-    dateParts = [date.getFullYear(), date.getMonth(), date.getDate()];
-  }
-
-  const [year, month, day, ...rest] = dateParts;
-
-  const validPersian = isValidPersian(year, month, day);
-
-  if (
-    invalidDateSeverity === "error" &&
-    ((calendar === "persian" && !validPersian) ||
-      (calendar === "gregorian" && validPersian))
-  ) {
-    throw new Error("Invalid date");
-  }
-
-  if (validPersian) {
-    date = toGregorianDate(year, month, day);
-  } else {
-    date = new Date(year, month, day);
-  }
-
-  setTimeComponents(date, rest);
-
-  return date;
 }
 
 export default function normalizeArguments(
@@ -130,7 +160,7 @@ export default function normalizeArguments(
     options.invalidDateSeverity
   );
 
-  if (!date) {
+  if (!date || isNaN(date.getTime())) {
     time = NaN;
   } else {
     time = localizeTime(date.getTime(), formatOptions.timeZone);
@@ -140,4 +170,5 @@ export default function normalizeArguments(
 }
 
 const isOptions = (arg: unknown): arg is object =>
-  typeof arg === "object" && !(arg instanceof Date);
+  typeof arg === "object" && arg !== null && !(arg instanceof Date);
+
