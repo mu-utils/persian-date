@@ -236,7 +236,7 @@ export const dayjsPlugin = (_option: unknown, Dayjs: any, dayjs: any) => {
 
   const oldStartOf = proto.startOf;
   proto.startOf = function (units: string, startOf?: boolean) {
-    if (!this.isJalali()) {
+    if (!this.isJalali() || !units) {
       return oldStartOf.bind(this)(units, startOf);
     }
     const isStart = startOf !== undefined ? startOf : true;
@@ -265,7 +265,7 @@ export const dayjsPlugin = (_option: unknown, Dayjs: any, dayjs: any) => {
 
   const oldEndOf = proto.endOf;
   proto.endOf = function (units: string) {
-    if (!this.isJalali()) {
+    if (!this.isJalali() || !units) {
       return oldEndOf.bind(this)(units);
     }
     const u = units.endsWith("s") ? units.slice(0, -1) : units;

@@ -80,6 +80,13 @@ function parseDate(
     }
 
     if (typeof singleArg === "string") {
+      if (singleArg.endsWith("Z") || /[+-]\d{2}:\d{2}$/.test(singleArg)) {
+        const parsed = new Date(singleArg);
+        if (!isNaN(parsed.getTime())) {
+          return parsed;
+        }
+      }
+
       const dateParts = extractDateParts(singleArg);
       if (!dateParts || dateParts.length === 0) {
         return undefined;

@@ -525,6 +525,45 @@ describe("PersianDate", () => {
       expect(greg.getMonth()).toBe(12);
       expect(greg.getDate()).toBe(31);
     });
+
+    it("should compare dates with isBefore, isAfter, and isSame", () => {
+      const d1 = new PersianDate("1403/06/12");
+      const d2 = new PersianDate("1403/06/15");
+      const d3 = new PersianDate("1403/07/01");
+
+      expect(d1.isBefore(d2)).toBe(true);
+      expect(d2.isBefore(d1)).toBe(false);
+
+      expect(d2.isAfter(d1)).toBe(true);
+      expect(d1.isAfter(d2)).toBe(false);
+
+      expect(d1.isSame(new PersianDate("1403/06/12"))).toBe(true);
+      expect(d1.isSame(d2)).toBe(false);
+
+      // Same year
+      expect(d1.isSame(d2, "year")).toBe(true);
+      expect(d1.isSame(new PersianDate("1402/06/12"), "year")).toBe(false);
+
+      // Same month
+      expect(d1.isSame(d2, "month")).toBe(true);
+      expect(d1.isSame(d3, "month")).toBe(false);
+
+      // Same day
+      const dSameDay = new PersianDate("1403/06/12 15:30:00");
+      expect(d1.isSame(dSameDay, "day")).toBe(true);
+      expect(d1.isSame(d2, "day")).toBe(false);
+      expect(d1.isSame(d2, "days")).toBe(false);
+
+      // Same hour
+      const dSameHour = new PersianDate("1403/06/12 15:45:00");
+      expect(dSameDay.isSame(dSameHour, "hour")).toBe(true);
+    });
+
+    it("should parse ISO 8601 strings with timezone offsets correctly", () => {
+      const isoWithOffset = new PersianDate("2024-09-02T14:30:00+03:30");
+      expect(isNaN(isoWithOffset.getTime())).toBe(false);
+      expect(isoWithOffset.getFullYear()).toBe(1403);
+    });
   });
 });
 

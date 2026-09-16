@@ -45,6 +45,7 @@ export default class PersianDate extends Date {
    * for initializing PersianDate instances.
    */
   constructor(options?: PersianDateOptions);
+  constructor(value: DateValue, options?: PersianDateOptions);
   constructor(value: Date, options?: PersianDateOptions);
   constructor(value: number, options?: PersianDateOptions);
   constructor(value: string, options?: PersianDateOptions);
@@ -153,6 +154,66 @@ export default class PersianDate extends Date {
    */
   diff(value: DateValue, unit?: DateUint): number {
     return dffDates(this.getTime(), getTime(value), unit);
+  }
+
+  /**
+   * Checks if the current date is before another date.
+   *
+   * @param {DateValue} value - The date value to compare against.
+   * @returns {boolean} `true` if this date is before the given date.
+   */
+  isBefore(value: DateValue): boolean {
+    return this.getTime() < getTime(value);
+  }
+
+  /**
+   * Checks if the current date is after another date.
+   *
+   * @param {DateValue} value - The date value to compare against.
+   * @returns {boolean} `true` if this date is after the given date.
+   */
+  isAfter(value: DateValue): boolean {
+    return this.getTime() > getTime(value);
+  }
+
+  /**
+   * Checks if the current date is the same as another date, optionally matching a specific unit.
+   *
+   * @param {DateValue} value - The date value to compare against.
+   * @param {DateUint | "year" | "month" | "day" | "hour" | "minute" | "second"} [unit] - Comparison unit.
+   * @returns {boolean} `true` if the dates are the same.
+   */
+  isSame(
+    value: DateValue,
+    unit?: "year" | "month" | "day" | "hour" | "minute" | "second" | DateUint
+  ): boolean {
+    if (!unit) {
+      return this.getTime() === getTime(value);
+    }
+    const other = new PersianDate(value as any, {
+      calendar: this.options.calendar,
+    });
+    const u = unit.endsWith("s") ? unit.slice(0, -1) : unit;
+    switch (u) {
+      case "year":
+        return this.getFullYear() === other.getFullYear();
+      case "month":
+        return (
+          this.getFullYear() === other.getFullYear() &&
+          this.getMonth() === other.getMonth()
+        );
+      case "day":
+        return (
+          this.getFullYear() === other.getFullYear() &&
+          this.getMonth() === other.getMonth() &&
+          this.getDate() === other.getDate()
+        );
+      default:
+        return (
+          this.clone().startOf(unit as any).getTime() ===
+          other.startOf(unit as any).getTime()
+        );
+    }
   }
 
   /**

@@ -8,6 +8,8 @@ import FormatOptions from "../../types/FormatOptions";
  * @param options - Formatting options including timeZone.
  * @returns An object containing Persian year, month, and day.
  */
+const formatterCache = new Map<string, Intl.DateTimeFormat>();
+
 export const toPersianDate = (
   value: number | Date,
   { timeZone }: FormatOptions
@@ -18,12 +20,17 @@ export const toPersianDate = (
   }
 
   try {
-    const formatter = new Intl.DateTimeFormat("en-u-ca-persian", {
-      timeZone,
-      year: "numeric",
-      month: "numeric",
-      day: "numeric",
-    });
+    const key = timeZone || "default";
+    let formatter = formatterCache.get(key);
+    if (!formatter) {
+      formatter = new Intl.DateTimeFormat("en-u-ca-persian", {
+        timeZone,
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+      });
+      formatterCache.set(key, formatter);
+    }
 
     const parts = formatter.formatToParts(date);
     let year = NaN;
