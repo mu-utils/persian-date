@@ -1,7 +1,7 @@
 {
   "name": "@mu-utils/persian-date",
-  "version": "1.0.9",
-  "description": "A Persian date to convert from gregorian and behave like a date in Javascript project.",
+  "version": "1.1.0",
+  "description": "A lightweight, accurate Persian (Jalali) date library extending native Date with first-class Day.js plugin support.",
   "main": "dist/bundle.min.cjs.js",
   "module": "dist/bundle.min.esm.js",
   "types": "dist/index.d.ts",
@@ -22,7 +22,19 @@
     "prepublishOnly": "npm run build",
     "postpublish": "git push && git push --tags"
   },
-  "keywords": [],
+  "keywords": [
+    "persian",
+    "jalali",
+    "shamsi",
+    "date",
+    "persian-date",
+    "dayjs",
+    "dayjs-plugin",
+    "jalaliday",
+    "calendar",
+    "iran",
+    "hijri-shamsi"
+  ],
   "license": "ISC",
   "peerDependencies": {
     "dayjs": ">=1.10.0"
