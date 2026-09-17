@@ -32,6 +32,15 @@ export function persianDate(...args: unknown[]): PersianDate {
   return new (PersianDate as any)(...args);
 }
 
+export const jalaliDate = persianDate;
+export const shamsiDate = persianDate;
+export const JalaliDate = PersianDate;
+export const ShamsiDate = PersianDate;
+export const gregorianToJalali = gregorianToPersian;
+export const jalaliToGregorian = persianToGregorian;
+export const toJalaliDate = toPersianDate;
+export const isJalaliLeapYear = isPersianLeapYear;
+
 export {
   PersianDate,
   dayjsPlugin,

@@ -137,11 +137,14 @@ export default class PersianDate extends Date {
    * @returns {void}
    */
   setCalendar(calendar: Calendar): void {
-    this.options.calendar = calendar;
+    const normalized: "persian" | "gregorian" =
+      calendar === "gregorian" ? "gregorian" : "persian";
+    this.options.calendar = normalized;
     this.formatOptions.calendar =
-      calendar === "gregorian" ? undefined : DEFAULT_CALENDAR;
+      normalized === "gregorian" ? undefined : DEFAULT_CALENDAR;
     this.update();
   }
+
 
   /**
    * Formats the current PersianDate instance using the provided date format template.

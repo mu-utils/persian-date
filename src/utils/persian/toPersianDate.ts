@@ -13,8 +13,9 @@ const formatterCache = new Map<string, Intl.DateTimeFormat>();
 
 export const toPersianDate = (
   value: number | Date,
-  { timeZone }: FormatOptions
+  { timeZone }: FormatOptions = {}
 ): DateType => {
+
   const date = typeof value === "number" ? new Date(value) : value;
   if (isNaN(date.getTime())) {
     return { year: NaN, month: NaN, day: NaN };

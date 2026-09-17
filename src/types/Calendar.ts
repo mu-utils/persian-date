@@ -1,3 +1,4 @@
-type Calendar = "persian" | "gregorian";
+type Calendar = "persian" | "jalali" | "shamsi" | "gregorian";
 
 export default Calendar;
+
