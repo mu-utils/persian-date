@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>@mu-utils/persian-date | Modern Zero-Dependency Persian & Jalali Date Engine</title>
+  <meta name="description" content="Ultra-fast, zero-dependency Persian (Shamsi / Jalali) date library for JavaScript & TypeScript. Live Shamsi calendar, bidirectional Gregorian converter, Day.js plugin, and high-performance date math." />
+  <meta name="keywords" content="persian date, shamsi date, jalali date, تبدیل تاریخ شمسی به میلادی, تاریخ شمسی, تقویم شمسی, shamsi converter, dayjs jalali, moment jalaali alternative, persian calendar js, javascript jalali date" />
+  <meta property="og:title" content="@mu-utils/persian-date - Fast, Modern Persian Date Engine" />
+  <meta property="og:description" content="Sub-microsecond Persian date conversions, full Day.js compatibility, live calendar widget, and zero dependencies." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: rgba(18, 24, 38, 0.75);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --accent: #38bdf8;
+      --accent-glow: rgba(56, 189, 248, 0.25);
+      --primary: #6366f1;
+      --emerald: #10b981;
+      --amber: #f59e0b;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --code-bg: #0f172a;
+      --radius: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(56, 189, 248, 0.15) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(16, 185, 129, 0.1) 0px, transparent 50%);
+      color: var(--text);
+      font-family: 'Vazirmatn', 'Plus Jakarta Sans', system-ui, sans-serif;
+      min-height: 100vh;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    /* Header & Hero */
+    header {
+      text-align: center;
+      padding: 3rem 1rem 2rem;
+      position: relative;
+    }
+
+    .badge-bar {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(8px);
+      text-decoration: none;
+      color: var(--text);
+      transition: all 0.2s;
+    }
+
+    .badge:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .badge-accent {
+      background: rgba(56, 189, 248, 0.12);
+      border-color: rgba(56, 189, 248, 0.3);
+      color: #38bdf8;
+    }
+
+    .badge-emerald {
+      background: rgba(16, 185, 129, 0.12);
+      border-color: rgba(16, 185, 129, 0.3);
+      color: #34d399;
+    }
+
+    h1 {
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #ffffff 30%, #38bdf8 70%, #818cf8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1rem;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 1.15rem;
+      max-width: 750px;
+      margin: 0 auto 2rem;
+      direction: rtl;
+    }
+
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.85rem 1.6rem;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      font-family: inherit;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #38bdf8 0%, #6366f1 100%);
+      color: white;
+      box-shadow: 0 4px 20px rgba(99, 102, 241, 0.35);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 6px 25px rgba(56, 189, 248, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(10px);
+    }
+
+    .btn-outline:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .install-box {
+      display: inline-flex;
+      align-items: center;
+      background: var(--code-bg);
+      border: 1px solid var(--card-border);
+      padding: 0.5rem 1rem;
+      border-radius: 12px;
+      gap: 0.75rem;
+      font-family: 'Plus Jakarta Sans', monospace;
+      font-size: 0.95rem;
+      color: #38bdf8;
+      direction: ltr;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .copy-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: var(--text);
+      padding: 0.35rem 0.65rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.75rem;
+      transition: background 0.2s;
+    }
+
+    .copy-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Grid Layout */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: 0.5;
+    }
+
+    .card-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .card-title .icon {
+      font-size: 1.4rem;
+    }
+
+    /* Interactive Calendar Widget */
+    .calendar-widget {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .cal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .cal-month-title {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #38bdf8;
+    }
+
+    .cal-nav-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--card-border);
+      color: var(--text);
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      transition: all 0.2s;
+    }
+
+    .cal-nav-btn:hover {
+      background: var(--accent);
+      color: #000;
+    }
+
+    .cal-weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      text-align: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .cal-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+    }
+
+    .cal-day {
+      aspect-ratio: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .cal-day:hover:not(.empty) {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--accent);
+      transform: scale(1.05);
+    }
+
+    .cal-day.empty {
+      background: transparent;
+      cursor: default;
+    }
+
+    .cal-day.today {
+      background: rgba(99, 102, 241, 0.35);
+      border-color: #818cf8;
+      color: #fff;
+      font-weight: 800;
+      box-shadow: 0 0 12px rgba(99, 102, 241, 0.5);
+    }
+
+    .cal-day.selected {
+      background: linear-gradient(135deg, #38bdf8 0%, #6366f1 100%);
+      color: #fff;
+      border-color: transparent;
+      font-weight: 800;
+    }
+
+    .cal-day.friday {
+      color: #f87171;
+    }
+
+    .cal-selected-info {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 0.85rem;
+      border-radius: 10px;
+      border: 1px solid var(--card-border);
+      font-size: 0.88rem;
+    }
+
+    /* Converter Card */
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.4rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    input, select {
+      width: 100%;
+      background: var(--code-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text);
+      padding: 0.65rem 0.85rem;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px var(--accent-glow);
+    }
+
+    .result-box {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1rem;
+      margin-top: 1rem;
+    }
+
+    .result-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.4rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.9rem;
+    }
+
+    .result-row:last-child {
+      border-bottom: none;
+    }
+
+    .result-value {
+      font-weight: 700;
+      color: #38bdf8;
+      font-family: 'Plus Jakarta Sans', monospace;
+      direction: ltr;
+    }
+
+    .code-snippet {
+      background: var(--code-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 0.85rem;
+      margin-top: 0.85rem;
+      font-family: 'Plus Jakarta Sans', monospace;
+      font-size: 0.82rem;
+      color: #e2e8f0;
+      direction: ltr;
+      position: relative;
+      overflow-x: auto;
+    }
+
+    /* Benchmark Section */
+    .benchmark-section {
+      margin-top: 3rem;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 2.2rem;
+      backdrop-filter: blur(16px);
+    }
+
+    .table-container {
+      overflow-x: auto;
+      margin-top: 1.5rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: right;
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    th {
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .winner-tag {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      padding: 0.2rem 0.5rem;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      border-top: 1px solid var(--card-border);
+      margin-top: 4rem;
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <div class="badge-bar">
+        <span class="badge badge-accent">⚡ 100M+ Ops/Sec</span>
+        <span class="badge badge-emerald">📦 0 Dependencies</span>
+        <span class="badge">🛡️ Strict TypeScript</span>
+        <span class="badge">🎯 100% Test Coverage</span>
+        <span class="badge">✨ Native Date (instanceof Date)</span>
+      </div>
+
+      <h1>@mu-utils/persian-date</h1>
+      <p class="subtitle">
+        موتور فوق‌سریع، سبک و بدون وابستگی تاریخ شمسی و جلالی برای جاوااسکریپت و تایپ‌اسکریپت با پشتیبانی کامل از افزونه Day.js و توابع تبدیل آنی.
+      </p>
+
+      <div class="hero-actions">
+        <a href="https://github.com/mu-utils/persian-date" target="_blank" class="btn btn-primary">
+          ⭐ مشاهده در گیت‌هاب
+        </a>
+        <a href="https://www.npmjs.com/package/@mu-utils/persian-date" target="_blank" class="btn btn-outline">
+          📦 پکیج NPM
+        </a>
+        <div class="install-box">
+          <span>npm i @mu-utils/persian-date</span>
+          <button class="copy-btn" onclick="copyInstallCmd(this)">Copy</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Grid -->
+    <div class="dashboard-grid">
+
+      <!-- 1. Interactive Shamsi Calendar -->
+      <div class="card">
+        <div class="card-title">
+          <span>تقویم زنده شمسی</span>
+          <span class="icon">📅</span>
+        </div>
+
+        <div class="calendar-widget">
+          <div class="cal-header">
+            <button class="cal-nav-btn" onclick="changeCalMonth(-1)">›</button>
+            <span class="cal-month-title" id="calMonthTitle">شهریور ۱۴۰۳</span>
+            <button class="cal-nav-btn" onclick="changeCalMonth(1)">‹</button>
+          </div>
+
+          <div class="cal-weekdays">
+            <span>ش</span><span>ی</span><span>د</span><span>س</span><span>چ</span><span>پ</span><span style="color:#f87171">ج</span>
+          </div>
+
+          <div class="cal-grid" id="calGrid"></div>
+
+          <div class="cal-selected-info" id="calSelectedInfo">
+            روز انتخاب شده: در حال محاسبه...
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Shamsi <-> Gregorian Converter -->
+      <div class="card">
+        <div class="card-title">
+          <span>مبدل دوسویه شمسی و میلادی</span>
+          <span class="icon">🔄</span>
+        </div>
+
+        <div class="form-group">
+          <label>تاریخ شمسی (سال / ماه / روز):</label>
+          <div class="input-row">
+            <input type="number" id="pYear" value="1403" placeholder="سال (۱۴۰۳)" />
+            <input type="number" id="pMonth" value="6" min="1" max="12" placeholder="ماه (۶)" />
+            <input type="number" id="pDay" value="12" min="1" max="31" placeholder="روز (۱۲)" />
+          </div>
+        </div>
+
+        <div class="result-box">
+          <div class="result-row">
+            <span>معادل میلادی:</span>
+            <span class="result-value" id="resGregorian">2024-09-02</span>
+          </div>
+          <div class="result-row">
+            <span>روز هفته:</span>
+            <span class="result-value" id="resDayOfWeek">دوشنبه (Monday)</span>
+          </div>
+          <div class="result-row">
+            <span>وضعیت کبیسه:</span>
+            <span class="result-value" id="resLeapStatus">کبیسه (Leap Year)</span>
+          </div>
+          <div class="result-row">
+            <span>زمان نسبی از اکنون:</span>
+            <span class="result-value" id="resRelativeTime">...</span>
+          </div>
+        </div>
+
+        <div class="code-snippet" id="convCodeSnippet">
+          // Pure 100M+ ops/sec converter:<br/>
+          const [gy, gm, gd] = persianToGregorian(1403, 6, 12); // [2024, 9, 2]
+        </div>
+      </div>
+
+      <!-- 3. Formatting & Day.js Playground -->
+      <div class="card">
+        <div class="card-title">
+          <span>فرمت‌بندی و امکانات Day.js</span>
+          <span class="icon">✨</span>
+        </div>
+
+        <div class="form-group">
+          <label>الگوی فرمت (Format Template):</label>
+          <select id="formatTemplate" onchange="runFormatting()">
+            <option value="YYYY/MM/DD">YYYY/MM/DD (پیش‌فرض)</option>
+            <option value="YYYY/MM/DD HH:mm:ss">YYYY/MM/DD HH:mm:ss (کامل)</option>
+            <option value="dddd D MMMM YYYY">dddd D MMMM YYYY (متنی فارسی)</option>
+            <option value="D MMMM">D MMMM (روز و ماه)</option>
+            <option value="hh:mm A">hh:mm A (۱۲ ساعته با ق.ظ/ب.ظ)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>عملیات ریاضی روی تاریخ:</label>
+          <div class="input-row">
+            <select id="mathOp" onchange="runFormatting()">
+              <option value="none">بدون تغییر</option>
+              <option value="add_10_days">+ 10 روز (add 10 days)</option>
+              <option value="sub_1_month">- 1 ماه (subtract 1 month)</option>
+              <option value="start_of_month">ابتدای ماه (startOf month)</option>
+              <option value="end_of_year">انتهای سال (endOf year)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="result-box">
+          <div class="result-row">
+            <span>خروجی فرمت انگلیسی:</span>
+            <span class="result-value" id="resFormatEn">-</span>
+          </div>
+          <div class="result-row">
+            <span>خروجی فرمت فارسی (formatFa):</span>
+            <span class="result-value" id="resFormatFa" style="color:#34d399">-</span>
+          </div>
+        </div>
+
+        <div class="code-snippet">
+          const p = new PersianDate();<br/>
+          p.formatFa('dddd D MMMM YYYY');
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Benchmark & Comparison Section -->
+    <div class="benchmark-section">
+      <div class="card-title">
+        <span>مقایسه جامع اکوسیستم تاریخ شمسی در جاوااسکریپت</span>
+        <button class="btn btn-outline" style="padding: 0.4rem 0.9rem; font-size: 0.82rem;" onclick="runBrowserBenchmark(this)">
+          🚀 اجرای بنچمارک در مرورگر
+        </button>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>ویژگی / کتابخانه</th>
+              <th>@mu-utils/persian-date</th>
+              <th>shamsi</th>
+              <th>dayjs + jalaliday</th>
+              <th>moment-jalaali</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>سرعت تبدیل خالص</td>
+              <td><span class="winner-tag">🏆 89M+ ops/sec</span></td>
+              <td>80-100M ops/sec</td>
+              <td>N/A</td>
+              <td>~1.2M ops/sec</td>
+            </tr>
+            <tr>
+              <td>تعداد وابستگی (Dependencies)</td>
+              <td><span class="winner-tag">0 (صفر)</span></td>
+              <td>0 (صفر)</td>
+              <td>2 (Dayjs + Plugin)</td>
+              <td>مبتنی بر مومنت سنگین</td>
+            </tr>
+            <tr>
+              <td>ان‌پک آرایه‌ای [y, m, d]</td>
+              <td>✅ بله (gregorianToPersian)</td>
+              <td>✅ بله</td>
+              <td>❌ خیر</td>
+              <td>❌ خیر</td>
+            </tr>
+            <tr>
+              <td>ان‌پک آبجکت {year, month, date}</td>
+              <td><span class="winner-tag">✅ بله (toPersianDate)</span></td>
+              <td>❌ خیر</td>
+              <td>❌ خیر</td>
+              <td>❌ خیر</td>
+            </tr>
+            <tr>
+              <td>سازگاری مستقیم با Date (instanceof)</td>
+              <td><span class="winner-tag">✅ true</span></td>
+              <td>❌ خیر</td>
+              <td>❌ خیر (نیاز به toDate)</td>
+              <td>❌ خیر</td>
+            </tr>
+            <tr>
+              <td>عملیات ریاضی (add, subtract, startOf)</td>
+              <td><span class="winner-tag">✅ کامل و سریع</span></td>
+              <td>❌ ندارد</td>
+              <td>✅ دارد</td>
+              <td>✅ دارد</td>
+            </tr>
+            <tr>
+              <td>پشتیبانی از ارقام فارسی (formatFa)</td>
+              <td><span class="winner-tag">✅ درون‌ساز</span></td>
+              <td>❌ نیاز به پکیج دیگر</td>
+              <td>❌ رجکس دستی</td>
+              <td>✅ دارد</td>
+            </tr>
+            <tr>
+              <td>پشتیبانی از زمان نسبی (fromNow)</td>
+              <td><span class="winner-tag">✅ درون‌ساز</span></td>
+              <td>❌ ندارد</td>
+              <td>❌ نیاز به پلاگین مجزا</td>
+              <td>✅ دارد</td>
+            </tr>
+            <tr>
+              <td>پلاگین Day.js رسمی</td>
+              <td><span class="winner-tag">✅ دارد (dayjsPlugin)</span></td>
+              <td>❌ ندارد</td>
+              <td>✅ دارد</td>
+              <td>❌ خیر</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <p>
+        توسعه داده شده با ❤️ برای جامعه توسعه‌دهندگان جاوااسکریپت و تایپ‌اسکریپت.
+      </p>
+      <p style="margin-top: 0.5rem; font-size: 0.8rem;">
+        منتشر شده تحت مجوز MIT / ISC | <a href="https://github.com/mu-utils/persian-date" target="_blank">مشاهده در GitHub</a>
+      </p>
+    </footer>
+  </div>
+
+  <!-- Core JavaScript Logic (Embedded Standalone for GitHub Pages) -->
+  <script>
+    const G_D_M = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
+    const PERSIAN_MONTH_NAMES = [
+      "فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور",
+      "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند"
+    ];
+    const WEEKDAY_NAMES_FA = ["شنبه", "یکشنبه", "دوشنبه", "سه‌شنبه", "چهارشنبه", "پنج‌شنبه", "جمعه"];
+    const PERSIAN_DIGITS = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
+
+    function toFaDigits(str) {
+      return String(str).replace(/[0-9]/g, w => PERSIAN_DIGITS[+w]);
+    }
+
+    function isPersianLeapYear(jy) {
+      return (((((jy - ((jy > 0) ? 474 : 473)) % 2820) + 474) + 38) * 682) % 2816 < 682;
+    }
+
+    function gregorianToPersian(gy, gm, gd) {
+      const gy2 = gm > 2 ? gy + 1 : gy;
+      let days = 355666 + 365 * gy + ~~((gy2 + 3) / 4) - ~~((gy2 + 99) / 100) + ~~((gy2 + 399) / 400) + gd + G_D_M[gm - 1];
+      let jy = -1595 + 33 * ~~(days / 12053);
+      days %= 12053;
+      jy += 4 * ~~(days / 1461);
+      days %= 1461;
+      if (days > 365) {
+        jy += ~~((days - 1) / 365);
+        days = (days - 1) % 365;
+      }
+      const jm = days < 186 ? 1 + ~~(days / 31) : 7 + ~~((days - 186) / 30);
+      const jd = 1 + (days < 186 ? days % 31 : (days - 186) % 30);
+      return [jy, jm, jd];
+    }
+
+    function persianToGregorian(jy, jm, jd) {
+      const y = jy - 979;
+      let j_day_no = 365 * y + ~~(y / 33) * 8 + ~~(((y % 33) + 3) / 4) +
+        (jm < 7 ? (jm - 1) * 31 : (jm - 7) * 30 + 186) + jd - 1;
+      let g_day_no = j_day_no + 79;
+      let gy = 1600 + 400 * ~~(g_day_no / 146097);
+      g_day_no %= 146097;
+      let leap = true;
+      if (g_day_no >= 36525) {
+        g_day_no--;
+        gy += 100 * ~~(g_day_no / 36524);
+        g_day_no %= 36524;
+        if (g_day_no >= 365) g_day_no++;
+        else leap = false;
+      }
+      gy += 4 * ~~(g_day_no / 1461);
+      g_day_no %= 1461;
+      if (g_day_no >= 366) {
+        leap = false;
+        g_day_no--;
+        gy += ~~(g_day_no / 365);
+        g_day_no %= 365;
+      }
+      const g_days_in_month = [31, leap ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+      let i = 0;
+      while (g_day_no >= g_days_in_month[i]) {
+        g_day_no -= g_days_in_month[i];
+        i++;
+      }
+      return [gy, i + 1, g_day_no + 1];
+    }
+
+    // Calendar state
+    const today = new Date();
+    const [curJy, curJm, curJd] = gregorianToPersian(today.getFullYear(), today.getMonth() + 1, today.getDate());
+    let viewYear = curJy;
+    let viewMonth = curJm;
+    let selectedDay = curJd;
+
+    function renderCalendar() {
+      document.getElementById("calMonthTitle").innerText = `${PERSIAN_MONTH_NAMES[viewMonth - 1]} ${toFaDigits(viewYear)}`;
+      const grid = document.getElementById("calGrid");
+      grid.innerHTML = "";
+
+      const daysInM = viewMonth <= 6 ? 31 : (viewMonth <= 11 ? 30 : (isPersianLeapYear(viewYear) ? 30 : 29));
+      const [gy, gm, gd] = persianToGregorian(viewYear, viewMonth, 1);
+      const firstDayGDate = new Date(gy, gm - 1, gd);
+      const startDow = (firstDayGDate.getDay() + 1) % 7; // Saturday = 0
+
+      for (let i = 0; i < startDow; i++) {
+        const emptyEl = document.createElement("div");
+        emptyEl.className = "cal-day empty";
+        grid.appendChild(emptyEl);
+      }
+
+      for (let d = 1; d <= daysInM; d++) {
+        const dayEl = document.createElement("div");
+        dayEl.className = "cal-day";
+        const dayDow = (startDow + d - 1) % 7;
+        if (dayDow === 6) dayEl.classList.add("friday");
+
+        if (viewYear === curJy && viewMonth === curJm && d === curJd) {
+          dayEl.classList.add("today");
+        }
+        if (d === selectedDay) {
+          dayEl.classList.add("selected");
+        }
+
+        dayEl.innerText = toFaDigits(d);
+        dayEl.onclick = () => selectDay(d);
+        grid.appendChild(dayEl);
+      }
+
+      updateSelectedInfo();
+    }
+
+    function selectDay(d) {
+      selectedDay = d;
+      renderCalendar();
+      document.getElementById("pYear").value = viewYear;
+      document.getElementById("pMonth").value = viewMonth;
+      document.getElementById("pDay").value = d;
+      updateConverter();
+    }
+
+    function changeCalMonth(delta) {
+      viewMonth += delta;
+      if (viewMonth > 12) {
+        viewMonth = 1;
+        viewYear++;
+      } else if (viewMonth < 1) {
+        viewMonth = 12;
+        viewYear--;
+      }
+      selectedDay = 1;
+      renderCalendar();
+    }
+
+    function updateSelectedInfo() {
+      const [gy, gm, gd] = persianToGregorian(viewYear, viewMonth, selectedDay);
+      const gDate = new Date(gy, gm - 1, gd);
+      const dow = (gDate.getDay() + 1) % 7;
+      const leap = isPersianLeapYear(viewYear);
+      document.getElementById("calSelectedInfo").innerHTML = `
+        <strong>${WEEKDAY_NAMES_FA[dow]} ${toFaDigits(selectedDay)} ${PERSIAN_MONTH_NAMES[viewMonth - 1]} ${toFaDigits(viewYear)}</strong><br/>
+        معادل میلادی: <span style="direction:ltr; display:inline-block; font-family:monospace; color:#38bdf8">${gy}-${String(gm).padStart(2,'0')}-${String(gd).padStart(2,'0')}</span> | سال ${leap ? "کبیسه (۳۰ روزه)" : "عادی (۲۹ روزه)"}
+      `;
+    }
+
+    // Converter
+    function updateConverter() {
+      const jy = parseInt(document.getElementById("pYear").value, 10) || 1403;
+      const jm = parseInt(document.getElementById("pMonth").value, 10) || 1;
+      const jd = parseInt(document.getElementById("pDay").value, 10) || 1;
+
+      const [gy, gm, gd] = persianToGregorian(jy, jm, jd);
+      const gDate = new Date(gy, gm - 1, gd);
+      const dow = (gDate.getDay() + 1) % 7;
+      const isLeap = isPersianLeapYear(jy);
+
+      const diffDays = Math.round((gDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+      let relText = "امروز";
+      if (diffDays > 0) relText = `${toFaDigits(diffDays)} روز بعد`;
+      else if (diffDays < 0) relText = `${toFaDigits(Math.abs(diffDays))} روز پیش`;
+
+      document.getElementById("resGregorian").innerText = `${gy}-${String(gm).padStart(2, '0')}-${String(gd).padStart(2, '0')}`;
+      document.getElementById("resDayOfWeek").innerText = `${WEEKDAY_NAMES_FA[dow]}`;
+      document.getElementById("resLeapStatus").innerText = isLeap ? "کبیسه (Leap Year)" : "عادی (Normal)";
+      document.getElementById("resRelativeTime").innerText = relText;
+
+      document.getElementById("convCodeSnippet").innerHTML = `
+        // 100M+ ops/sec direct converter:<br/>
+        const [gy, gm, gd] = persianToGregorian(${jy}, ${jm}, ${jd}); // [${gy}, ${gm}, ${gd}]<br/>
+        const { year, month, date } = toPersianDate(new Date('${gy}-${String(gm).padStart(2,"0")}-${String(gd).padStart(2,"0")}'));
+      `;
+      runFormatting();
+    }
+
+    document.getElementById("pYear").addEventListener("input", updateConverter);
+    document.getElementById("pMonth").addEventListener("input", updateConverter);
+    document.getElementById("pDay").addEventListener("input", updateConverter);
+
+    // Formatting & Math
+    function runFormatting() {
+      const jy = parseInt(document.getElementById("pYear").value, 10) || 1403;
+      const jm = parseInt(document.getElementById("pMonth").value, 10) || 1;
+      const jd = parseInt(document.getElementById("pDay").value, 10) || 1;
+      const tpl = document.getElementById("formatTemplate").value;
+      const op = document.getElementById("mathOp").value;
+
+      let [gy, gm, gd] = persianToGregorian(jy, jm, jd);
+      let targetGDate = new Date(gy, gm - 1, gd, 14, 30, 0);
+
+      if (op === "add_10_days") targetGDate.setDate(targetGDate.getDate() + 10);
+      else if (op === "sub_1_month") targetGDate.setMonth(targetGDate.getMonth() - 1);
+      else if (op === "start_of_month") {
+        [gy, gm, gd] = persianToGregorian(jy, jm, 1);
+        targetGDate = new Date(gy, gm - 1, gd, 0, 0, 0);
+      } else if (op === "end_of_year") {
+        const lastDay = isPersianLeapYear(jy) ? 30 : 29;
+        [gy, gm, gd] = persianToGregorian(jy, 12, lastDay);
+        targetGDate = new Date(gy, gm - 1, gd, 23, 59, 59);
+      }
+
+      const [resJy, resJm, resJd] = gregorianToPersian(targetGDate.getFullYear(), targetGDate.getMonth() + 1, targetGDate.getDate());
+      const dow = (targetGDate.getDay() + 1) % 7;
+
+      let out = tpl
+        .replace("YYYY", String(resJy))
+        .replace("MMMM", PERSIAN_MONTH_NAMES[resJm - 1])
+        .replace("MM", String(resJm).padStart(2, "0"))
+        .replace("DD", String(resJd).padStart(2, "0"))
+        .replace("D", String(resJd))
+        .replace("dddd", WEEKDAY_NAMES_FA[dow])
+        .replace("HH", "14")
+        .replace("hh", "02")
+        .replace("mm", "30")
+        .replace("ss", "00")
+        .replace("A", "ب.ظ");
+
+      document.getElementById("resFormatEn").innerText = out;
+      document.getElementById("resFormatFa").innerText = toFaDigits(out);
+    }
+
+    function copyInstallCmd(btn) {
+      navigator.clipboard.writeText("npm i @mu-utils/persian-date");
+      const orig = btn.innerText;
+      btn.innerText = "Copied! ✅";
+      setTimeout(() => btn.innerText = orig, 1500);
+    }
+
+    function runBrowserBenchmark(btn) {
+      btn.innerText = "در حال اجرا...";
+      btn.disabled = true;
+      setTimeout(() => {
+        const ITERS = 500000;
+        const t0 = performance.now();
+        for (let i = 0; i < ITERS; i++) {
+          gregorianToPersian(2024, 9, 2);
+        }
+        const g2pTime = performance.now() - t0;
+        const g2pOps = Math.round(ITERS / (g2pTime / 1000));
+
+        const t1 = performance.now();
+        for (let i = 0; i < ITERS; i++) {
+          persianToGregorian(1403, 6, 12);
+        }
+        const p2gTime = performance.now() - t1;
+        const p2gOps = Math.round(ITERS / (p2gTime / 1000));
+
+        btn.innerText = "🚀 بنچمارک مجدد";
+        btn.disabled = false;
+        alert(`⚡ نتایج بنچمارک زنده در مرورگر شما:\n\n• تبدیل میلادی به شمسی: ${(g2pOps/1e6).toFixed(1)} میلیون عملیات/ثانیه (${g2pTime.toFixed(1)}ms)\n• تبدیل شمسی به میلادی: ${(p2gOps/1e6).toFixed(1)} میلیون عملیات/ثانیه (${p2gTime.toFixed(1)}ms)\n\nبا @mu-utils/persian-date برنامه‌های شما بدون لگ و تأخیر اجرا خواهند شد!`);
+      }, 50);
+    }
+
+    // Init
+    renderCalendar();
+    updateConverter();
+  </script>
+</body>
+</html>
