@@ -199,9 +199,10 @@ console.log(`  persianDate instanceof Date                               -> ${pd
 console.log("\n==========================================================================================");
 console.log("  COMPREHENSIVE ECOSYSTEM COMPARISON");
 console.log("==========================================================================================");
-console.log("  Feature / Metric          | shamsi             | Day.js + jalaliday | @mu-utils/persian-date | Winner");
+console.log("  Feature / Metric          | shamsi             | Day.js + jalaliday | persian-date-native    | Winner");
 console.log("  --------------------------|--------------------|--------------------|------------------------|---------------------");
 console.log(`  Instantiation ops/sec     | N/A (no wrapper)   | ${String((ITERATIONS / (timeDj / 1000)).toFixed(0)).padEnd(18)} | ${String((ITERATIONS / (timePd / 1000)).toFixed(0)).padEnd(22)} | 🏆 PersianDate (2.1x)`);
+
 console.log(`  Formatting ops/sec        | 0 (Needs extra pk) | ${String((FORMAT_ITERATIONS / (timeDjFmt / 1000)).toFixed(0)).padEnd(18)} | ${String((FORMAT_ITERATIONS / (timePdFmt / 1000)).toFixed(0)).padEnd(22)} | 🏆 PersianDate`);
 console.log(`  Conversion G->P ops/sec   | ${(CONV_ITERATIONS / (timeShamsiG2P / 1000) / 1e6).toFixed(1)}M ops/sec         | N/A                | ${(CONV_ITERATIONS / (timeG2P / 1000) / 1e6).toFixed(1)}M ops/sec            | 🏆 Equal Ultra-Speed`);
 console.log(`  Conversion P->G ops/sec   | ${(CONV_ITERATIONS / (timeShamsiP2G / 1000) / 1e6).toFixed(1)}M ops/sec         | N/A                | ${(CONV_ITERATIONS / (timeP2G / 1000) / 1e6).toFixed(1)}M ops/sec            | 🏆 Equal Ultra-Speed`);

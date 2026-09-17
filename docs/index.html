@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>@mu-utils/persian-date | Modern Zero-Dependency Persian & Jalali Date Engine</title>
+  <title>persian-date-native | Modern Zero-Dependency Persian & Jalali Date Engine</title>
   <meta name="description" content="Ultra-fast, zero-dependency Persian (Shamsi / Jalali) date library for JavaScript & TypeScript. Live Shamsi calendar, bidirectional Gregorian converter, Day.js plugin, and high-performance date math." />
-  <meta name="keywords" content="persian date, shamsi date, jalali date, تبدیل تاریخ شمسی به میلادی, تاریخ شمسی, تقویم شمسی, shamsi converter, dayjs jalali, moment jalaali alternative, persian calendar js, javascript jalali date" />
-  <meta property="og:title" content="@mu-utils/persian-date - Fast, Modern Persian Date Engine" />
+  <meta name="keywords" content="persian date native, persian-date-native, persian date, shamsi date, jalali date, تبدیل تاریخ شمسی به میلادی, تاریخ شمسی, تقویم شمسی, shamsi converter, dayjs jalali, moment jalaali alternative, persian calendar js, javascript jalali date" />
+  <meta property="og:title" content="persian-date-native - Fast, Modern Persian Date Engine" />
   <meta property="og:description" content="Sub-microsecond Persian date conversions, full Day.js compatibility, live calendar widget, and zero dependencies." />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
@@ -198,6 +198,7 @@
     .copy-btn:hover {
       background: rgba(255, 255, 255, 0.2);
     }
+
 
     /* Grid Layout */
     .dashboard-grid {
@@ -514,7 +515,7 @@
         <span class="badge">✨ Native Date (instanceof Date)</span>
       </div>
 
-      <h1>@mu-utils/persian-date</h1>
+      <h1>persian-date-native</h1>
       <p class="subtitle">
         موتور فوق‌سریع، سبک و بدون وابستگی تاریخ شمسی و جلالی برای جاوااسکریپت و تایپ‌اسکریپت با پشتیبانی کامل از افزونه Day.js و توابع تبدیل آنی.
       </p>
@@ -523,15 +524,16 @@
         <a href="https://github.com/mu-utils/persian-date" target="_blank" class="btn btn-primary">
           ⭐ مشاهده در گیت‌هاب
         </a>
-        <a href="https://www.npmjs.com/package/@mu-utils/persian-date" target="_blank" class="btn btn-outline">
+        <a href="https://www.npmjs.com/package/persian-date-native" target="_blank" class="btn btn-outline">
           📦 پکیج NPM
         </a>
         <div class="install-box">
-          <span>npm i @mu-utils/persian-date</span>
+          <span>npm i persian-date-native</span>
           <button class="copy-btn" onclick="copyInstallCmd(this)">Copy</button>
         </div>
       </div>
     </header>
+
 
     <!-- Main Grid -->
     <div class="dashboard-grid">
@@ -667,11 +669,12 @@
           <thead>
             <tr>
               <th>ویژگی / کتابخانه</th>
-              <th>@mu-utils/persian-date</th>
+              <th>persian-date-native</th>
               <th>shamsi</th>
               <th>dayjs + jalaliday</th>
               <th>moment-jalaali</th>
             </tr>
+
           </thead>
           <tbody>
             <tr>
@@ -972,7 +975,7 @@
     }
 
     function copyInstallCmd(btn) {
-      navigator.clipboard.writeText("npm i @mu-utils/persian-date");
+      navigator.clipboard.writeText("npm i persian-date-native");
       const orig = btn.innerText;
       btn.innerText = "Copied! ✅";
       setTimeout(() => btn.innerText = orig, 1500);
@@ -999,7 +1002,7 @@
 
         btn.innerText = "🚀 بنچمارک مجدد";
         btn.disabled = false;
-        alert(`⚡ نتایج بنچمارک زنده در مرورگر شما:\n\n• تبدیل میلادی به شمسی: ${(g2pOps/1e6).toFixed(1)} میلیون عملیات/ثانیه (${g2pTime.toFixed(1)}ms)\n• تبدیل شمسی به میلادی: ${(p2gOps/1e6).toFixed(1)} میلیون عملیات/ثانیه (${p2gTime.toFixed(1)}ms)\n\nبا @mu-utils/persian-date برنامه‌های شما بدون لگ و تأخیر اجرا خواهند شد!`);
+        alert(`⚡ نتایج بنچمارک زنده در مرورگر شما:\n\n• تبدیل میلادی به شمسی: ${(g2pOps/1e6).toFixed(1)} میلیون عملیات/ثادیه (${g2pTime.toFixed(1)}ms)\n• تبدیل شمسی به میلادی: ${(p2gOps/1e6).toFixed(1)} میلیون عملیات/ثانیه (${p2gTime.toFixed(1)}ms)\n\nبا persian-date-native برنامه‌های شما بدون لگ و تأخیر اجرا خواهند شد!`);
       }, 50);
     }
 
@@ -1009,3 +1012,4 @@
   </script>
 </body>
 </html>
+

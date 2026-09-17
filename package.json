@@ -1,7 +1,8 @@
 {
-  "name": "@mu-utils/persian-date",
-  "version": "1.2.2",
-  "description": "A lightweight, accurate Persian (Jalali) date library extending native Date with first-class Day.js plugin support.",
+  "name": "persian-date-native",
+  "version": "1.0.0",
+  "description": "Ultra-fast, zero-dependency Persian (Jalali / Shamsi) date engine extending native JavaScript Date with Day.js plugin support.",
+
   "main": "dist/bundle.min.cjs.js",
   "module": "dist/bundle.min.esm.js",
   "types": "dist/index.d.ts",
@@ -24,6 +25,7 @@
     "postpublish": "git push && git push --tags"
   },
   "keywords": [
+    "persian-date-native",
     "shamsi",
     "shamsi-date",
     "shamsi-converter",
@@ -31,6 +33,7 @@
     "shamsi-calendar",
     "persian",
     "persian-date",
+
     "persian-calendar",
     "persian-datepicker",
     "jalali",

@@ -1,7 +1,7 @@
-# @mu-utils/persian-date
+# persian-date-native
 
-[![npm version](https://img.shields.io/npm/v/@mu-utils/persian-date.svg?style=flat-square&color=38bdf8)](https://www.npmjs.com/package/@mu-utils/persian-date)
-[![npm downloads](https://img.shields.io/npm/dt/@mu-utils/persian-date.svg?style=flat-square&color=6366f1)](https://www.npmjs.com/package/@mu-utils/persian-date)
+[![npm version](https://img.shields.io/npm/v/persian-date-native.svg?style=flat-square&color=38bdf8)](https://www.npmjs.com/package/persian-date-native)
+[![npm downloads](https://img.shields.io/npm/dt/persian-date-native.svg?style=flat-square&color=6366f1)](https://www.npmjs.com/package/persian-date-native)
 [![coverage: 100%](https://img.shields.io/badge/coverage-100%25-brightgreen.svg?style=flat-square)](https://github.com/mu-utils/persian-date)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Strict%20100%25-blue.svg?style=flat-square)](https://www.typescriptlang.org/)
 [![Zero Dependencies](https://img.shields.io/badge/dependencies-0%20(zero)-success.svg?style=flat-square)](package.json)
@@ -38,6 +38,7 @@
   - [Migrating from `date-fns-jalali`](#migrating-from-date-fns-jalali)
 - [📖 Format Tokens](#-format-tokens)
 - [📚 Complete API Reference](#-complete-api-reference)
+  - [Universal Enterprise Aliases (`jalaliDate`, `shamsiDate`)](#universal-enterprise-aliases)
 - [🔬 Leap Year Accuracy: 1403 vs 1404](#-leap-year-accuracy-1403-vs-1404)
 - [🧪 Testing & Benchmarking](#-testing--benchmarking)
 - [🔍 SEO & Search Keywords](#-seo--search-keywords)
@@ -62,7 +63,7 @@ Includes:
 
 - 🪶 **Zero Runtime Dependencies**: Ultra-lightweight core with 0 external dependencies.
 - ⚡ **89M+ Operations/Sec Pure Conversion**: Optimized bitwise integer arithmetic for sub-microsecond astronomical calculations.
-- 🎯 **100% Test Coverage Across All Metrics**: 100% Statements, 100% Branches, 100% Functions, and 100% Lines verified (16 test suites, 138 unit tests).
+- 🎯 **100% Test Coverage Across All Metrics**: 100% Statements, 100% Branches, 100% Functions, and 100% Lines verified (17 test suites, 142 unit tests).
 - 🛡️ **Native JavaScript `Date` Inheritance**: `persianDate instanceof Date === true`. Works out-of-the-box with React, Vue, Ant Design, MUI, Shadcn, and HTML datepickers without needing `.toDate()` wrappers.
 - 📦 **Dual Ergonomic Unpacking**:
   - **Tuple Unpacking**: `const [jy, jm, jd] = gregorianToPersian(2024, 9, 2)` (100% drop-in parity with `shamsi`).
@@ -87,11 +88,11 @@ However, `shamsi` has critical architectural limitations:
 4. **No relative time** (`fromNow` / `toNow`).
 5. **No leap year or boundary utilities**.
 
-`@mu-utils/persian-date` is a **complete, high-performance superset**: it provides the exact same tuple unpacking speed while giving you a full Day.js-style fluent API, native `Date` inheritance, 100% test coverage, and Day.js plugin support.
+`persian-date-native` is a **complete, high-performance superset**: it provides the exact same tuple unpacking speed while giving you a full Day.js-style fluent API, native `Date` inheritance, 100% test coverage, and Day.js plugin support.
 
 ### Comprehensive Benchmark Table
 
-| Feature / Metric | `@mu-utils/persian-date` | `shamsi` | `dayjs + jalaliday` | `moment-jalaali` | `date-fns-jalali` |
+| Feature / Metric | `persian-date-native` | `shamsi` | `dayjs + jalaliday` | `moment-jalaali` | `date-fns-jalali` |
 | :--- | :---: | :---: | :---: | :---: | :---: |
 | **Dependencies** | **0 (Zero)** 🏆 | **0 (Zero)** | 2 (Dayjs + Plugin) | `moment` (~70 KB) | Multiple packages |
 | **Pure Conversion (G→P)** | **89.1M ops/sec** ⚡ | 80–100M ops/sec | N/A | ~1.2M ops/sec | Functional only |
@@ -126,13 +127,13 @@ However, `shamsi` has critical architectural limitations:
 
 ```bash
 # npm
-npm install @mu-utils/persian-date
+npm install persian-date-native
 
 # yarn
-yarn add @mu-utils/persian-date
+yarn add persian-date-native
 
 # pnpm
-pnpm add @mu-utils/persian-date
+pnpm add persian-date-native
 ```
 
 ---
@@ -144,7 +145,7 @@ pnpm add @mu-utils/persian-date
 Exact 1:1 drop-in replacement for `shamsi`:
 
 ```typescript
-import { gregorianToPersian, persianToGregorian } from "@mu-utils/persian-date";
+import { gregorianToPersian, persianToGregorian } from "persian-date-native";
 
 // Convert Gregorian to Persian tuple
 const [jy, jm, jd] = gregorianToPersian(2024, 9, 2);
@@ -158,7 +159,7 @@ console.log(gy, gm, gd); // 2024, 9, 2
 ### 2. Object Unpacking (`{ year, month, date }`)
 
 ```typescript
-import { toPersianDate, toGregorianDate } from "@mu-utils/persian-date";
+import { toPersianDate, toGregorianDate } from "persian-date-native";
 
 // Unpack named fields from any JS Date or timestamp
 const { year, month, date } = toPersianDate(new Date("2024-09-02T12:00:00Z"));
@@ -172,7 +173,7 @@ console.log(nativeDate.toISOString()); // "2024-09-01T20:30:00.000Z"
 ### 3. Day.js-Style Fluent API
 
 ```typescript
-import { persianDate } from "@mu-utils/persian-date";
+import { persianDate } from "persian-date-native";
 
 // Format date with Persian digits
 const d = persianDate("1403/06/12 14:30:00");
@@ -191,7 +192,7 @@ console.log(d.fromNow()); // "۶ ماه پیش"
 ### Pure Integer Converters (89M+ ops/sec)
 
 ```typescript
-import { gregorianToPersian, persianToGregorian } from "@mu-utils/persian-date";
+import { gregorianToPersian, persianToGregorian } from "persian-date-native";
 
 // Single-step astronomical calculations without heap allocations
 const [jy, jm, jd] = gregorianToPersian(2024, 9, 2);
@@ -203,7 +204,7 @@ const [gy, gm, gd] = persianToGregorian(1403, 6, 12);
 Because `PersianDate` **extends** native `Date`, no wrapper conversion is necessary:
 
 ```typescript
-import { persianDate, persianToGregorian } from "@mu-utils/persian-date";
+import { persianDate, persianToGregorian } from "persian-date-native";
 
 const pd = persianDate(1403, 6, 12);
 
@@ -230,7 +231,7 @@ console.log(pd.format("YYYY/MM/DD")); // "1403/06/12"
 Replace complex Day.js plugin setups with zero-dependency native calls:
 
 ```typescript
-import { persianDate } from "@mu-utils/persian-date";
+import { persianDate } from "persian-date-native";
 
 // Instantiation
 const d = persianDate("1403/06/12 14:30:00");
@@ -254,7 +255,7 @@ console.log(persianDate().subtract(5, "minutes").fromNow(false, { digits: "fa" }
 ## 🎨 Building a Real Persian Calendar UI
 
 ```typescript
-import { persianDate, toPersianDigits } from "@mu-utils/persian-date";
+import { persianDate, toPersianDigits } from "persian-date-native";
 
 export function generateMonthGrid(year: number, month: number) {
   const firstDay = persianDate(year, month, 1);
@@ -296,7 +297,7 @@ If your project is already built on Day.js:
 
 ```typescript
 import dayjs from "dayjs";
-import { jalaliday } from "@mu-utils/persian-date";
+import { jalaliday } from "persian-date-native";
 
 dayjs.extend(jalaliday);
 
@@ -322,8 +323,8 @@ import * as shamsi from 'shamsi';
 const [jy, jm, jd] = shamsi.gregorianToJalali(2024, 9, 2);
 const [gy, gm, gd] = shamsi.jalaliToGregorian(1403, 6, 12);
 
-// AFTER (@mu-utils/persian-date — exact same tuple unpacking + full feature set)
-import { gregorianToPersian, persianToGregorian, persianDate } from '@mu-utils/persian-date';
+// AFTER (persian-date-native — exact same tuple unpacking + full feature set)
+import { gregorianToPersian, persianToGregorian, persianDate } from 'persian-date-native';
 const [jy, jm, jd] = gregorianToPersian(2024, 9, 2);  // exact 1:1 match
 const [gy, gm, gd] = persianToGregorian(1403, 6, 12); // exact 1:1 match
 
@@ -341,8 +342,8 @@ const m = momentJalaali('1403/06/12', 'jYYYY/jMM/jDD');
 console.log(m.format('jYYYY/jMM/jDD'));
 console.log(m.add(10, 'jDay').format('jYYYY/jMM/jDD'));
 
-// AFTER (@mu-utils/persian-date — 0 dependencies, 2.1x faster)
-import { persianDate } from '@mu-utils/persian-date';
+// AFTER (persian-date-native — 0 dependencies, 2.1x faster)
+import { persianDate } from 'persian-date-native';
 const d = persianDate('1403/06/12');
 console.log(d.format('YYYY/MM/DD'));
 console.log(d.add(10, 'days').format('YYYY/MM/DD'));
@@ -361,8 +362,8 @@ dayjs.extend(jalaliday).extend(utc).extend(relativeTime);
 dayjs.locale('fa');
 const d = dayjs('1403/06/12', { jalali: true });
 
-// AFTER (@mu-utils/persian-date — single import, everything built in)
-import { persianDate } from '@mu-utils/persian-date';
+// AFTER (persian-date-native — single import, everything built in)
+import { persianDate } from 'persian-date-native';
 const d = persianDate('1403/06/12');
 console.log(d.formatFa()); // "۱۴۰۳/۰۶/۱۲"
 console.log(d.fromNow());  // "۶ ماه پیش"
@@ -376,8 +377,8 @@ import { format, addDays } from 'date-fns-jalali';
 const d = new Date('2024-09-02');
 console.log(format(d, 'yyyy/MM/dd'));
 
-// AFTER (@mu-utils/persian-date — chainable, native Date)
-import { persianDate } from '@mu-utils/persian-date';
+// AFTER (persian-date-native — chainable, native Date)
+import { persianDate } from 'persian-date-native';
 const d = persianDate('2024-09-02');
 console.log(d.clone().add(10, 'days').format('YYYY/MM/DD'));
 ```
@@ -434,6 +435,23 @@ persianDate.format("[امروز:] dddd DD MMMM YYYY [ساعت] HH:mm");
 - **`isPersianLeapYear(year: number): boolean`**: Accurate 33-year solar cycle leap year checker.
 - **`relativeTime(fromTime, toTime, options?): string`**: Persian relative time generator.
 
+### Universal Enterprise Aliases
+
+For teams and legacy codebases accustomed to `jalali` or `shamsi` terminology:
+
+```typescript
+import {
+  jalaliDate,        // alias for persianDate
+  shamsiDate,        // alias for persianDate
+  JalaliDate,        // alias for PersianDate class
+  ShamsiDate,        // alias for PersianDate class
+  gregorianToJalali, // alias for gregorianToPersian
+  jalaliToGregorian, // alias for persianToGregorian
+  toJalaliDate,      // alias for toPersianDate
+  isJalaliLeapYear   // alias for isPersianLeapYear
+} from "persian-date-native";
+```
+
 ### `PersianDate` Class Methods
 
 #### Formatting & Inspection
@@ -488,7 +506,7 @@ persianDate(1404, 12, 1).daysInMonth();  // 29
 ## 🧪 Testing & Benchmarking
 
 ```bash
-# Run all 16 test suites with 100% code coverage
+# Run all 17 test suites with 100% code coverage
 npm test -- --coverage
 
 # Run comprehensive benchmark suite comparing against Day.js & shamsi
@@ -503,7 +521,7 @@ npm run build
 ## 🔍 SEO & Search Keywords
 
 - **Persian**: تاریخ شمسی، تقویم شمسی، تبدیل تاریخ شمسی به میلادی، تبدیل تاریخ میلادی به شمسی، تاریخ جلالی، تبدیل تاریخ خورشیدی، پکیج تاریخ شمسی npm، اعداد فارسی، سال کبیسه ۱۴۰۳، تقویم فارسی جاوااسکریپت.
-- **English**: `shamsi`, `shamsi-date`, `shamsi converter`, `jalali date`, `jalali calendar`, `persian date`, `persian-calendar-js`, `dayjs-jalali`, `jalaliday`, `moment-jalaali alternative`, `date-fns-jalali alternative`, `convert shamsi to gregorian`, `convert gregorian to jalali`, `zero dependency persian date`.
+- **English**: `persian-date-native`, `shamsi`, `shamsi-date`, `shamsi converter`, `jalali date`, `jalali calendar`, `persian date`, `persian-calendar-js`, `dayjs-jalali`, `jalaliday`, `moment-jalaali alternative`, `date-fns-jalali alternative`, `convert shamsi to gregorian`, `convert gregorian to jalali`, `zero dependency persian date`.
 
 ---
 
